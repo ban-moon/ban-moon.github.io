@@ -1,4 +1,7 @@
-/* 将除首页以外的侧边栏进行隐藏 */
-#aside-content.notHome{
-    display: none;
+/* 侧边栏调整 */
+#aside-content .card-widget:first-child {
+    margin-top: 0;
+}
+#aside-content:only-child > .card-widget{
+    margin-top: 20px !important;
 }
