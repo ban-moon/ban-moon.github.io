@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>将本地jar包添加至本地Maven仓库</title>
+      <link href="/archive/a6084b01/"/>
+      <url>/archive/a6084b01/</url>
+      
+        <content type="html"><![CDATA[<h1 id="将本地jar包添加至本地Maven仓库"><a href="#将本地jar包添加至本地Maven仓库" class="headerlink" title="将本地jar包添加至本地Maven仓库"></a>将本地jar包添加至本地Maven仓库</h1><h2 id="一、介绍"><a href="#一、介绍" class="headerlink" title="一、介绍"></a>一、介绍</h2><p>在平常开发过程中，常常会遇到网络卡顿，导致下载不了<code>maven</code>的依赖<code>jar</code>，这时候就需要拿到同事的<code>jar</code>包，自己导入到本地的仓库中。</p><p>如下进行使用</p><h2 id="二、使用"><a href="#二、使用" class="headerlink" title="二、使用"></a>二、使用</h2><p>将本地<code>jar</code>包放一个合适的位置，接着打开<code>cmd</code>黑窗输入下面这段代码，即可加入至本地的<code>maven</code>仓库</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn install:install-file -DgroupId=com.banmoon.test -DartifactId=core -Dversion=1.0.1 -Dpackaging=jar -Dfile=C:\Users\banmoon\Desktop\core-3.4.0.jar</span><br></pre></td></tr></table></figure><p>其中里面的参数代表含义如下</p><ul><li><code>-DgroupId</code>：对应<code>groupId</code></li><li><code>-DartifactId</code>：对应<code>artifactId</code></li><li><code>-Dversion</code>：对应<code>version</code></li></ul><p>如此上述添加成功后，我们可以这样引用</p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.banmoon.test<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure><h2 id="三、最后"><a href="#三、最后" class="headerlink" title="三、最后"></a>三、最后</h2><div style="background: rgba(135, 206, 235, 0.5); padding: 20px">    <span style="width: 90px;margin-bottom: 10px;display: inline-block;">groupId：</span>    <input type=text value="" id="g" style="border: 1px #333 solid;">    <br />    <span style="width: 90px;margin-bottom: 10px;display: inline-block;">artifactId：</span>    <input type=text value="" id="a" style="border: 1px #333 solid;">    <br />    <span style="width: 90px;margin-bottom: 10px;display: inline-block;">version：</span>    <input type=text value="" id="v" style="border: 1px #333 solid;">    <br />    <span style="width: 90px;margin-bottom: 10px;display: inline-block;">jar位置：</span>    <input type=text value="" id="f" style="border: 1px #333 solid;">    <br />    <button id="btn" style="border: 1px #333 solid; padding: 0 5px;margin-bottom: 10px;" onclick="insertMaven()">生成</button>    <br>    结果：    <br />    <input type="textarea" id="result" style="border: 1px #333 solid;margin-bottom: 5px;display: inline-block;width: 100%;" />    <button style="border: 1px #333 solid; padding: 0 5px;" onclick="copy(getId('result'))">复制到剪切板</button></div><p>我是半月，你我一同共勉！！！</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Java </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 构建工具 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>dependencyManagement和dependencies的区别</title>
       <link href="/archive/4f713af4/"/>
       <url>/archive/4f713af4/</url>
