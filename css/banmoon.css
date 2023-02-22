@@ -23,3 +23,8 @@
 #aside-content #card-toc .toc-content .toc-child:has(> .toc-item.active) {
     display: block !important;
 }
+/* 上一篇、下一篇文章 */
+#pagination .prev-post .cover,
+.relatedPosts > .relatedPosts-list > div .cover {
+    opacity: 0.6;
+}
