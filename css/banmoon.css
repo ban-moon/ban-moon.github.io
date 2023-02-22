@@ -5,3 +5,21 @@
 #aside-content:only-child > .card-widget{
     margin-top: 20px !important;
 }
+/* toc目录修改 */
+#aside-content #card-toc .toc-content .toc-link {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#aside-content #card-toc .toc-content:not(.is-expand) .toc-item.active .toc-child {
+    display: none;
+}
+#aside-content #card-toc .toc-content .toc-level-1>.toc-child {
+    display: block !important;
+}
+#aside-content #card-toc .toc-content a.active+ol{
+    display: block !important;
+}
+#aside-content #card-toc .toc-content .toc-child:has(> .toc-item.active) {
+    display: block !important;
+}
