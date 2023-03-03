@@ -1,8 +1,8 @@
 /* 侧边栏调整 */
 #aside-content .card-widget:first-child {
-    margin-top: 0;
+    margin-top: 0 !important;
 }
-#aside-content:only-child > .card-widget{
+#aside-content .card-widget{
     margin-top: 20px !important;
 }
 /* toc目录修改 */
