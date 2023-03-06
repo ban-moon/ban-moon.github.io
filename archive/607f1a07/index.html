@@ -1,0 +1,324 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>优雅！Spring的重试小工具 | 半月无霜</title><meta name="author" content="半月无霜"><meta name="copyright" content="半月无霜"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="优雅！Spring的重试小工具 一、介绍 在日常项目的开发中，避免不了调用第三方服务的情况。 如果是第三方有提供SDK包那还好说，就怕没有，第三方接口还不稳定的情况最恼火了。 这个时候，我们一般都会加上重试机制，手动捕获异常发起重试，不优雅 试试这个spring中的工具spring-retry如何  官网 github地址 二、使用 导入maven依赖，使用的是SpringBoot框架，版本号已经">
+<meta property="og:type" content="article">
+<meta property="og:title" content="优雅！Spring的重试小工具">
+<meta property="og:url" content="https://www.banmoon.top/archive/607f1a07/">
+<meta property="og:site_name" content="半月无霜">
+<meta property="og:description" content="优雅！Spring的重试小工具 一、介绍 在日常项目的开发中，避免不了调用第三方服务的情况。 如果是第三方有提供SDK包那还好说，就怕没有，第三方接口还不稳定的情况最恼火了。 这个时候，我们一般都会加上重试机制，手动捕获异常发起重试，不优雅 试试这个spring中的工具spring-retry如何  官网 github地址 二、使用 导入maven依赖，使用的是SpringBoot框架，版本号已经">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230306180145.jpg">
+<meta property="article:published_time" content="2023-03-06T09:56:48.000Z">
+<meta property="article:modified_time" content="2023-03-06T09:56:48.000Z">
+<meta property="article:author" content="半月无霜">
+<meta property="article:tag" content="demo">
+<meta property="article:tag" content="Spring">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230306180145.jpg"><link rel="shortcut icon" href="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/config/favicon.ico"><link rel="canonical" href="https://www.banmoon.top/archive/607f1a07/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="../../css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: true,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '优雅！Spring的重试小工具',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: undefined,
+  isToc: true,
+  postUpdate: '2023-03-06 17:56:48'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = url => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      link.onload = () => resolve()
+      link.onerror = () => reject()
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/banmoon.css?1"><meta name="generator" content="Hexo 5.4.2"></head><body><link rel="stylesheet" href="/css/flash.css"/><script src="https://cdn.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/config/a441450a27436ff61f584dc176bc6a10.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="archives/"><div class="headline">文章</div><div class="length-num">54</div></a><a href="tags/"><div class="headline">标签</div><div class="length-num">23</div></a><a href="categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/index"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fas fa-compass"></i><span> 发现</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-heartbeat"></i><span> 娱乐</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/picture/"><i class="fa-fw fa-fw fas fa-images"></i><span> 相册</span></a></li><li><a class="site-page child" href="/collection/"><i class="fa-fw fa-fw fas fa-book"></i><span> 收藏</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友联</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230306180145.jpg')"><nav id="nav"><span id="blog-info"><a href="index.html" title="半月无霜"><span class="site-name">半月无霜</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/index"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fas fa-compass"></i><span> 发现</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-heartbeat"></i><span> 娱乐</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/picture/"><i class="fa-fw fa-fw fas fa-images"></i><span> 相册</span></a></li><li><a class="site-page child" href="/collection/"><i class="fa-fw fa-fw fas fa-book"></i><span> 收藏</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友联</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">优雅！Spring的重试小工具</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-03-06T09:56:48.000Z" title="发表于 2023-03-06 17:56:48">2023-03-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-06T09:56:48.000Z" title="更新于 2023-03-06 17:56:48">2023-03-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="../../categories/Java/">Java</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">786</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>3分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="优雅！Spring的重试小工具"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1>优雅！Spring的重试小工具</h1>
+<h2 id="一、介绍">一、介绍</h2>
+<p>在日常项目的开发中，避免不了调用第三方服务的情况。</p>
+<p>如果是第三方有提供<code>SDK</code>包那还好说，就怕没有，第三方接口还不稳定的情况最恼火了。</p>
+<p>这个时候，我们一般都会加上重试机制，手动捕获异常发起重试，不优雅</p>
+<p>试试这个<code>spring</code>中的工具<code>spring-retry</code>如何</p>
+<p><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230306175221.png" alt="image-20230306171419108"></p>
+<p><a target="_blank" rel="noopener" href="https://docs.spring.io/spring-batch/docs/current/reference/html/retry.html">官网</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/spring-projects/spring-retry">github地址</a></p>
+<h2 id="二、使用">二、使用</h2>
+<p>导入<code>maven</code>依赖，使用的是<code>SpringBoot</code>框架，版本号已经有管理了，直接引入即可。</p>
+<p>记得把<code>AOP</code>也引用一下</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.retry<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-retry<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-aop<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在<code>SpringBoot</code>的启动类上加上<code>@EnableRetry</code>注解</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.banmoon.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.mybatis.spring.annotation.MapperScan;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.SpringApplication;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.ConfigurableApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.springframework.retry.annotation.EnableRetry;</span><br><span class="line"><span class="keyword">import</span> org.springframework.scheduling.annotation.EnableScheduling;</span><br><span class="line"></span><br><span class="line"><span class="meta">@EnableRetry</span></span><br><span class="line"><span class="meta">@EnableScheduling</span></span><br><span class="line"><span class="meta">@MapperScan(&quot;com.banmoon.test.mapper&quot;)</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestApplication</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        SpringApplication.run(TestApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编写<code>RetryController.java</code>，里面包含了模拟的<code>server</code>方法，一会我们通过<code>client</code>方法去调用它</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.banmoon.test.controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.banmoon.test.obj.dto.ResultData;</span><br><span class="line"><span class="keyword">import</span> com.banmoon.test.service.RetryService;</span><br><span class="line"><span class="keyword">import</span> io.swagger.annotations.Api;</span><br><span class="line"><span class="keyword">import</span> lombok.extern.slf4j.Slf4j;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.validation.annotation.Validated;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestParam;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeoutException;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Validated</span></span><br><span class="line"><span class="meta">@Api(tags = &quot;重试测试&quot;)</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;retry&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RetryController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RetryService retryService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;server&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> ResultData&lt;String&gt; <span class="title function_">server</span><span class="params">(<span class="meta">@RequestParam</span> Integer delay)</span> <span class="keyword">throws</span> TimeoutException &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">boolean</span> <span class="variable">timeout</span> <span class="operator">=</span> delay &gt; <span class="number">5000</span>;</span><br><span class="line">            <span class="keyword">if</span> (timeout) &#123;</span><br><span class="line">                delay = <span class="number">5000</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            TimeUnit.MILLISECONDS.sleep(delay);</span><br><span class="line">            <span class="keyword">if</span> (timeout) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">TimeoutException</span>();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            log.error(<span class="string">&quot;睡眠异常&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ResultData.success(delay+<span class="string">&quot;&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;client&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> ResultData <span class="title function_">client</span><span class="params">(<span class="meta">@RequestParam</span> Integer delay)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> retryService.callServer(delay);</span><br><span class="line">        <span class="keyword">return</span> ResultData.success(result);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>client</code>方法用到了<code>RetryService.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.banmoon.test.service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">RetryService</span> &#123;</span><br><span class="line"></span><br><span class="line">    String <span class="title function_">callServer</span><span class="params">(Integer delay)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.banmoon.test.service.impl;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cn.hutool.http.HttpUtil;</span><br><span class="line"><span class="keyword">import</span> cn.hutool.socket.SocketRuntimeException;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.fastjson2.JSON;</span><br><span class="line"><span class="keyword">import</span> com.banmoon.test.obj.dto.ResultData;</span><br><span class="line"><span class="keyword">import</span> com.banmoon.test.service.RetryService;</span><br><span class="line"><span class="keyword">import</span> lombok.extern.slf4j.Slf4j;</span><br><span class="line"><span class="keyword">import</span> org.springframework.retry.annotation.Retryable;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.net.SocketTimeoutException;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RetryServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">RetryService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="meta">@Retryable(value = &#123;SocketRuntimeException.class, SocketTimeoutException.class&#125;, maxAttempts = 3)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">callServer</span><span class="params">(Integer delay)</span> &#123;</span><br><span class="line">        log.info(<span class="string">&quot;客户端请求服务端，delay：&#123;&#125;&quot;</span>, delay);</span><br><span class="line">        Map&lt;String, Object&gt; params = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        params.put(<span class="string">&quot;delay&quot;</span>, delay);</span><br><span class="line">        <span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> HttpUtil.get(<span class="string">&quot;http://localhost:8089/retry/server&quot;</span>, params, <span class="number">5000</span>);</span><br><span class="line">        ResultData&lt;String&gt; data = JSON.parseObject(result, ResultData.class);</span><br><span class="line">        <span class="keyword">return</span> data.getData();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>主要就是这行注解</p>
+<p><code>@Retryable(value = &#123;SocketRuntimeException.class, SocketTimeoutException.class&#125;, maxAttempts = 3)</code></p>
+<p>发起重试的异常，重试的次数</p>
+<p>具体可以看文档，或者源码</p>
+<h2 id="三、测试">三、测试</h2>
+<p>启动服务，发送请求</p>
+<p><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230306175227.png" alt="image-20230306174646082"></p>
+<p>响应是这样的，我们继续看控制台，成功发起重试</p>
+<p><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230306175231.png" alt="image-20230306170024983"></p>
+<h2 id="四、最后">四、最后</h2>
+<p>在文档的示例中，我们也可以这样发起重试，如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">RetryTemplate</span> <span class="variable">template</span> <span class="operator">=</span> RetryTemplate.builder()</span><br><span class="line">				.maxAttempts(<span class="number">3</span>)</span><br><span class="line">				.fixedBackoff(<span class="number">1000</span>)</span><br><span class="line">				.retryOn(RemoteAccessException.class)</span><br><span class="line">				.build();</span><br><span class="line"></span><br><span class="line">template.execute(ctx -&gt; &#123;</span><br><span class="line">    <span class="comment">// ... do something</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>我是半月，你我一同共勉！</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://www.banmoon.top">半月无霜</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.banmoon.top/archive/607f1a07/">https://www.banmoon.top/archive/607f1a07/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.banmoon.top" target="_blank">半月无霜</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="../../tags/demo/">demo</a><a class="post-meta__tags" href="../../tags/Spring/">Spring</a></div><div class="post_share"><div class="social-share" data-image="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230306180145.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="../8f03ced9/" title="SpringBoot实现统一响应提示国际化"><img class="cover" src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230306150111.jpg" onerror="onerror=null;src='../../img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">SpringBoot实现统一响应提示国际化</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="../87c8a286/" title="Java8新特性stream流"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/articles/1d5e0e54087352483b8192f4a287cbc2.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-27</div><div class="title">Java8新特性stream流</div></div></a></div><div><a href="../aeff03cf/" title="SpringBoot动态修改日志等级"><img class="cover" src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230304221526.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-04</div><div class="title">SpringBoot动态修改日志等级</div></div></a></div><div><a href="../a4ead5b7/" title="Validated分组校验及扩展"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/articles/b0efea5382ca20c31e4eb89502018d67.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-01-31</div><div class="title">Validated分组校验及扩展</div></div></a></div><div><a href="../2b62f472/" title="Valid注解使用及扩展"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/articles/6bf9e068b8dc3d11a2a7f07c50305abd.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-23</div><div class="title">Valid注解使用及扩展</div></div></a></div><div><a href="../cbf5ebf2/" title="什么！MyBatis的xml还可以这么写"><img class="cover" src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230218120408.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-02-18</div><div class="title">什么！MyBatis的xml还可以这么写</div></div></a></div><div><a href="../88f528d7/" title="使用axios下载文件"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/articles/2bde62836cdf5d93808a8fe5acf42047.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-03</div><div class="title">使用axios下载文件</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><script>if (document.documentElement.classList.contains('hide-aside')) {
+    saveToLocal.set('aside-status', 'show', 2);
+    document.documentElement.classList.toggle('hide-aside');
+}</script><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">优雅！Spring的重试小工具</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BB%8B%E7%BB%8D"><span class="toc-text">一、介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BD%BF%E7%94%A8"><span class="toc-text">二、使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%B5%8B%E8%AF%95"><span class="toc-text">三、测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%9C%80%E5%90%8E"><span class="toc-text">四、最后</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="" title="优雅！Spring的重试小工具"><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230306180145.jpg" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="优雅！Spring的重试小工具"/></a><div class="content"><a class="title" href="" title="优雅！Spring的重试小工具">优雅！Spring的重试小工具</a><time datetime="2023-03-06T09:56:48.000Z" title="发表于 2023-03-06 17:56:48">2023-03-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../8f03ced9/" title="SpringBoot实现统一响应提示国际化"><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230306150111.jpg" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="SpringBoot实现统一响应提示国际化"/></a><div class="content"><a class="title" href="../8f03ced9/" title="SpringBoot实现统一响应提示国际化">SpringBoot实现统一响应提示国际化</a><time datetime="2023-03-06T06:59:58.000Z" title="发表于 2023-03-06 14:59:58">2023-03-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../aeff03cf/" title="SpringBoot动态修改日志等级"><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230304221526.jpg" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="SpringBoot动态修改日志等级"/></a><div class="content"><a class="title" href="../aeff03cf/" title="SpringBoot动态修改日志等级">SpringBoot动态修改日志等级</a><time datetime="2023-03-04T14:14:15.000Z" title="发表于 2023-03-04 22:14:15">2023-03-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../f6a7a9bb/" title="为自己模拟的IOC容器添加上DI注入"><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230303142107.jpg" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="为自己模拟的IOC容器添加上DI注入"/></a><div class="content"><a class="title" href="../f6a7a9bb/" title="为自己模拟的IOC容器添加上DI注入">为自己模拟的IOC容器添加上DI注入</a><time datetime="2023-03-03T06:19:33.000Z" title="发表于 2023-03-03 14:19:33">2023-03-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../d14aca80/" title="vue2中的组件"><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230226161720.jpg" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="vue2中的组件"/></a><div class="content"><a class="title" href="../d14aca80/" title="vue2中的组件">vue2中的组件</a><time datetime="2023-02-26T08:15:50.000Z" title="发表于 2023-02-26 16:15:50">2023-02-26</time></div></div></div></div></div></div></main><footer id="footer" style="background: linear-gradient(-45deg,#ee7752,#ce3e75,#23a6d5,#23d5ab)"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2023 By 半月无霜</div><div class="footer_custom_text"><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/"><span>粤ICP备2021146613号</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="../../js/utils.js"></script><script src="../../js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="../../js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://www.banmoon.top/archive/607f1a07/'
+    this.page.identifier = ''
+    this.page.title = '优雅！Spring的重试小工具'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+
+  document.getElementById('darkmode').addEventListener('click', () => {
+    setTimeout(() => window.disqusReset(), 200)
+  })
+}
+
+if ('Valine' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script></div><script src="/js/banmoon.js?1"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
