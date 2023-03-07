@@ -21,3 +21,7 @@ function insertMaven () {
     let result = `mvn install:install-file -DgroupId=${$g.value} -DartifactId=${$a.value} -Dversion=${$v.value} -Dpackaging=jar -Dfile=${$f.value}`
     $result.value = result;
 }
+
+getId("card-info-btn").onclick = function () {
+    btf.snackbarShow("点击 ctrl + D 加入书签");
+}
