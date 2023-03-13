@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>什么是闭包，Java中有闭包吗？</title>
+      <link href="/archive/a2eda5f0/"/>
+      <url>/archive/a2eda5f0/</url>
+      
+        <content type="html"><![CDATA[<h1>什么是闭包，Java中有闭包吗？</h1><h2 id="一、介绍">一、介绍</h2><p>闭包是什么？我学习<code>Java</code>以来，虽然听过这个名词，但我今天才第一次了解它。</p><p><strong>所谓闭包，就是在函数中有另一个函数，这个内部函数可以作为参数，外部通过传递的方式，将函数传递进来。从而内部函数可以访问到外部函数的局部变脸。</strong></p><h2 id="二、演示">二、演示</h2><p>我们使用<code>groovy</code>来演示闭包的使用，它是一门由<code>java</code>优化而来的语言，底层正是<code>class</code>，可以运行再<code>JVM</code>虚拟机上。</p><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> sth(Closure closure) &#123;</span><br><span class="line">    <span class="keyword">def</span> x = <span class="number">5</span></span><br><span class="line">    <span class="keyword">def</span> y = <span class="number">5</span></span><br><span class="line">    println(closure.call(x, y))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 加</span></span><br><span class="line">sth(&#123;x, y -&gt; x + y&#125;)</span><br><span class="line"><span class="comment">// 减</span></span><br><span class="line">sth(&#123;x, y -&gt; x - y&#125;)</span><br><span class="line"><span class="comment">// 乘</span></span><br><span class="line">sth(&#123;x, y -&gt; x * y&#125;)</span><br><span class="line"><span class="comment">// 除</span></span><br><span class="line">sth(&#123;x, y -&gt; x / y&#125;)</span><br></pre></td></tr></table></figure><p>运行结果如下</p><p><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230313203623.png" alt="image-20230313180656370"></p><p>在<code>Java</code>中，我们可以使用匿名内部类来完成类似的功能，而在<code>Java8</code>后，可以直接使用<code>lambda</code>表达式，使得编码速度大大提升，语法结构也变得大同小异了起来</p><p>使用如下，是不是差不多</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.banmoon.test.closure;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.function.BiFunction;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        sth((x, y) -&gt; x + y);</span><br><span class="line">        sth((x, y) -&gt; x - y);</span><br><span class="line">        sth((x, y) -&gt; x * y);</span><br><span class="line">        sth((x, y) -&gt; x / y);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sth</span><span class="params">(BiFunction&lt;Integer, Integer, Object&gt; function)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">5</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">y</span> <span class="operator">=</span> <span class="number">5</span>;</span><br><span class="line">        System.out.println(function.apply(x, y));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230313203656.png" alt="image-20230313203654844"></p><p>关于函数式编程，可以看我的这篇文章，<a href="https://www.banmoon.top/archive/675ec0a7/">Java的函数式接口以及Lambda表达式</a></p><h2 id="三、最后">三、最后</h2><p>我是半月，你我一同共勉！</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Java </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> demo </tag>
+            
+            <tag> jdk </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>vue2路由</title>
       <link href="/archive/4d004f0e/"/>
       <url>/archive/4d004f0e/</url>
