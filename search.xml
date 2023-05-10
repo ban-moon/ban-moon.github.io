@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>Neo4j入门</title>
+      <link href="/archive/70e8cca4/"/>
+      <url>/archive/70e8cca4/</url>
+      
+        <content type="html"><![CDATA[<h1>Neo4j入门</h1><h2 id="一、介绍">一、介绍</h2><p>Neo4j是一个开源的图形数据库管理系统，它基于Java语言开发。与传统的关系型数据库不同，Neo4j使用图形结构来存储和查询数据，这使得它在处理复杂关系时更加高效和灵活。</p><p><strong>Neo4j的核心特性包括：</strong></p><pre><code>1. 图形结构：Neo4j的数据模型是基于图的，每个节点表示一个实体，每个边表示两个实体之间的关系。这种结构使得Neo4j非常适合处理复杂的关系问题，例如社交网络、推荐系统等。2. 快速查询：由于Neo4j采用基于路径的查询方式，因此它的查询速度非常快。相比之下，传统的关系型数据库需要遍历整个表才能找到所需的数据，这会导致性能问题。3. 灵活性：Neo4j支持动态模式，这意味着它可以轻松地适应不断变化的数据模式。此外，Neo4j还支持ACID事务，确保数据的一致性和可靠性。4. 可扩展性：Neo4j可以通过添加更多的节点和边来扩展其数据模型，这使得它非常适合处理大规模数据集。此外，Neo4j还支持集群部署，以提高可扩展性和容错能力。</code></pre><p>总之，Neo4j是一个功能强大、灵活、高效的图形数据库管理系统，适用于处理各种复杂的关系问题。</p><p><strong>Neo4j的优点和缺点：</strong></p><p>优点：</p><pre><code>1. 高效的数据模型：Neo4j采用基于图的数据模型，可以更加高效地处理复杂的关系问题。相比之下，传统的关系型数据库需要遍历整个表才能找到所需的数据，这会导致性能问题。2. 灵活的数据操作：Neo4j支持动态模式，可以轻松地适应不断变化的数据模式。此外，Neo4j还支持ACID事务，确保数据的一致性和可靠性。3. 易于扩展：Neo4j可以通过添加更多的节点和边来扩展其数据模型，这使得它非常适合处理大规模数据集。此外，Neo4j还支持集群部署，以提高可扩展性和容错能力。4. 可视化工具：Neo4j提供了一些可视化工具，如Cypher和Gremlin,可以帮助用户更加方便地管理和查询数据。</code></pre><p>缺点：</p><pre><code>1. 学习成本高：相对于传统的关系型数据库，Neo4j的学习成本较高，需要一定的学习曲线。2. 不支持SQL:Neo4j不支持SQL语言，需要使用Cypher或Gremlin等专门的语言进行查询和管理。</code></pre><p>对比MySQL数据库：</p><p>与MySQL数据库相比，Neo4j的优点在于它更加适合处理复杂的关系问题，具有更高的效率和灵活性。而MySQL则更加适合处理结构化数据，具有更好的扩展性和可靠性。因此，选择使用哪种数据库取决于具体的应用场景和需求。如果需要处理复杂的关系问题，建议使用Neo4j;如果需要处理结构化数据，建议使用MySQL。</p><h2 id="二、安装">二、安装</h2><h3 id="1）官网下载">1）官网下载</h3><p>官网下载中心：<a href="https://go.neo4j.com/download-thanks.html?edition=community&amp;release=3.5.28&amp;flavour=winzip">https://go.neo4j.com/download-thanks.html?edition=community&amp;release=3.5.28&amp;flavour=winzip</a></p><p>直接下载解压就可以，进入<code>bin</code>目录，黑框启动，如下</p><p><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230510111033.png" alt="image-20230509224317540"></p><p>打开<code>http://localhost:7474</code>，输入账号密码<code>neo4j</code>，<code>neo4j</code>就成功启动啦</p><h3 id="2）Docker镜像容器">2）Docker镜像容器</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker pull neo4j:3.5.28-community</span><br><span class="line"></span><br><span class="line">docker run -d -p 7474:7474 -p 7687:7687 --name neo4j -e &quot;NE04J_AUTH=neo4j/123456&quot; -v /usr/local/soft/neo4j/data:/data -v /usr/local/soft/neo4j/logs:/logs -v /usr/local/soft/neo4j/conf:/var/lib/neo4j/conf -v /usr/local/soft/neo4j/import:/var/lib/neo4j/import neo4j:3.5.28-community</span><br></pre></td></tr></table></figure><p>这个就不演示了</p><h2 id="三、CQL语句">三、CQL语句</h2><p>官网：<a href="https://neo4j.com/docs/cypher-manual/5/clauses/">Clauses - Cypher Manual (neo4j.com)</a></p><h3 id="1）create">1）create</h3><p>创建没什么好说的，可以创建节点、关系</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// 创建一个单独的节点</span><br><span class="line">create (n:person &#123;name:&#x27;半月无霜&#x27;&#125;) return n</span><br><span class="line"></span><br><span class="line">// 创建多个独立的节点</span><br><span class="line">create (n:person &#123;name:&#x27;小明&#x27;&#125;),(m:person &#123;name:&#x27;小红&#x27;&#125;) return n,m</span><br><span class="line"></span><br><span class="line">// 创建多个节点，且节点之间有关系</span><br><span class="line">create (n:person &#123;name:&#x27;孙悟空&#x27;&#125;)-[r:关系 &#123;label: &#x27;师弟&#x27;&#125;]-&gt;(m:person &#123;name:&#x27;猪八戒&#x27;&#125;) return n,m</span><br><span class="line"></span><br><span class="line">// 创建一个关系，作用于已有的节点</span><br><span class="line">// 本质就是先查询出两个节点，再创建这两个节点的关系</span><br><span class="line">match (n:person),(m:person)</span><br><span class="line">where n.name = &#x27;小明&#x27; and m.name = &#x27;小红&#x27;</span><br><span class="line">create (n)-[r:关系 &#123;label: &#x27;同学&#x27;&#125;]-&gt;(m)</span><br><span class="line">return n.name, r.label, m.name</span><br></pre></td></tr></table></figure><h3 id="2）delete">2）delete</h3><p>删除节点，关系</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// 删除节点，先查询到，再删除</span><br><span class="line">match (n:person &#123;name: &#x27;半月无霜&#x27;&#125;) delete n</span><br><span class="line">// 也可以使用where进行查询</span><br><span class="line">match (n:person) where n.name = &#x27;半月无霜&#x27; delete n</span><br><span class="line"></span><br><span class="line">// 如果删除节点报错，可能是因为节点上有关系，要先删除关系，才能把节点删除</span><br><span class="line">// 删除节点上的所有关系，并删除该节点</span><br><span class="line">match (n:person)-[r:`关系`]-()</span><br><span class="line">where n.name = &#x27;小明&#x27;</span><br><span class="line">delete r,n</span><br><span class="line"></span><br><span class="line">// 删除关系，但不删除节点</span><br><span class="line">match ()-[r:`关系`]-&gt;()</span><br><span class="line">where r.label = &#x27;师弟&#x27;</span><br><span class="line">delete r</span><br></pre></td></tr></table></figure><h3 id="3）set、remove">3）set、remove</h3><ul class="lvl-0"><li class="lvl-2"><p><strong>set</strong>：节点上面有属性，我们可以对其进行更新</p></li><li class="lvl-2"><p><strong>remove</strong>：节点上面有属性，我们可以对其进行移除</p></li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// 修改节点的属性</span><br><span class="line">match (n:person &#123;name: &#x27;小红&#x27;&#125;) set n.name = &#x27;红孩儿&#x27;</span><br><span class="line"></span><br><span class="line">// 修改关系的属性，比如说孙悟空的师父是猪八戒，这明显是错误的，我们要将其纠正</span><br><span class="line">match (n:person &#123;name: &#x27;孙悟空&#x27;&#125;)-[r:`关系`]-&gt;(m:person &#123;name: &#x27;猪八戒&#x27;&#125;)</span><br><span class="line">set r.label = &#x27;师弟&#x27;</span><br><span class="line">return n,r,m</span><br><span class="line"></span><br><span class="line">// 修改节点的label</span><br><span class="line">match (n:person)</span><br><span class="line">set n:`西游记`</span><br><span class="line">remove n:person</span><br><span class="line"></span><br><span class="line">// 删除节点的一个属性，并新增外号</span><br><span class="line">match (n:`西游记` &#123;name: &#x27;孙悟空&#x27;&#125;),(m:`西游记` &#123;name: &#x27;红孩儿&#x27;&#125;),(l:`西游记` &#123;name: &#x27;猪八戒&#x27;&#125;)</span><br><span class="line">set n.nickname = &#x27;齐天大圣&#x27;, m.nickname = &#x27;牛圣婴&#x27;, l.nickname = &#x27;猪刚鬣&#x27;</span><br><span class="line">remove n.name,m.name,l.name</span><br><span class="line">return n</span><br></pre></td></tr></table></figure><h3 id="4）match">4）match</h3><p>用于匹配查找，上面已经用到了许多，不再详细展开了</p><p>上面的一些操作，简单来说就是</p><ol><li class="lvl-3"><p>先匹配找到节点或关系</p></li><li class="lvl-3"><p>再对其节点或关系进行操作</p></li></ol><p>上面没提到的操作关键字</p><table><thead><tr><th>关键字</th><th>说明</th></tr></thead><tbody><tr><td>return</td><td>返回结果</td></tr><tr><td>where</td><td>进行where条件匹配</td></tr></tbody></table><p>下面再来看几组匹配的查询把</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// 查询单独一个节点</span><br><span class="line">match (n:`西游记`)</span><br><span class="line">where n.nickname = &#x27;齐天大圣&#x27;</span><br><span class="line">return n</span><br><span class="line"></span><br><span class="line">// 如果查询其中的属性</span><br><span class="line">match (n:`西游记`)</span><br><span class="line">return n.nickname</span><br><span class="line"></span><br><span class="line">// 查询有师弟关系的所有节点</span><br><span class="line">match (n)-[r:`关系`]-&gt;(m)</span><br><span class="line">where r.label = &#x27;师弟&#x27;</span><br><span class="line">return n,r,m</span><br><span class="line"></span><br><span class="line">// 查询节点有关系的所有其他节点和关系，*代表的是层级关系，不填则为与节点的直接关系</span><br><span class="line">match p=(n:`西游记`)-[r*]-&gt;(m)</span><br><span class="line">where n.nickname = &#x27;齐天大圣&#x27;</span><br><span class="line">return p</span><br></pre></td></tr></table></figure><h2 id="四、最后">四、最后</h2><p>使用<code>Neo4j</code>学起来比以前的<code>MySQL</code>简单，但这仅仅是入门，后面估计还有很多坑没有踩呢。</p><p>我是半月，你我一同共勉！！！</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据库 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Neo4j </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Docker入门学习</title>
       <link href="/archive/88ad9c58/"/>
       <url>/archive/88ad9c58/</url>
@@ -45,9 +70,9 @@
       
         <tags>
             
-            <tag> jdk </tag>
-            
             <tag> demo </tag>
+            
+            <tag> jdk </tag>
             
         </tags>
       
@@ -99,9 +124,9 @@
       
         <tags>
             
-            <tag> jdk </tag>
-            
             <tag> demo </tag>
+            
+            <tag> jdk </tag>
             
         </tags>
       
@@ -659,9 +684,9 @@
       
         <tags>
             
-            <tag> SpringBoot </tag>
-            
             <tag> redis </tag>
+            
+            <tag> SpringBoot </tag>
             
             <tag> AOP </tag>
             
@@ -923,9 +948,9 @@
       
         <tags>
             
-            <tag> redis </tag>
-            
             <tag> 消息队列 </tag>
+            
+            <tag> redis </tag>
             
         </tags>
       
@@ -1545,9 +1570,9 @@
       
         <tags>
             
-            <tag> SpringBoot </tag>
-            
             <tag> 消息队列 </tag>
+            
+            <tag> SpringBoot </tag>
             
         </tags>
       
