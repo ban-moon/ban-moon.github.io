@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>Java中锁的分类</title>
+      <link href="/archive/54b2b61f/"/>
+      <url>/archive/54b2b61f/</url>
+      
+        <content type="html"><![CDATA[<h1>Java中锁的分类</h1><h2 id="一、介绍">一、介绍</h2><p>在<code>Java</code>中的锁可以分为以下这四类</p><ol><li class="lvl-3"><p>可重入锁、不可重入锁</p></li><li class="lvl-3"><p>乐观锁、悲观锁</p></li><li class="lvl-3"><p>公平锁、非公平锁</p></li><li class="lvl-3"><p>互斥锁、共享锁</p></li></ol><h2 id="二、详解">二、详解</h2><h3 id="1）可重入锁、不可重入锁">1）可重入锁、不可重入锁</h3><p>当一个线程持有一个锁后，又想再持有这个锁时，发生的情况。</p><ul class="lvl-0"><li class="lvl-2"><p><strong>可重入锁</strong>：允许再次持有，多少次都没问题。</p></li><li class="lvl-2"><p><strong>不可重入锁</strong>：不允许再次持有，已经持有了锁后，再次去获取时，会造成死锁的情况。</p></li></ul><p>没必要给自己增加负担，所以<code>Java</code>中的锁基本都是可重入锁</p><h3 id="2）乐观锁、悲观锁">2）乐观锁、悲观锁</h3><p>他们两之间的区别主要体现在访问资源时，要不要进行上锁</p><ul class="lvl-0"><li class="lvl-2"><p><strong>乐观锁</strong>：假定多个线程同时访问同一个资源时，并不会彼此产生干涉和冲突，因此在多线程并发时，每个线程都可以自由访问共享资源，只在更新时检查数据是否被其他线程修改。如果数据未被修改，乐观锁会直接进行更新。常见的乐观锁实现包括版本号机制和CAS机制。<code>Java</code>中的<code>Atomic</code>相关的类，底层正是使用的<code>CAS</code>。</p></li><li class="lvl-2"><p><strong>悲观锁</strong>：每个线程在访问，都要先进行上锁，这样其他线程就无法访问。悲观锁适用于对数据更新操作比较频繁的场景。当锁被别人占用时，线程只能进入等待阻塞阶段了。在<code>Java</code>中，<code>synchronized </code>和<code>Lock</code>相关的类都属于悲观锁。</p></li></ul><p>他们主要的区别是，由于悲观锁会造成锁的占用和线程的切换，故占用较大。而乐观锁，发现数据、版本号不对时，就会放弃此次操作，重新再一次进行读写，占用不大，适合比较小量的线程共享数据。</p><p>如果只是少量的操作，那么进行乐观锁即可。</p><p>如果是大批的操作，一大批的线程共享数据，那么进行悲观锁会好上很多。</p><h3 id="3）公平锁、非公平锁">3）公平锁、非公平锁</h3><p>公平锁和非公平锁主要的区别在于获取锁时的排队机制不同。</p><p>当一个A线程正在运行，B线程先来阻塞，C后来阻塞，那么A线程运行完后，B线程和C线程如何进行分配</p><ul class="lvl-0"><li class="lvl-2"><p><strong>公平锁</strong>：遵循先入先出，先到先得的策略，对线程进行分配。</p></li><li class="lvl-2"><p><strong>非公平锁</strong>：不管先来后到，线程统一进行竞争，有<code>CPU</code>调度进行分配。</p></li></ul><p><code>Java</code>中的<code>synchronized</code>就是一款非公平锁，而<code>Lock</code>锁两者皆可，是可以进行设置的。</p><h3 id="4）互斥锁、共享锁">4）互斥锁、共享锁</h3><p>线程持有锁后，其他线程同时持有这把锁，通过这样的特性进行区分</p><ul class="lvl-0"><li class="lvl-2"><p><strong>互斥锁</strong>：不同的线程不能同时持有同一把锁</p></li><li class="lvl-2"><p><strong>共享锁</strong>：不同的线程允许同时持有同一把锁</p></li></ul><p>在<code>Java</code>中，<code>synchronized</code>关键字就是一把互斥锁，而读写锁<code>ReadWriteLock</code>中的读锁，就是一个共享锁。</p><h2 id="三、最后">三、最后</h2><p>我是半月，你我一同共勉！！！</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 程序人生 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 面试 </tag>
+            
+            <tag> jdk </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>关于Java中引用的面试题</title>
       <link href="/archive/53fb86d6/"/>
       <url>/archive/53fb86d6/</url>
@@ -1147,16 +1174,16 @@
       
       <categories>
           
-          <category> 数据库 </category>
+          <category> 程序人生 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> MySQL </tag>
-            
             <tag> 面试 </tag>
+            
+            <tag> MySQL </tag>
             
         </tags>
       
@@ -1208,9 +1235,9 @@
       
         <tags>
             
-            <tag> redis </tag>
-            
             <tag> 面试 </tag>
+            
+            <tag> redis </tag>
             
         </tags>
       
@@ -1260,9 +1287,9 @@
       
         <tags>
             
-            <tag> jdk </tag>
-            
             <tag> 面试 </tag>
+            
+            <tag> jdk </tag>
             
         </tags>
       
