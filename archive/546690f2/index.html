@@ -1,0 +1,673 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>kafka的架构及常见面试题 | 半月无霜</title><meta name="author" content="半月无霜"><meta name="copyright" content="半月无霜"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="kafka的架构及常见面试题 一、介绍 Kafka是一种高吞吐量、持久性、分布式的发布订阅的消息队列系统。它最初由LinkedIn(领英)公司发布，使用Scala语言编写，与2010年12月份开源，成为Apache的顶级子项目 。 Kafka是一个多分区、多副本且基于zookeeper协调的分布式消息系统。也是一个分布式流式处理平台，它以高吞吐、可持久化、可水平扩展、支持流数据处理等多种特性而被广">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kafka的架构及常见面试题">
+<meta property="og:url" content="https://www.banmoon.top/archive/546690f2/">
+<meta property="og:site_name" content="半月无霜">
+<meta property="og:description" content="kafka的架构及常见面试题 一、介绍 Kafka是一种高吞吐量、持久性、分布式的发布订阅的消息队列系统。它最初由LinkedIn(领英)公司发布，使用Scala语言编写，与2010年12月份开源，成为Apache的顶级子项目 。 Kafka是一个多分区、多副本且基于zookeeper协调的分布式消息系统。也是一个分布式流式处理平台，它以高吞吐、可持久化、可水平扩展、支持流数据处理等多种特性而被广">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230828102741.jpg">
+<meta property="article:published_time" content="2023-08-28T02:25:07.000Z">
+<meta property="article:modified_time" content="2023-08-28T02:25:07.000Z">
+<meta property="article:author" content="半月无霜">
+<meta property="article:tag" content="面试">
+<meta property="article:tag" content="消息队列">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230828102741.jpg"><link rel="shortcut icon" href="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/config/favicon.ico"><link rel="canonical" href="https://www.banmoon.top/archive/546690f2/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="../../css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: true,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'kafka的架构及常见面试题',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: undefined,
+  isToc: true,
+  postUpdate: '2023-08-28 10:25:07'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = url => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      link.onload = () => resolve()
+      link.onerror = () => reject()
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/banmoon.css?1"><meta name="generator" content="Hexo 5.4.2"></head><body><link rel="stylesheet" href="/css/flash.css"/><script src="https://cdn.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/config/a441450a27436ff61f584dc176bc6a10.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="archives/"><div class="headline">文章</div><div class="length-num">66</div></a><a href="tags/"><div class="headline">标签</div><div class="length-num">25</div></a><a href="categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/index"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fas fa-compass"></i><span> 发现</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-heartbeat"></i><span> 娱乐</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/picture/"><i class="fa-fw fa-fw fas fa-images"></i><span> 相册</span></a></li><li><a class="site-page child" href="/collection/"><i class="fa-fw fa-fw fas fa-book"></i><span> 收藏</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友联</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230828102741.jpg')"><nav id="nav"><span id="blog-info"><a href="index.html" title="半月无霜"><span class="site-name">半月无霜</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/index"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fas fa-compass"></i><span> 发现</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-heartbeat"></i><span> 娱乐</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/picture/"><i class="fa-fw fa-fw fas fa-images"></i><span> 相册</span></a></li><li><a class="site-page child" href="/collection/"><i class="fa-fw fa-fw fas fa-book"></i><span> 收藏</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友联</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">kafka的架构及常见面试题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-08-28T02:25:07.000Z" title="发表于 2023-08-28 10:25:07">2023-08-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-28T02:25:07.000Z" title="更新于 2023-08-28 10:25:07">2023-08-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="../../categories/%E7%A8%8B%E5%BA%8F%E4%BA%BA%E7%94%9F/">程序人生</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>13分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="kafka的架构及常见面试题"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1>kafka的架构及常见面试题</h1>
+<h2 id="一、介绍">一、介绍</h2>
+<p>Kafka是一种高吞吐量、持久性、分布式的发布订阅的消息队列系统。它最初由LinkedIn(领英)公司发布，使用Scala语言编写，与2010年12月份开源，成为Apache的顶级子项目 。</p>
+<p>Kafka是一个多分区、多副本且基于zookeeper协调的分布式消息系统。也是一个分布式流式处理平台，它以高吞吐、可持久化、可水平扩展、支持流数据处理等多种特性而被广泛使用 。</p>
+<h2 id="二、架构">二、架构</h2>
+<h3 id="1）生产、消费">1）生产、消费</h3>
+<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230820153207.png" alt="image-20230819164024482"></p>
+<p>首先得了解这个，比较简单的一个集群图</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>**生产者（Producer）：**生产消息，发送消息的服务</p>
+</li>
+<li class="lvl-2">
+<p>**消费者（Comsumer）：**消费消息，处理消息的服务</p>
+</li>
+</ul>
+<h3 id="2）每一个kafka实例中有什么">2）每一个kafka实例中有什么</h3>
+<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230820153203.png" alt="image-20230819165134280"></p>
+<p>如上图，只画了其中一个，具体看看里面是什么</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p><strong>broker</strong>：一个kafka进程就是一个<code>broker</code>，也就可以这样理解，集群中每一台kafka服务就是<code>broker</code></p>
+</li>
+<li class="lvl-2">
+<p>**主题（topic）：**在发布订阅的模式下，我们需要对消息进行一个区分，同一个功能的消息，我们发往同一个主题下</p>
+</li>
+<li class="lvl-2">
+<p><strong>分区（Partition）：<strong>可以看到每一个</strong>主题topic</strong>下，有多个分区。消息会推送到这些分区里面，可以增加生产者，消费者的对消息生产处理的吞吐量</p>
+</li>
+</ul>
+<blockquote>
+<p>在没有画出来了另外两个kafka中，我们会推选出领导<code>Leader</code>，以及追随者<code>Follower</code>，这个我们后面再聊</p>
+</blockquote>
+<h3 id="3）简单的消费">3）简单的消费</h3>
+<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230820153158.png" alt="image-20230819170659700"></p>
+<p>如上图，对于消费者如何消费分片中的消息的，其中有下面几点的解释</p>
+<ol>
+<li class="lvl-3">
+<p>一个<code>Partition</code>只能由一个<code>Consumer</code>来消费，一个<code>Consumer</code>可以消费多个不同的<code>Partition</code>。所以，我们应该保证每个主题的<code>Partition</code>的数量<strong>大于</strong><code>Consumer</code>的数量</p>
+</li>
+<li class="lvl-3">
+<p><code>Consumer</code>越多，则吞吐量越高，消费得越快。当然，要结合第一点</p>
+</li>
+<li class="lvl-3">
+<p><code>Consumer</code>增加或减少时，<code>Partition</code>和<code>Consumer</code>的消费关系会自动调整</p>
+</li>
+</ol>
+<h3 id="4）带group的消费">4）带group的消费</h3>
+<p>在上一节看到了简单的消费，那只不过是同一个<code>group</code>下，接下来引入<code>group</code>这个概念</p>
+<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230820153152.png" alt="image-20230819172057856"></p>
+<p>上面第三节说的都不错，在这里就是要加一个前提条件，一个<code>Partition</code>的消息同一个<code>group</code>中的一个<code>Consumer</code>来消费，</p>
+<p>交给了同组的某个<code>Consumer</code>，就不能交给同组的其他<code>Consumer</code>了</p>
+<p><mark>每一个<code>group</code>都可以完整消费主题中的所有消息</mark></p>
+<h3 id="5）消费partition里面的消息">5）消费<code>partition</code>里面的消息</h3>
+<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230820153148.png" alt="image-20230819174659549"></p>
+<p>如上图，有以下几点特性</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>一个Partition内部的消息是有序的，越新的消息<code>offset</code>越大。不同<code>partition</code>的消息根据<code>offset</code>无法比较新l旧</p>
+</li>
+<li class="lvl-2">
+<p><code>Consumer</code>顺序地消费<code>partition</code>里的每一条消息，可以每读一条就向kafka上报(commit)，当前读到了哪个位置(offset)，也可以间隔性上报</p>
+<ul class="lvl-2">
+<li class="lvl-4">可以读几条再上报<code>offset</code>，比如说每读5条，上报更新一下<code>offset</code></li>
+<li class="lvl-4">也可以时间间隔的方式上报<code>offset</code>，比如说每隔<code>5s</code>上报更新</li>
+</ul>
+</li>
+<li class="lvl-2">
+<p><code>Consumer</code>重启时<code>kafka</code>根据该<code>group</code>上一次提交的最大<code>offset</code>来决定从哪个地方开始消费。</p>
+<ul class="lvl-2">
+<li class="lvl-4"><mark>这里就会出现重复消费的问题，而解决这个重复消费的问题，是面试中的高频问题。</mark></li>
+</ul>
+</li>
+<li class="lvl-2">
+<p>不同<code>group</code>之间，记录的<code>offset</code>是不同的，这也是上一节每个<code>group</code>独立消费<code>topic</code>的消息的原因</p>
+</li>
+</ul>
+<h3 id="6）生产消息，写入Partition">6）生产消息，写入<code>Partition</code></h3>
+<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230820153142.png" alt="image-20230819194314285"></p>
+<p>关于生产者生产消息至<code>Partition</code>，有三种情况，按照优先级这样排序</p>
+<ol>
+<li class="lvl-3">
+<p>生产者可以指定<code>Partition</code>进行写入</p>
+</li>
+<li class="lvl-3">
+<p>通过消息携带的<code>key</code>，再通过<code>hash</code>分发器计算得到结果，来决定去哪个<code>Partition</code></p>
+</li>
+<li class="lvl-3">
+<p>按照时间片轮动选择<code>Partition</code>。比如说当前<code>5</code>分钟，往<code>Partition 0</code>中写入；下一个<code>5</code>分钟，往<code>Partition 1</code>中写入</p>
+</li>
+</ol>
+<h3 id="7）生产消息，写入Partition应答ack">7）生产消息，写入<code>Partition</code>应答<code>ack</code></h3>
+<p>在上面一节，我们确定了<code>partition</code>存储是哪个，接下来还有一个问题，就是如果是<code>kafka</code>集群架构的话，我们会出现同个<code>Partition</code>，有一个<code>Leader</code>，多个<code>Follower</code>。</p>
+<ol>
+<li class="lvl-3">
+<p>在上面确定<code>partition</code>后，我们要去寻找它的<code>Leader</code></p>
+</li>
+<li class="lvl-3">
+<p><code>Leader partition</code>将消息写入本地磁盘</p>
+<ol>
+<li class="lvl-6">当写入完成后，向<code>Producer</code>进行应答响应</li>
+</ol>
+</li>
+<li class="lvl-3">
+<p><code>Follower partition</code>会将消息从<code>Leader</code>那拉回来，写入自己的本地磁盘</p>
+<ol>
+<li class="lvl-6">当写入完成后，向<code>Leader</code>进行应答响应</li>
+<li class="lvl-6">当<code>leader</code>收到所有的<code>Follower</code>应答后，再向<code>Producer</code>应答</li>
+</ol>
+</li>
+</ol>
+<p>那么在此刻，生产消息的应答<code>ack</code>有三种策略</p>
+<ol>
+<li class="lvl-3">
+<p>完全不管<code>ack</code>应答</p>
+</li>
+<li class="lvl-3">
+<p><code>Producer</code>只需要<code>Leader Partition</code>应答即可，不用管<code>Follower Partition</code>是否写入成功</p>
+</li>
+<li class="lvl-3">
+<p><code>partition</code>需要保证所有的<code>Follower</code>才进行应答</p>
+</li>
+</ol>
+<h3 id="8）Partition备份机制">8）<code>Partition</code>备份机制</h3>
+<p>在<code>kafka</code>集群中，我们有<code>Partition</code>的备份机制，如下</p>
+<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230820153133.png" alt="image-20230819195525972"></p>
+<p>同一个主题下，集群中的每个<code>broker</code>，都会维护自己的<code>Partition</code>。</p>
+<ol>
+<li class="lvl-3">
+<p>其中，他们会选出<code>Leader</code>、<code>Follower</code>，生产者的数据优先推送给<code>Leader</code></p>
+</li>
+<li class="lvl-3">
+<p>每一个<code>Partition</code>都有自己的<code>Leader</code></p>
+</li>
+<li class="lvl-3">
+<p>同一个<code>Topic</code>下的，不同<code>Partition</code>尽量分布在不同的<code>broker</code></p>
+</li>
+</ol>
+<p>当有<code>leader</code>的<code>broker</code>宕机后，<code>kafka</code>集群会重新竞选那台<code>broker</code>上原本是<code>leader</code>的<code>Partition</code>，和下面<code>ISR</code>队列有关。</p>
+<h3 id="9）消息的磁盘存储文件结构">9）消息的磁盘存储文件结构</h3>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p><strong>分区<code>Partition</code></strong>，一个<code>Topic</code>中有多个<code>Partition</code>，可以有效地避免了消息的堆积</p>
+</li>
+<li class="lvl-2">
+<p><strong>分段<code>segment</code></strong>，消息在<code>Partition</code>里面，消息是分段来进行存储的，每次操作的消息读写都是针对<code>segmengt</code>一个<code>segment</code>包括一个<code>log</code>文件，两个<code>index</code>文件，三个文件成套出现。前面数字的文件名代表着<code>offset</code>偏移量开始索引位置</p>
+<ul class="lvl-2">
+<li class="lvl-4"><strong>000000101.log</strong>：存储具体消息的数据文件</li>
+<li class="lvl-4"><strong>000000101.index</strong>：存储<code>Consumer</code>的<code>offset</code>便宜量的索引文件</li>
+<li class="lvl-4"><strong>000000101.timeindex</strong>：存储消息时间戳的索引文件</li>
+</ul>
+</li>
+<li class="lvl-2">
+<p><strong>索引<code>index</code></strong>，<code>kafka</code>分段后的数据建立的索引文件</p>
+</li>
+</ul>
+<p>如下图</p>
+<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230820153129.png" alt="image-20230820142002237"></p>
+<p>可以看到上面有两个索引文件，</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p><code>index</code>文件是记录<code>offset</code>消息和<code>log</code>文件中消息位置的映射关系的文件</p>
+</li>
+<li class="lvl-2">
+<p><code>timeindex</code>文件时记录时间戳和<code>offset</code>关系的文件</p>
+</li>
+</ul>
+<p>请注意，这边的索引并不会记录每一条消息的索引，而是采取<strong>稀疏索引</strong>，也就是隔一段消息才会记录消息的索引。</p>
+<blockquote>
+<p>这个消息索引的稠密程度，影响<code>kafka</code>存储读取的速度</p>
+<p>索引越稠密，则读取的速度越快</p>
+<p>索引越稀疏，则文件存储的空间越大</p>
+</blockquote>
+<p>由于上面存储文件都是采用<code>offset</code>偏移量来命名，所以<code>kafka</code>会采取二分查找方法，可以大大提交检索效率。</p>
+<h2 id="三、面试题">三、面试题</h2>
+<h3 id="1）如何避免kafka消息丢失">1）如何避免kafka消息丢失</h3>
+<h4 id="1-1）出现消息丢失的原因">1.1）出现消息丢失的原因</h4>
+<p>从上面架构上来看，<code>kafka</code>丢失消息的原因主要可以分为下面几个场景</p>
+<ol>
+<li class="lvl-3">
+<p><code>Producer</code>在把消息发送给<code>kafka</code>集群时，中间网络出现问题，导致消息无法到达</p>
+<ol>
+<li class="lvl-6">网络抖动原因</li>
+<li class="lvl-6"><code>Producer</code>消息超出大小限制，<code>broker</code>收到以后没法进行存储</li>
+</ol>
+</li>
+<li class="lvl-3">
+<p><code>kafka</code>集群接收到消息后，保存消息至本地磁盘出现异常</p>
+<ol>
+<li class="lvl-6">集群接收到数据后会将数据进行持久化存储到磁盘，消息都是先写入到页缓存，然后由操作系统负责具体的刷盘任务或者使用fsync强制刷盘。如果此时Broker宕机，且选举了一个落后<code>leader</code>副本限多的<code>follower</code>副本成为新的<code>leader</code>副本，那么落后的消息数据就会丢失。</li>
+</ol>
+</li>
+<li class="lvl-3">
+<p><code>Consumer</code>在消费消息时发生异常，导致<code>Consumer</code>端消费失败</p>
+<ol>
+<li class="lvl-6">消费者配置了<code>offset</code>自动提交参数，<code>enable.auto.commit=true</code>。消费者接受到了消息，进行了自动提交。但其实消费者并没有处理完成，就宕机了，此时<code>kafka</code>认为<code>Consumer</code>已经消费了这条消息了，后续便不再分配，造成了消息的丢失</li>
+</ol>
+</li>
+</ol>
+<h4 id="1-2）解决方法——Producer消息发送消息失败">1.2）解决方法——<code>Producer</code>消息发送消息失败</h4>
+<p>关于上面<code>Producer</code>消息发送消息失败的解决方法，总结归纳出五种，可以结合使用</p>
+<ol>
+<li class="lvl-3">
+<p>生产者调用异步回调消息。伪代码如下：<code>producer.send(msg, callback)</code></p>
+</li>
+<li class="lvl-3">
+<p>生产者增加消息确认机制，设置生产者参数：<code>acks=all</code>。<code>partition</code>的<code>leader</code>接收到消息，等待所有的<code>follower</code>副本都同步到了消息之后，才认为本次生产者发送消息成功了。</p>
+</li>
+<li class="lvl-3">
+<p>生产者设置重试次数。比如：<code>retrie&gt;=3</code>,增加重试次数以保证消息的不丢失</p>
+</li>
+<li class="lvl-3">
+<p>定义本地消息日志表，定时任务扫描这个表自动补偿，做好监控告警。</p>
+</li>
+<li class="lvl-3">
+<p>后台提供一个补偿消息的工具，可以手工补偿。</p>
+</li>
+</ol>
+<h4 id="1-3）解决方法——broker写入磁盘失败">1.3）解决方法——<code>broker</code>写入磁盘失败</h4>
+<ol>
+<li class="lvl-3">
+<p>同步刷盘（不太建议）。同步刷盘可以提高消息的可靠性，防止由于机器没有及时写入磁盘的消息丢失。但是会严重影响性能</p>
+</li>
+<li class="lvl-3">
+<p>利用<code>Partition</code>的多副本机制（建议）。使用下面的这段配置，</p>
+<ol>
+<li class="lvl-6"><code>unclean.leader.election.enable=false</code>：表示不允许非<code>ISR</code>中的副本被选举为<code>leader</code>，以免数据丢失</li>
+<li class="lvl-6"><code>replication.factor&gt;=3</code>：消息分区的副本个数，建议设置大于等于<code>3</code>个</li>
+<li class="lvl-6"><code>min.insync.replicas&gt;1</code>：这个值大于<code>1</code>，要求<code>leader</code>至少能和一个<code>Follower</code>副本保证联系</li>
+</ol>
+</li>
+</ol>
+<h4 id="1-4）解决方法——Consumer消费异常">1.4）解决方法——<code>Consumer</code>消费异常</h4>
+<ol>
+<li class="lvl-3">
+<p>消费者需要关闭自动提交，采用手动提交<code>offset</code>，<code>enable.auto.commit=false</code>，并在代码中写入</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 同步提交</span></span><br><span class="line">consumer.commitSync();</span><br><span class="line"><span class="comment">// 异步提交</span></span><br><span class="line">consumer.commitAsync();</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="2）如何避免重复消费消息">2）如何避免重复消费消息</h3>
+<p>这实际上是一个消息的幂等性问题</p>
+<blockquote>
+<p>幂等性是指一个操作可以被重复执行，但结果不会改变的特性。在消息队列中，幂等性是指在消息消费过程中，保证消息的唯一性，不会出现重复消费的情况  。</p>
+</blockquote>
+<p>我们有以下几个方案可以解决</p>
+<ol>
+<li class="lvl-3">
+<p>对于一些业务相关的消息，我们通常有需要处理的消息业务主键。比如说，发送短信的发送流水号，支付业务的订单流水号等。</p>
+<ol>
+<li class="lvl-6">当消费者接受到消息后，使用这个消息主键建立获取分布式锁，同时将消息业务主键写入库。</li>
+<li class="lvl-6">如果第一步成功，消费者进行消费</li>
+<li class="lvl-6">当消费者处理完成后，释放分布式锁</li>
+<li class="lvl-6">如果有一条重复的消息进入，那么在第一步中就会失败，要么是分布式锁，要么是数据库主键冲突</li>
+</ol>
+</li>
+<li class="lvl-3">
+<p>针对没有业务的消息，可以再生产消息的时候给予一个分布式全局ID，后面的处理方法与第一条类似</p>
+</li>
+<li class="lvl-3">
+<p>在有状态流转的业务当中，一个消费者只消费一种业务状态，当这个消息的业务状态已经更新、已经处理。那么直接丢弃掉此次消息即可</p>
+</li>
+<li class="lvl-3">
+<p>乐观锁，消息在生产的时候携带业务上一次查询出的版本号，在消费时携带版本号去更新数据库。如果乐观锁原因导致失败，那么不需要进行后续处理</p>
+</li>
+<li class="lvl-3">
+<p><code>insert ... on duplicate key update</code>，消费插入数据时，数据已存在则进行更新</p>
+</li>
+</ol>
+<h3 id="3）kafka的零拷贝是什么原理">3）kafka的零拷贝是什么原理</h3>
+<ol>
+<li class="lvl-3">
+<p>第一次：将磁盘文件，读取到操作系统内核缓冲区；</p>
+</li>
+<li class="lvl-3">
+<p>第二次：将内核缓冲区的数据，copy 到 application 应用程序的 buffer；</p>
+</li>
+<li class="lvl-3">
+<p>第三步：将 application 应用程序 buffer 中的数据，copy 到 socket 网络发送缓冲区(属于操作系统内核的缓冲区)；</p>
+</li>
+<li class="lvl-3">
+<p>第四次：将 socket buffer 的数据，copy 到网卡，由网卡进行网络传输。</p>
+</li>
+</ol>
+<p>如下图</p>
+<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230820153118.png" alt="image-20230820130332350"></p>
+<p>取消掉两次<code>CPU</code>的拷贝，从而减小<code>CPU</code>的消耗。</p>
+<p>零拷贝是操作系统提供的，如<code>Linux</code>上的<code>sendfile</code>命令，是将读到内核空间的数据，转到 <code>socket buffer</code>，进行网络发送</p>
+<p>还有<code>Java NIO</code>中的<code>transferTo()</code>方法</p>
+<h3 id="4）kafka如何在分布式的情况下保证顺序消费">4）kafka如何在分布式的情况下保证顺序消费</h3>
+<p>在<code>kafka</code>的<code>broker</code>中，主题下可以设置多个不同的<code>partition</code>，而<code>kafka</code>只能保证<code>Partition</code>中的消息时有序的，但没法保证不同<code>Partition</code>的消息顺序性。</p>
+<p>比如说，有一个主题<code>Topic A</code>，里面有两个<code>Partition</code>，但消费端只有一个<code>Consumer</code>。根据上面的架构可以知道，这个<code>Consumer</code>会消费两个<code>Partition</code>中的消息，这样就肯定会出现消费乱序的情况。</p>
+<p>那么针对上面这种乱序的情况，我们可以这样进行设置</p>
+<ol>
+<li class="lvl-3">
+<p>一个主题只建立一个<code>Partition</code>，这样所有的消息也就只会发送到一个<code>Partition</code>中，也就保证了消息的顺序性。</p>
+<ol>
+<li class="lvl-6"><code>Producer</code>也可以指定往一个<code>partition</code>中发送消息。<mark>具体可以看第二章第6节</mark></li>
+</ol>
+</li>
+<li class="lvl-3">
+<p>可以保证一个<code>Partition</code>只能被一个<code>Consumer</code>消费，也可以保证消息的有序性消费。但也要避免<code>Rebalance</code>，原本一对一好好的，<code>Consumer</code>宕机或者下线导致<code>Rebalance</code>就会导致消费的乱序。</p>
+</li>
+</ol>
+<h3 id="5）kafka为什么这么快">5）kafka为什么这么快</h3>
+<p>主要原因有下面几个</p>
+<ol>
+<li class="lvl-3">
+<p>磁盘写入采用了顺序读写，保证了消息的堆积</p>
+<ul class="lvl-2">
+<li class="lvl-5">顺序读写，磁盘会预读，预读即在读取的起始地址连续读取多个页面，主要时间花费在了传输时间，而这个时间两种读写可以认为是一样的。</li>
+<li class="lvl-5">随机读写，因为数据没有在一起，将预读浪费掉了。需要多次寻道和旋转延迟。而这个时间可能是传输时间的许多倍。</li>
+</ul>
+</li>
+<li class="lvl-3">
+<p>零拷贝：第3节提到过，避免了两次<code>CPU</code>拷贝，减少了<code>CPU</code>的消耗</p>
+</li>
+<li class="lvl-3">
+<p>分区、分段、索引，再配合二分查找检索，提高消息的检索效率</p>
+<ul class="lvl-2">
+<li class="lvl-5"><strong>分区<code>Partition</code></strong>，有效避免了消息的堆积</li>
+<li class="lvl-5"><strong>分段<code>segment</code></strong>，消息在<code>Partition</code>里面，消息是分段来进行存储的，每次操作的消息读写都是针对<code>segmengt</code></li>
+<li class="lvl-5"><strong>索引<code>index</code></strong>，<code>kafka</code>分段后的数据建立的索引文件，就是第二章第9节的文件存储结构</li>
+</ul>
+</li>
+<li class="lvl-3">
+<p>批量压缩读写</p>
+<ul class="lvl-2">
+<li class="lvl-6">多条数据一起压缩，存储，读取</li>
+<li class="lvl-6"><code>kafka</code>是直接操作的<code>page cache</code>，而不是堆内对象，读写速度更高。且进程重启后，缓存也不会丢失</li>
+</ul>
+</li>
+</ol>
+<h3 id="6）什么是ISR，它有什么用">6）什么是<code>ISR</code>，它有什么用</h3>
+<p>在<code>kafka</code>中，除了有<code>ISR</code>，还有<code>OSR</code>，<code>AR</code>，功能如下</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>**ISR（InSyncRepli）：**在<code>kafka</code>中，当一个<code>broker</code>宕机挂掉的时候，原本在其<code>broker</code>的<code>Leader Partition</code>会重新进行竞选。这个竞选基本从<code>ISR</code>队列中选举。那么现在可以这样说，<code>ISR</code>是一个维护了<code>Follower Partition</code>的队列，其中的<code>Partition</code>都与<code>Leader Partition</code>消息保持一致。</p>
+</li>
+<li class="lvl-2">
+<p>**OSR（OutSyncRepli）：**没在<code>ISR</code>队列中的其他<code>Follower Partition</code>组成的队列</p>
+</li>
+<li class="lvl-2">
+<p>**AR（AllRepli）：**全部分区的<code>Follower Partition</code>，也就是<code>ISR</code>和<code>OSR</code>的<code>Partition</code>总和</p>
+</li>
+</ul>
+<h3 id="7）kafka中的Rebalance是什么，什么时候会触发">7）kafka中的Rebalance是什么，什么时候会触发</h3>
+<p><code>Rebalance</code>是指<code>Partition</code>与<code>Consumer</code>之间的关系需要重新调整分配，这个重新调整分配的动作称为<code>Rebalance</code>。</p>
+<p>那么当出现下面几种情况的时候，会触发<code>Rebalance</code></p>
+<ol>
+<li class="lvl-3">
+<p>当一个<code>Group</code>中的<code>Consumer</code>新增后</p>
+</li>
+<li class="lvl-3">
+<p>当一个<code>Group</code>中的<code>Consumer</code>离开后，比如说宕机</p>
+</li>
+<li class="lvl-3">
+<p>当<code>Topic</code>下的<code>Partition</code>数量发生变化后</p>
+</li>
+</ol>
+<p>总之，两边的关系数量发生变化的话，都会触发<code>Rebalance</code></p>
+<h3 id="8）当kafka出现消息积压时，该怎么办">8）当kafka出现消息积压时，该怎么办</h3>
+<p>当出现上面这种情况的时候，要么就是<code>Consumer</code>挂掉了或者消费水平太低，要么就是<code>Producer</code>消息太多，间接导致<code>Consumer</code>消费不及时。</p>
+<p>针对上面这种情况，我们可以有以下的解决方案，可以结合使用</p>
+<ol>
+<li class="lvl-3">
+<p><strong>提高<code>Consumer</code>的数量</strong>，可以通过增加消费者组中的<code>Consumer</code>数量或者增加<code>Consumer</code>实例来实现。这样每个<code>Consumer</code>可以并行处理消息，提高整体消费能力。</p>
+</li>
+<li class="lvl-3">
+<p><strong>增加<code>Partition</code>分区数量</strong>，在<code>kafka</code>中，可以设置主题下的<code>Partition</code>，将消息分散至更多的<code>Partition</code>中，配合第一点方案提高整体的消费能力</p>
+</li>
+<li class="lvl-3">
+<p><strong>提高<code>Consumer</code>的消费能力</strong>，优化消费者的处理能力，确保<code>Consumer</code>能够快速处理每条消息。将<code>Consumer</code>处理消息的速度优化至高于<code>Producer</code>生产消息的速度。在不破坏代码业务逻辑的情况下，也可以使用异步处理来消费消息。</p>
+</li>
+</ol>
+<p>在面试过程中，第三点方案是至关重要的，很多企业由于硬件资源的原因，没有增加<code>Consumer</code>的数量，没有增加<code>Partition</code>数量的空间。<strong>故此，<code>Consumer</code>优秀的消费能力，就成了他们考察的目标了。</strong></p>
+<h2 id="四、最后">四、最后</h2>
+<p>我是半月，你我一同共勉！！！</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://www.banmoon.top">半月无霜</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.banmoon.top/archive/546690f2/">https://www.banmoon.top/archive/546690f2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.banmoon.top" target="_blank">半月无霜</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="../../tags/%E9%9D%A2%E8%AF%95/">面试</a><a class="post-meta__tags" href="../../tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息队列</a></div><div class="post_share"><div class="social-share" data-image="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230828102741.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="../742a330a/" title="Java中关于线程池的几道面试题"><img class="cover" src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230531115249.jpg" onerror="onerror=null;src='../../img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Java中关于线程池的几道面试题</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="../54b2b61f/" title="Java中锁的分类"><img class="cover" src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230529161433.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-29</div><div class="title">Java中锁的分类</div></div></a></div><div><a href="../742a330a/" title="Java中关于线程池的几道面试题"><img class="cover" src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230531115249.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-31</div><div class="title">Java中关于线程池的几道面试题</div></div></a></div><div><a href="../8c746a2c/" title="Redis的持久化策略RDB和AOF"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/articles/b54a8ff58bb9d29cbb50e77472287b0e.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-11</div><div class="title">Redis的持久化策略RDB和AOF</div></div></a></div><div><a href="../53fb86d6/" title="关于Java中引用的面试题"><img class="cover" src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230527225134.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-27</div><div class="title">关于Java中引用的面试题</div></div></a></div><div><a href="../f725265/" title="关于MySQL的几道面试题"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/articles/e4e8dc45b6c63e99023848eb8f302c7b.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-22</div><div class="title">关于MySQL的几道面试题</div></div></a></div><div><a href="../b668dca2/" title="关于final关键字的两个面试题"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/articles/d0431e43db3d05b52fa58ebd0a6d92c1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-05</div><div class="title">关于final关键字的两个面试题</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><script>if (document.documentElement.classList.contains('hide-aside')) {
+    saveToLocal.set('aside-status', 'show', 2);
+    document.documentElement.classList.toggle('hide-aside');
+}</script><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">kafka的架构及常见面试题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BB%8B%E7%BB%8D"><span class="toc-text">一、介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%9E%B6%E6%9E%84"><span class="toc-text">二、架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%BC%89%E7%94%9F%E4%BA%A7%E3%80%81%E6%B6%88%E8%B4%B9"><span class="toc-text">1）生产、消费</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%BC%89%E6%AF%8F%E4%B8%80%E4%B8%AAkafka%E5%AE%9E%E4%BE%8B%E4%B8%AD%E6%9C%89%E4%BB%80%E4%B9%88"><span class="toc-text">2）每一个kafka实例中有什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%EF%BC%89%E7%AE%80%E5%8D%95%E7%9A%84%E6%B6%88%E8%B4%B9"><span class="toc-text">3）简单的消费</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%EF%BC%89%E5%B8%A6group%E7%9A%84%E6%B6%88%E8%B4%B9"><span class="toc-text">4）带group的消费</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%EF%BC%89%E6%B6%88%E8%B4%B9partition%E9%87%8C%E9%9D%A2%E7%9A%84%E6%B6%88%E6%81%AF"><span class="toc-text">5）消费partition里面的消息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%EF%BC%89%E7%94%9F%E4%BA%A7%E6%B6%88%E6%81%AF%EF%BC%8C%E5%86%99%E5%85%A5Partition"><span class="toc-text">6）生产消息，写入Partition</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%EF%BC%89%E7%94%9F%E4%BA%A7%E6%B6%88%E6%81%AF%EF%BC%8C%E5%86%99%E5%85%A5Partition%E5%BA%94%E7%AD%94ack"><span class="toc-text">7）生产消息，写入Partition应答ack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8%EF%BC%89Partition%E5%A4%87%E4%BB%BD%E6%9C%BA%E5%88%B6"><span class="toc-text">8）Partition备份机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9%EF%BC%89%E6%B6%88%E6%81%AF%E7%9A%84%E7%A3%81%E7%9B%98%E5%AD%98%E5%82%A8%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-text">9）消息的磁盘存储文件结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="toc-text">三、面试题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%BC%89%E5%A6%82%E4%BD%95%E9%81%BF%E5%85%8Dkafka%E6%B6%88%E6%81%AF%E4%B8%A2%E5%A4%B1"><span class="toc-text">1）如何避免kafka消息丢失</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1%EF%BC%89%E5%87%BA%E7%8E%B0%E6%B6%88%E6%81%AF%E4%B8%A2%E5%A4%B1%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="toc-text">1.1）出现消息丢失的原因</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2%EF%BC%89%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%E2%80%94%E2%80%94Producer%E6%B6%88%E6%81%AF%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E5%A4%B1%E8%B4%A5"><span class="toc-text">1.2）解决方法——Producer消息发送消息失败</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3%EF%BC%89%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%E2%80%94%E2%80%94broker%E5%86%99%E5%85%A5%E7%A3%81%E7%9B%98%E5%A4%B1%E8%B4%A5"><span class="toc-text">1.3）解决方法——broker写入磁盘失败</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4%EF%BC%89%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%E2%80%94%E2%80%94Consumer%E6%B6%88%E8%B4%B9%E5%BC%82%E5%B8%B8"><span class="toc-text">1.4）解决方法——Consumer消费异常</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%BC%89%E5%A6%82%E4%BD%95%E9%81%BF%E5%85%8D%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9%E6%B6%88%E6%81%AF"><span class="toc-text">2）如何避免重复消费消息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%EF%BC%89kafka%E7%9A%84%E9%9B%B6%E6%8B%B7%E8%B4%9D%E6%98%AF%E4%BB%80%E4%B9%88%E5%8E%9F%E7%90%86"><span class="toc-text">3）kafka的零拷贝是什么原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%EF%BC%89kafka%E5%A6%82%E4%BD%95%E5%9C%A8%E5%88%86%E5%B8%83%E5%BC%8F%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E4%BF%9D%E8%AF%81%E9%A1%BA%E5%BA%8F%E6%B6%88%E8%B4%B9"><span class="toc-text">4）kafka如何在分布式的情况下保证顺序消费</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%EF%BC%89kafka%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB"><span class="toc-text">5）kafka为什么这么快</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%EF%BC%89%E4%BB%80%E4%B9%88%E6%98%AFISR%EF%BC%8C%E5%AE%83%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8"><span class="toc-text">6）什么是ISR，它有什么用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%EF%BC%89kafka%E4%B8%AD%E7%9A%84Rebalance%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%8C%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E4%BC%9A%E8%A7%A6%E5%8F%91"><span class="toc-text">7）kafka中的Rebalance是什么，什么时候会触发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8%EF%BC%89%E5%BD%93kafka%E5%87%BA%E7%8E%B0%E6%B6%88%E6%81%AF%E7%A7%AF%E5%8E%8B%E6%97%B6%EF%BC%8C%E8%AF%A5%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="toc-text">8）当kafka出现消息积压时，该怎么办</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%9C%80%E5%90%8E"><span class="toc-text">四、最后</span></a></li></ol></li></ol></div></div><script>var tocItems = document.querySelectorAll('.toc-item');
+tocItems.forEach(item => {
+  var span = item.querySelector('a > span');
+  var content = span.textContent;
+  item.setAttribute('title', content);
+});</script><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="" title="kafka的架构及常见面试题"><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230828102741.jpg" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="kafka的架构及常见面试题"/></a><div class="content"><a class="title" href="" title="kafka的架构及常见面试题">kafka的架构及常见面试题</a><time datetime="2023-08-28T02:25:07.000Z" title="发表于 2023-08-28 10:25:07">2023-08-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../742a330a/" title="Java中关于线程池的几道面试题"><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230531115249.jpg" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="Java中关于线程池的几道面试题"/></a><div class="content"><a class="title" href="../742a330a/" title="Java中关于线程池的几道面试题">Java中关于线程池的几道面试题</a><time datetime="2023-05-31T03:51:04.000Z" title="发表于 2023-05-31 11:51:04">2023-05-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../54b2b61f/" title="Java中锁的分类"><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230529161433.jpg" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="Java中锁的分类"/></a><div class="content"><a class="title" href="../54b2b61f/" title="Java中锁的分类">Java中锁的分类</a><time datetime="2023-05-29T08:13:23.000Z" title="发表于 2023-05-29 16:13:23">2023-05-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../53fb86d6/" title="关于Java中引用的面试题"><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230527225134.jpg" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="关于Java中引用的面试题"/></a><div class="content"><a class="title" href="../53fb86d6/" title="关于Java中引用的面试题">关于Java中引用的面试题</a><time datetime="2023-05-27T14:46:54.000Z" title="发表于 2023-05-27 22:46:54">2023-05-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../8d98dcd8/" title="红黑树详解"><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525220329.jpg" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="红黑树详解"/></a><div class="content"><a class="title" href="../8d98dcd8/" title="红黑树详解">红黑树详解</a><time datetime="2023-05-25T13:58:27.000Z" title="发表于 2023-05-25 21:58:27">2023-05-25</time></div></div></div></div></div></div></main><footer id="footer" style="background: linear-gradient(-45deg,#ee7752,#ce3e75,#23a6d5,#23d5ab)"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2023 By 半月无霜</div><div class="footer_custom_text"><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/"><span>粤ICP备2021146613号</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="../../js/utils.js"></script><script src="../../js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="../../js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://www.banmoon.top/archive/546690f2/'
+    this.page.identifier = ''
+    this.page.title = 'kafka的架构及常见面试题'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+
+  document.getElementById('darkmode').addEventListener('click', () => {
+    setTimeout(() => window.disqusReset(), 200)
+  })
+}
+
+if ('Valine' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script></div><script src="/js/banmoon.js?1"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="决心,勇气,爱慕,仇恨,变质,扭曲,法则,永恒,不变,天理" data-fontsize="16px" data-random="false" async="async"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
