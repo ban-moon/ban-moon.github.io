@@ -28,3 +28,19 @@
 .relatedPosts > .relatedPosts-list > div .cover {
     opacity: 0.6;
 }
+/* 修改分割线 */
+hr {
+    position: unset !important;
+    margin: 20px auto !important;
+}
+/* mark标记 */
+mark {
+    color: brown;
+    font-weight: bolder;
+    background-color: transparent;
+}
+/* 修改选中的背景 */
+*::selection {
+    background: #49b1f5;
+    color: #f7f7f7;
+}

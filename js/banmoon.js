@@ -22,6 +22,6 @@ function insertMaven () {
     $result.value = result;
 }
 
-getId("card-info-btn").onclick = function () {
-    btf.snackbarShow("点击 ctrl + D 加入书签");
-}
+// getId("card-info-btn").onclick = function () {
+//     btf.snackbarShow("点击 ctrl + D 加入书签");
+// }
