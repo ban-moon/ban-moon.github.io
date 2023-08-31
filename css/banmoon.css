@@ -2,51 +2,67 @@
 #aside-content .card-widget:first-child {
     margin-top: 0 !important;
 }
-#aside-content .card-widget{
+
+#aside-content .card-widget {
     margin-top: 20px !important;
 }
+
 /* toc目录修改 */
 #aside-content #card-toc .toc-content .toc-link {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 #aside-content #card-toc .toc-content:not(.is-expand) .toc-item.active .toc-child {
     display: none;
 }
+
 #aside-content #card-toc .toc-content .toc-level-1>.toc-child {
     display: block !important;
 }
-#aside-content #card-toc .toc-content a.active+ol{
+
+#aside-content #card-toc .toc-content a.active+ol {
     display: block !important;
 }
+
 #aside-content #card-toc .toc-content .toc-child:has(> .toc-item.active) {
     display: block !important;
 }
+
 /* 上一篇、下一篇文章，推荐文章的遮罩 */
 #pagination .prev-post .cover,
-.relatedPosts > .relatedPosts-list > div .cover {
+.relatedPosts>.relatedPosts-list>div .cover {
     opacity: 0.6;
 }
+
 /* 修改分割线 */
 hr {
     position: unset !important;
     margin: 20px auto !important;
 }
+
 /* mark标记 */
 mark {
     color: brown;
     font-weight: bolder;
     background-color: transparent;
 }
+
 /* 修改选中的背景 */
 *::selection {
     background: #49b1f5;
     color: #f7f7f7;
 }
+
 /* 修改小屏下的侧边栏显示 */
 @media screen and (max-width: 900px) {
     #aside-content {
-      display: none !important;
+        display: none !important;
     }
-  }
+}
+
+/* 修改a标签小手 */
+a {
+    cursor: pointer;
+}

@@ -406,6 +406,23 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       })
 
+      // 处理内部a标签跳转动画问题
+      const $alink = document.querySelectorAll('a[target^="#"]');
+      if ($alink) {
+          for (let i = 0; i < $alink.length; i++) {
+              const alink = $alink[i];
+              if (!alink.classList.contains('toc-link')) {
+                  alink.addEventListener('click', e => {
+                      const $target = document.getElementById(decodeURI(e.target.getAttribute('target')).replace('#', ''));
+                      btf.scrollToDest(btf.getEleTop($target), 300)
+                      if (window.innerWidth < 900) {
+                          window.mobileToc.close()
+                      }
+                  })
+              }
+          }
+      }
+
       autoScrollToc = item => {
         const activePosition = item.getBoundingClientRect().top
         const sidebarScrollTop = $cardToc.scrollTop
@@ -416,6 +433,14 @@ document.addEventListener('DOMContentLoaded', function () {
           $cardToc.scrollTop = sidebarScrollTop - 150
         }
       }
+    }
+
+    // 首页按钮点击
+    const $cardBtn = document.querySelector('#card-info-btn');
+    if ($cardBtn) {
+        $cardBtn.addEventListener('click', e => {
+            btf.snackbarShow("点击 ctrl + D 加入书签");
+        })
     }
 
     // find head position & add active class
