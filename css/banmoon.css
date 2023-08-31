@@ -44,3 +44,9 @@ mark {
     background: #49b1f5;
     color: #f7f7f7;
 }
+/* 修改小屏下的侧边栏显示 */
+@media screen and (max-width: 900px) {
+    #aside-content {
+      display: none !important;
+    }
+  }
