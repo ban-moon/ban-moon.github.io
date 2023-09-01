@@ -188,17 +188,17 @@
 <thead>
 <tr>
 <th>sql查询</th>
-<th><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230218115617.png" alt="image-20230218112233309"></th>
+<th><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230218115617.png" alt="image-20230218112233309" /></th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>结果集</td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230218115623.png" alt="image-20230218112511305"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230218115623.png" alt="image-20230218112511305" /></td>
 </tr>
 </tbody>
 </table>
-<hr>
+<hr />
 <p>如果是一对多，需要只需要这样做，修改一下<code>resultMap</code>映射</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">mapper</span> <span class="keyword">PUBLIC</span> <span class="string">&quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span> <span class="string">&quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;com.banmoon.test.mapper.UserMapper&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">id</span>=<span class="string">&quot;UserPermissionDTOResultMap&quot;</span> <span class="attr">type</span>=<span class="string">&quot;com.banmoon.test.dto.UserPermissionDTO&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">id</span> <span class="attr">column</span>=<span class="string">&quot;id&quot;</span> <span class="attr">property</span>=<span class="string">&quot;id&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">&quot;username&quot;</span> <span class="attr">property</span>=<span class="string">&quot;username&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">&quot;status&quot;</span> <span class="attr">property</span>=<span class="string">&quot;status&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">collection</span> <span class="attr">property</span>=<span class="string">&quot;roleList&quot;</span> <span class="attr">ofType</span>=<span class="string">&quot;com.banmoon.test.dto.RoleDTO&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">id</span> <span class="attr">column</span>=<span class="string">&quot;role_id&quot;</span> <span class="attr">property</span>=<span class="string">&quot;id&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">&quot;role_name&quot;</span> <span class="attr">property</span>=<span class="string">&quot;name&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">collection</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">collection</span> <span class="attr">property</span>=<span class="string">&quot;permissionList&quot;</span> <span class="attr">ofType</span>=<span class="string">&quot;java.lang.String&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">constructor</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">arg</span> <span class="attr">column</span>=<span class="string">&quot;permission_name&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">constructor</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">collection</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;getPermissionUserList&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;UserPermissionDTOResultMap&quot;</span>&gt;</span></span><br><span class="line">        select</span><br><span class="line">            t0.id,</span><br><span class="line">            t0.username,</span><br><span class="line">            t0.`status`,</span><br><span class="line">            t2.id as role_id,</span><br><span class="line">            t2.`name` as role_name,</span><br><span class="line">            t4.`name` as permission_name</span><br><span class="line">        from sys_user t0</span><br><span class="line">        left join sys_user_role t1 on t0.id = t1.user_id</span><br><span class="line">        left join sys_role t2 on t1.role_id = t2.id</span><br><span class="line">        left join sys_role_permission t3 on t2.id = t3.role_id</span><br><span class="line">        left join sys_permission t4 on t3.permission_id = t4.id</span><br><span class="line">        where t0.`status` = 1</span><br><span class="line">        order by id</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>看看对应的<code>Java</code>类</p>
@@ -209,13 +209,13 @@
 <thead>
 <tr>
 <th>sql查询</th>
-<th><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230218115630.png" alt="image-20230218114004208"></th>
+<th><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230218115630.png" alt="image-20230218114004208" /></th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>结果集</td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230218115636.png" alt="image-20230218114053401"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230218115636.png" alt="image-20230218114053401" /></td>
 </tr>
 </tbody>
 </table>
@@ -237,11 +237,11 @@
 <tbody>
 <tr>
 <td>赋值时</td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230218115642.png" alt="image-20230218115256287"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230218115642.png" alt="image-20230218115256287" /></td>
 </tr>
 <tr>
 <td><code>if</code>标签判断</td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230218115646.png" alt="image-20230218115513045"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230218115646.png" alt="image-20230218115513045" /></td>
 </tr>
 </tbody>
 </table>

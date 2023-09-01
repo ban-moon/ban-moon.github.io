@@ -180,19 +180,19 @@
 <p><mark>routes</mark>：路由规则</p>
 <ul class="lvl-6">
 <li class="lvl-9">
-<p><em>path</em>：访问的url</p>
+<p><i>path</i>：访问的url</p>
 </li>
 <li class="lvl-9">
-<p><em>component</em>：指定的组件</p>
+<p><i>component</i>：指定的组件</p>
 </li>
 <li class="lvl-9">
-<p><em>name</em>：路由规则名</p>
+<p><i>name</i>：路由规则名</p>
 </li>
 <li class="lvl-9">
 <p>props：是否解耦路由参数</p>
 </li>
 <li class="lvl-9">
-<p><em>redirect</em>：路由重定向</p>
+<p><i>redirect</i>：路由重定向</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 当访问/home时，会自动跳转至/index</span><br><span class="line"><span class="punctuation">[</span><span class="punctuation">&#123;</span> path<span class="punctuation">:</span> <span class="string">&quot;/home&quot;</span> redirect<span class="punctuation">:</span> <span class="string">&quot;/index&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
 </li>
 </ul>
@@ -328,13 +328,13 @@
 <h3 id="8）router-和-route的区别">8）<mark><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mi>o</mi><mi>u</mi><mi>t</mi><mi>e</mi><mi>r</mi><mo>=</mo><mo>=</mo><mtext>和</mtext><mo>=</mo><mo>=</mo></mrow><annotation encoding="application/x-tex">router==和==</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6151em;"></span><span class="mord mathnormal">ro</span><span class="mord mathnormal">u</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.02778em;">er</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">==</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord cjk_fallback">和</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">==</span></span></span></span>route</mark>的区别</h3>
 <ul class="lvl-0">
 <li class="lvl-2">
-<p><mark><strong>$router</strong></mark>：是路由对象的实例，相当于new VueRouter()这个对象</p>
+<p><mark><b>$router</b></mark>：是路由对象的实例，相当于new VueRouter()这个对象</p>
 <ul class="lvl-2">
 <li class="lvl-4">编程式跳转方法等</li>
 </ul>
 </li>
 <li class="lvl-2">
-<p><mark><strong>$route</strong></mark>：当前路由的实例对象，每一个路由都是一个独立的对象，此对象相当于<code>&#123; path: &quot;/&quot;, compontent: coma &#125;</code></p>
+<p><mark><b>$route</b></mark>：当前路由的实例对象，每一个路由都是一个独立的对象，此对象相当于<code>&#123; path: &quot;/&quot;, compontent: coma &#125;</code></p>
 <ul class="lvl-2">
 <li class="lvl-4">$route.path：获取路由配置的url路径</li>
 <li class="lvl-4">$route.params：含路有种的动态片段和全匹配片段的键值对，不会拼接到路由的url的<code>?</code>后面</li>

@@ -159,10 +159,10 @@
 <h2 id="一、介绍">一、介绍</h2>
 <p>此题出自力扣网题库第172题，我刚开始没有想到，后面看了题解才明白的。</p>
 <p>先看看题目，讲得很简单</p>
-<p><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20220326174615.png" alt="image-20220326174614333"></p>
+<p><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20220326174615.png" alt="image-20220326174614333" /></p>
 <p>还有入参的限制，<code>0 &lt;= n &lt;= 104</code></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">trailingZeroes</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">		<span class="comment">// TODO ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>放一个计算器，一会自己可以看看规律</strong></p>
+<p><b>放一个计算器，一会自己可以看看规律</b></p>
 <div style="background: rgba(135, 206, 235, 0.5); padding: 20px">
     输入数字n：<input type=text value="1" id="input" placeholder="1<=n<=88" style="border: 1px #333 solid;">
     <button id="btn" style="border: 1px #333 solid; padding: 0 5px;" onclick="function sab(a){
@@ -192,7 +192,7 @@
 <p>首先要看这道题想要的结果是什么，是零的个数</p>
 </li>
 <li class="lvl-3">
-<p>再看题目，阶乘阶乘，里面都是乘法计算，所以<strong>想要得到零，必须要乘上10</strong>，那么这个10就是因子</p>
+<p>再看题目，阶乘阶乘，里面都是乘法计算，所以<b>想要得到零，必须要乘上10</b>，那么这个10就是因子</p>
 </li>
 <li class="lvl-3">
 <p>思路到这，第一步就清除了，查询<code>n</code>中有多少个10或者10的倍数，就有多少个零</p>

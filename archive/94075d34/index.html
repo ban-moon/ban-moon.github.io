@@ -194,13 +194,13 @@
 </ul>
 <ol>
 <li class="lvl-3">
-<p><strong>基本绑定</strong></p>
+<p><b>基本绑定</b></p>
 </li>
 </ol>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">v-on:click</span>=<span class="string">&quot;submit()&quot;</span>&gt;</span>&#123;&#123; submitData &#125;&#125;<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;reset()&quot;</span>&gt;</span>&#123;&#123; resetData &#125;&#125;<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://cdn.jsdelivr.net/npm/vue/dist/vue.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">new</span> <span class="title class_">Vue</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">el</span>: <span class="string">&quot;#app&quot;</span>,</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">data</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">submitData</span>: <span class="string">&quot;登录&quot;</span>,</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">resetData</span>: <span class="string">&quot;重置&quot;</span></span></span><br><span class="line"><span class="language-javascript">        &#125;,</span></span><br><span class="line"><span class="language-javascript">        <span class="comment">// methods：方法集合对象</span></span></span><br><span class="line"><span class="language-javascript">        <span class="attr">methods</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">submit</span>: <span class="keyword">function</span>(<span class="params"></span>)&#123;</span></span><br><span class="line"><span class="language-javascript">                <span class="title function_">alert</span>(<span class="string">&quot;模拟登录&quot;</span>);</span></span><br><span class="line"><span class="language-javascript">            &#125;,</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">reset</span>: <span class="keyword">function</span>(<span class="params"></span>)&#123;</span></span><br><span class="line"><span class="language-javascript">                <span class="title function_">alert</span>(<span class="string">&quot;模拟重置&quot;</span>);</span></span><br><span class="line"><span class="language-javascript">            &#125;</span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">    &#125;)</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <ol start="2">
 <li class="lvl-3">
-<p><strong>访问Vue中data变量</strong></p>
+<p><b>访问Vue中data变量</b></p>
 </li>
 </ol>
 <ul class="lvl-0">
@@ -356,7 +356,7 @@
 <ul class="lvl-2">
 <li class="lvl-4">过滤器必须要有返回值</li>
 <li class="lvl-4">全局过滤器必须写在vue实例的前边</li>
-<li class="lvl-4">多参传递时，自定义参数直接从第二个开始传递（<strong>参考4.2私有过滤器</strong>）</li>
+<li class="lvl-4">多参传递时，自定义参数直接从第二个开始传递（<b>参考4.2私有过滤器</b>）</li>
 <li class="lvl-4">当全局和局部的过滤器命名冲突时，会默认使用局部过滤器</li>
 </ul>
 </li>
@@ -368,7 +368,7 @@
 <h3 id="5）计算属性">5）计算属性</h3>
 <ul class="lvl-0">
 <li class="lvl-2">
-<p><mark>作用</mark>：通过vue实例中已存在的属性来计算出一个<strong>不存在的属性</strong></p>
+<p><mark>作用</mark>：通过vue实例中已存在的属性来计算出一个<b>不存在的属性</b></p>
 </li>
 <li class="lvl-2">
 <p><mark>注意事项</mark>：</p>
@@ -388,7 +388,7 @@
 <li class="lvl-2">
 <p><mark>注意事项</mark>：</p>
 <ul class="lvl-2">
-<li class="lvl-4">在watch中定义函数方法，注意<strong>函数名与data中要监听的属性名要一致</strong></li>
+<li class="lvl-4">在watch中定义函数方法，注意<b>函数名与data中要监听的属性名要一致</b></li>
 </ul>
 </li>
 </ul>

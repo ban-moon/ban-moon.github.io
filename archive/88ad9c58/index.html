@@ -201,7 +201,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">列出本地的镜像</span></span><br><span class="line">docker images [OPTIONS] [REPOSITORY[:TAG]]</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">在仓库中查询镜像</span></span><br><span class="line">docker search [OPTIONS] TERM</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">从仓库中拉取镜像至本地</span></span><br><span class="line">docker pull [OPTIONS] NAME[:TAG|@DIGEST]</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">显示docker磁盘使用情况</span></span><br><span class="line">docker system df [OPTIONS]</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">删除一个或多个镜像</span></span><br><span class="line">docker rmi [OPTIONS] IMAGE [IMAGE...]</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">导入镜像，将tar压缩包导入为镜像</span></span><br><span class="line">docker import [OPTIONS] file|URL|- [REPOSITORY[:TAG]]</span><br></pre></td></tr></table></figure>
 <h3 id="5）容器命令">5）容器命令</h3>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动容器</span></span><br><span class="line">docker run [OPTIONS] IMAGE [COMMAND] [ARG...]</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">例如，启动一个后台运行的nginx</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">例如，启动一个nginx，并进入其环境</span></span><br><span class="line">docker run --name=myNginx -it nginx /bin/bash</span><br></pre></td></tr></table></figure>
-<p><strong>option命令有很多，罗列一下常用的</strong></p>
+<p><b>option命令有很多，罗列一下常用的</b></p>
 <table>
 <thead>
 <tr>
@@ -237,7 +237,7 @@
 </tbody>
 </table>
 <p>啊啊啊啊啊，具体看这里吧<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/reference/commandline/run/">docker run | Docker Documentation</a></p>
-<hr>
+<hr />
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">罗列出当前正在运行的容器</span></span><br><span class="line">docker ps [OPTIONS]</span><br><span class="line">docker container ls [OPTIONS]</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">退出容器，退出后容器会停止运行</span></span><br><span class="line">exit</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">退出容器，容器不会停止运行，会在后台运行</span></span><br><span class="line">ctrl+p+q</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">进入容器</span></span><br><span class="line">docker exec -it CONTAINER </span><br><span class="line">docker attach [OPTIONS] CONTAINER</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动已停止的容器</span></span><br><span class="line">docker start [OPTIONS] CONTAINER [CONTAINER...]</span><br><span class="line">docker container start [OPTIONS] CONTAINER [CONTAINER...]</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重启容器</span></span><br><span class="line">docker restart [OPTIONS] CONTAINER [CONTAINER...]</span><br><span class="line">docker container restart [OPTIONS] CONTAINER [CONTAINER...]</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">停止容器</span></span><br><span class="line">docker stop [OPTIONS] CONTAINER [CONTAINER...]</span><br><span class="line">docker container stop [OPTIONS] CONTAINER [CONTAINER...]</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">强制停止容器</span></span><br><span class="line">docker kill [OPTIONS] CONTAINER [CONTAINER...]</span><br><span class="line">docker container kill [OPTIONS] CONTAINER [CONTAINER...]</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">删除容器</span></span><br><span class="line">docker rm [OPTIONS] CONTAINER [CONTAINER...]</span><br><span class="line">docker container rm [OPTIONS] CONTAINER [CONTAINER...]</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看容器日志</span></span><br><span class="line">docker logs [OPTIONS] CONTAINER</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">返回容器的底层信息</span></span><br><span class="line">docker inspect [OPTIONS] NAME|ID [NAME|ID...]</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">显示容器正在运行的进程</span></span><br><span class="line">docker top CONTAINER [ps OPTIONS]</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">从容器中拷贝文件至宿主机</span></span><br><span class="line">docker cp [OPTIONS] CONTAINER:SRC_PATH DEST_PATH</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">从宿主机中拷贝文件至容器</span></span><br><span class="line">docker cp [OPTIONS] SRC_PATH CONTAINER:DEST_PATH</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">导出容器，将容器的文件系统导出为tar归档文件</span></span><br><span class="line">docker export [OPTIONS] CONTAINER</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建一个新镜像来自一个修改过的容器</span></span><br><span class="line">docker commit [OPTIONS] CONTAINER [REPOSITORY[:TAG]]</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>同样是重新进入容器，下面这两个有什么区别</p>
@@ -274,7 +274,7 @@
 <p>运行容器大家都会了，那么如果我们运行了一个容器，如果担心容器会宕机，导致容器中的数据丢失，那我们需要把重要的数据抽离出来，而这样的技术我们称为数据卷。</p>
 <p>比如说，我启动了一个<code>mysql</code>的服务，保存到库里面的数据越来越多，非常重要。那这样的话，我们可以将<code>mysql</code>存储的路径直接改为宿主机的路径，两两进行映射。内部<code>mysql</code>容器宕机了，重要的数据还在宿主机上保留着。</p>
 <p>同理<code>nginx</code>容器，我们可以把<code>config</code>目录做一个数据卷，我们只需要改动宿主机上目录的配置文件即可，非常快捷</p>
-<hr>
+<hr />
 <p>在Docker中，使用<code>-v</code>参数来创建数据卷。参数的语法是：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -v &lt;host-path&gt;:&lt;container-path&gt; --privileged=true &lt;image&gt;</span><br></pre></td></tr></table></figure>
 <p>其中，<code>&lt;host-path&gt;</code>是宿主机上的路径，<code>&lt;container-path&gt;</code>是容器内的路径，<code>&lt;image&gt;</code>是要运行的容器镜像。这个命令会将宿主机上的 <code>&lt;host-path&gt;</code> 目录映射到容器内的<code>&lt;container-path&gt;</code>。如果目录不存在，则会自动创建。</p>
@@ -307,8 +307,8 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name=myTomcat -it -p 8080:8080 -v /var/tomcat/webapps:/usr/local/tomcat/webapps --privileged=true tomcat</span><br></pre></td></tr></table></figure>
 <h3 id="3）Dockerfile">3）Dockerfile</h3>
 <h4 id="3-1）介绍">3.1）介绍</h4>
-<p><code>Dockerfile</code>是一个<strong>脚本文件</strong>，它包含一系列构建指令和参数，用于自动化<code>Docker</code>镜像的构建过程。通过<code>Dockerfile</code>，可以描述<code>Docker</code>镜像的详细信息，包括所需的操作系统、软件包、应用程序、环境变量等内容。<code>Docker</code>根据<code>Dockerfile</code>构建出一个可重现的<code>Docker</code>镜像，用于在运行时创建容器和环境。<code>Dockerfile</code>中的指令包括<mark>FROM、RUN、CMD、EXPOSE、ENV、ADD、COPY</mark>等命令，这些指令可以通过Dockerfile自动化创建Docker镜像的过程。</p>
-<p><strong><code>Dockerfile</code>解决了<code>Docker</code>容器部署和管理中的一些问题，例如：</strong></p>
+<p><code>Dockerfile</code>是一个<b>脚本文件</b>，它包含一系列构建指令和参数，用于自动化<code>Docker</code>镜像的构建过程。通过<code>Dockerfile</code>，可以描述<code>Docker</code>镜像的详细信息，包括所需的操作系统、软件包、应用程序、环境变量等内容。<code>Docker</code>根据<code>Dockerfile</code>构建出一个可重现的<code>Docker</code>镜像，用于在运行时创建容器和环境。<code>Dockerfile</code>中的指令包括<mark>FROM、RUN、CMD、EXPOSE、ENV、ADD、COPY</mark>等命令，这些指令可以通过Dockerfile自动化创建Docker镜像的过程。</p>
+<p><b><code>Dockerfile</code>解决了<code>Docker</code>容器部署和管理中的一些问题，例如</b>：</p>
 <ol>
 <li class="lvl-3">
 <p>镜像构建自动化：<code>Dockerfile</code>提供了一种自动化的方式来构建Docker镜像，大大简化了构建过程，并使得构建过程更加可靠和可重复。</p>
@@ -429,16 +429,16 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">构建命令，注意后面有个点</span></span><br><span class="line">docker build -t mycentos7:test .</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">完成后运行镜像</span></span><br><span class="line">docker run -it mycentos7:test</span><br></pre></td></tr></table></figure>
 <h3 id="4）Docker网络">4）Docker网络</h3>
 <p>Docker网络是一种用于在Docker主机和其他容器之间通信的网络体系结构。它提供了容器之间通信、容器与外部网络之间通信以及容器与主机之间通信的方法，同时也提供了安全性、弹性和性能方面的支持。</p>
-<p>Docker网络有三种类型：<strong>桥接网络、主机网络和覆盖网络</strong>。</p>
+<p>Docker网络有三种类型**：桥接网络、主机网络和覆盖网络**。</p>
 <ol>
 <li class="lvl-3">
-<p><strong>桥接网络</strong>：容器默认使用桥接网络模式，在该模式下，每个容器都被分配一个单独的网络命名空间，并控制了容器网络访问的权限。在同一个桥接网络中的容器可以通过容器名称或IP地址进行通信。</p>
+<p><b>桥接网络</b>：容器默认使用桥接网络模式，在该模式下，每个容器都被分配一个单独的网络命名空间，并控制了容器网络访问的权限。在同一个桥接网络中的容器可以通过容器名称或IP地址进行通信。</p>
 </li>
 <li class="lvl-3">
-<p><strong>主机网络</strong>：在主机网络模式下，Docker容器和主机使用同一个网络命名空间，容器可以直接使用主机的IP地址进行通信，但是它也会暴露主机上的所有端口。</p>
+<p><b>主机网络</b>：在主机网络模式下，Docker容器和主机使用同一个网络命名空间，容器可以直接使用主机的IP地址进行通信，但是它也会暴露主机上的所有端口。</p>
 </li>
 <li class="lvl-3">
-<p><strong>覆盖网络</strong>：覆盖网络基于Docker Swarm模式设计，它在多个Docker主机之间创建一个虚拟网络，允许容器在多个主机上使用相同的IP地址进行通信。每个虚拟网络都被赋予一个唯一标识符，并控制了容器访问网络的权限。</p>
+<p><b>覆盖网络</b>：覆盖网络基于Docker Swarm模式设计，它在多个Docker主机之间创建一个虚拟网络，允许容器在多个主机上使用相同的IP地址进行通信。每个虚拟网络都被赋予一个唯一标识符，并控制了容器访问网络的权限。</p>
 </li>
 </ol>
 <p>使用Docker网络可以更好地管理容器之间的通信，并保证容器与外部网络的安全和隔离性。例如，Elastic Stack应用程序就可以使用Docker网络来实现不同组件之间的通信，实现更好的可伸缩性、弹性和容错性。</p>
@@ -470,7 +470,7 @@
 </table>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看当前的docker网络</span></span><br><span class="line">docker network ls</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建网络</span></span><br><span class="line">docker network create [OPTIONS] NETWORK</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">删除docker网络</span></span><br><span class="line">docker network rm NETWORK [NETWORK...]</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">显示一个或多个网络的详细信息</span></span><br><span class="line">docker network inspect [OPTIONS] NETWORK [NETWORK...]</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p><strong>为什么需要docker网络，如何进行docker网络的编排？</strong></p>
+<p><b>为什么需要docker网络，如何进行docker网络的编排？</b></p>
 <p>Docker网络是必要的，因为容器需要网络连接，以便在不同的容器和主机之间进行通信以及与外部服务进行交互。Docker网络还提供了一些额外的功能，如容器发现、服务发现和负载均衡等。此外，Docker网络还可以提供安全性、维护性和可移植性等方面的支持。</p>
 <p>Docker网络编排是指通过将多个Docker容器连接在一起来组装应用程序。Docker提供了多种方式来进行Docker网络编排，例如：</p>
 <ol>
@@ -488,9 +488,9 @@
 <p>从理解上来说，我们希望<code>springCloud</code>微服务打成的<code>jar</code>包之间可以相互的通信，要想注册进<code>nacos</code>，想用<code>gateway</code>网关进行访问的话，最好就是将这一些<code>jar</code>包配置成统一网段的IP，从而达到他们的访问。</p>
 <p>还有一种情况就是，<code>MySQL</code>、<code>Redis</code>这些服务，在进行扩容或宕机重启后，我们的<code>jar</code>包连接服务指定的IP可以不用进行修改。也就是域名转发固定，或者是IP固定。</p>
 </blockquote>
-<hr>
+<hr />
 <p>查看一下，在Docker服务启动时的网络</p>
-<p><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230507134245.png" alt="image-20230505142613434"></p>
+<p><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230507134245.png" alt="image-20230505142613434" /></p>
 <p>docker0是Docker默认创建的一个虚拟网桥，用于管理Docker容器的网络。Docker使用docker0网桥来将物理主机和Docker容器连接在同一个网络中。容器将被分配到docker0的子网中，并分配一个IP地址。容器可以连接到docker0网桥，与其他容器或外部网络通信。</p>
 <p>当Docker容器被创建时，Docker会自动创建一个docker0网桥。docker0网桥是一个本地主机的虚拟网桥，与其他物理设备不同。Docker容器在启动时默认都会连接到docker0网桥，使得它们都能够进行网络通信。例如，当多个容器之间需要建立网络连接时，它们可以通过docker0网桥进行通信。</p>
 <p>默认情况下，docker0网桥的IP地址是172.17.0.1，Docker会分配从这个网段内分配IP地址给Docker容器。可以通过使用docker network命令创建自定义网络，并通过将容器连接到自定义网络来实现更好的网络管理和更高的网络安全性。</p>
@@ -500,11 +500,11 @@
 <h4 id="5-1）介绍">5.1）介绍</h4>
 <p>Docker的容器编排是一种管理和协调多个Docker容器的方法，使它们能够在集群中协同工作。它提供了一个简单的方式来定义、部署、扩展和管理Docker容器，从而实现容器集群的自动化管理。</p>
 <p>通过容器编排，您可以轻松地创建多个容器，定义它们之间的依赖关系，以及协调它们之间的通信和交互。它还可以自动扩展容器集群，并确保高可用性和负载均衡。</p>
-<p>目前市面上比较流行的Docker容器编排工具有<strong>Kubernetes、Docker Compose、Swarm</strong>等。这些工具可根据不同的需求进行选择和使用。</p>
+<p>目前市面上比较流行的Docker容器编排工具有<b>Kubernetes、Docker Compose、Swarm</b>等。这些工具可根据不同的需求进行选择和使用。</p>
 <p>我们小节简单介绍使用<code>Docker Compose</code>。</p>
 <p>如果<code>Dockerfile</code>是用来构建自定义镜像的话，那么<code>Docker Compose</code>就是用来，管理启动一个或多个容器的。</p>
 <p>比如说吧，我有一组<code>springCloud</code>的<code>jar</code>包，还有一些服务<code>MySQL</code>、<code>Redis</code>等，他们有启动的前提条件，先后顺序等。</p>
-<p>那么我们使用<code>Docker Compose</code>就可以一个<code>yaml</code>文件解决，我们只需要修改这份<code>yaml</code>文件即可，便可以<strong>一键启动</strong>。</p>
+<p>那么我们使用<code>Docker Compose</code>就可以一个<code>yaml</code>文件解决，我们只需要修改这份<code>yaml</code>文件即可，便可以<b>一键启动</b>。</p>
 <h4 id="5-2）下载安装">5.2）下载安装</h4>
 <p>官网文档：<a target="_blank" rel="noopener" href="https://docs.docker.com/compose/compose-file/compose-file-v3/">Compose file version 3 reference | Docker Documentation</a></p>
 <p>官网下载：<a target="_blank" rel="noopener" href="https://docs.docker.com/compose/install/">Overview | Docker Documentation</a></p>

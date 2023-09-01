@@ -158,32 +158,32 @@
     })(window)</script><link rel="stylesheet" href="/css/banmoon.css?1" defer /><meta name="generator" content="Hexo 5.4.2"></head><body><link rel="stylesheet" href="/css/flash.css"/><script src="https://cdn.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/config/a441450a27436ff61f584dc176bc6a10.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="archives/"><div class="headline">文章</div><div class="length-num">68</div></a><a href="tags/"><div class="headline">标签</div><div class="length-num">25</div></a><a href="categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/index"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fas fa-compass"></i><span> 发现</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-heartbeat"></i><span> 娱乐</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/picture/"><i class="fa-fw fa-fw fas fa-images"></i><span> 相册</span></a></li><li><a class="site-page child" href="/collection/"><i class="fa-fw fa-fw fas fa-book"></i><span> 收藏</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友联</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525220329.jpg')"><nav id="nav"><span id="blog-info"><a href="index.html" title="半月无霜"><span class="site-name">半月无霜</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/index"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fas fa-compass"></i><span> 发现</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-heartbeat"></i><span> 娱乐</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/picture/"><i class="fa-fw fa-fw fas fa-images"></i><span> 相册</span></a></li><li><a class="site-page child" href="/collection/"><i class="fa-fw fa-fw fas fa-book"></i><span> 收藏</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友联</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">红黑树详解</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-25T13:58:27.000Z" title="发表于 2023-05-25 21:58:27">2023-05-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-25T13:58:27.000Z" title="更新于 2023-05-25 21:58:27">2023-05-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="../../categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">5.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>23分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="红黑树详解"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1>红黑树详解</h1>
 <h2 id="一、介绍">一、介绍</h2>
 <p>作为一颗红黑树，它是一颗特殊的<code>AVL树</code>，也就是一颗特殊的平衡二叉树。</p>
-<p>对于平衡二叉树而言，它的定义是，对于任何二叉树的任何一个节点，<strong>它的左子树和右子树的高度差不能大于1</strong>。</p>
+<p>对于平衡二叉树而言，它的定义是，对于任何二叉树的任何一个节点，<b>它的左子树和右子树的高度差不能大于1</b>。</p>
 <p>而为什么红黑树比较特殊，它除了满足平衡二叉树的特点之外，还有以下的几个特征</p>
 <ol>
 <li class="lvl-3">
-<p>每一个节点都有一个状态，<strong><mark>红色</mark><strong>或者</strong>黑色</strong></p>
+<p>每一个节点都有一个状态，<b><mark>红色</mark><b>或者</b>黑色</b></p>
 </li>
 <li class="lvl-3">
 <p>根节点是黑色</p>
 </li>
 <li class="lvl-3">
-<p>红黑树的叶子节点默认都是空引用的对象，默认都是<strong>黑色</strong></p>
+<p>红黑树的叶子节点默认都是空引用的对象，默认都是<b>黑色</b></p>
 </li>
 <li class="lvl-3">
-<p>==<strong>红色</strong>==节点的两个子节点都是<strong>黑色</strong>，也就是说**<mark>红色</mark>**节点不能相连</p>
+<p>==<b>红色</b>==节点的两个子节点都是<b>黑色</b>，也就是说**<mark>红色</mark>**节点不能相连</p>
 </li>
 <li class="lvl-3">
-<p>从任意节点，到叶子节点，其经过的路径上，<strong>黑色</strong>节点的个数都是一致的</p>
+<p>从任意节点，到叶子节点，其经过的路径上，<b>黑色</b>节点的个数都是一致的</p>
 </li>
 </ol>
-<hr>
+<hr />
 <p><code>AVL树</code>是通过自旋转来完成的平衡</p>
-<p>但是红黑树却不全是这样，它虽然有自旋，但主要是节点特性，加上任意节点到叶子节点经过的<strong>黑色</strong>节点数量来保证了树的子平衡。</p>
+<p>但是红黑树却不全是这样，它虽然有自旋，但主要是节点特性，加上任意节点到叶子节点经过的<b>黑色</b>节点数量来保证了树的子平衡。</p>
 <p>出发点不同，则实现的方式完全不同</p>
 <h2 id="二、示例">二、示例</h2>
 <p>首先，我们针对以上五个特性，先画一个红黑树</p>
-<p><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215433.png" alt="image-20230311165058819"></p>
+<p><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215433.png" alt="image-20230311165058819" /></p>
 <p>再次讲解一下特性</p>
 <ol>
 <li class="lvl-3">
@@ -202,8 +202,8 @@
 <p>重点讲讲第五点</p>
 </li>
 </ol>
-<hr>
-<p>从任意节点，到叶子节点，其经过的路径上，<strong>黑色</strong>节点的个数都是一致的</p>
+<hr />
+<p>从任意节点，到叶子节点，其经过的路径上，<b>黑色</b>节点的个数都是一致的</p>
 <ol>
 <li class="lvl-3">
 <p>比如说<code>5</code>这个节点，到达叶子节点一共有<code>4</code>种走法，每一种走法的黑色节点个数都是<code>2</code>个</p>
@@ -235,7 +235,7 @@
 <p>变色：红色节点变成黑色节点，黑色节点变成红色节点</p>
 </li>
 </ul>
-<hr>
+<hr />
 <p>假设我们对上面示例的红黑树进行插入，可以分为以下这几种情况</p>
 <h3 id="1）当前红黑树是空树">1）当前红黑树是空树</h3>
 <p>这种没什么好说的，直接把插入的节点设置成根节点即可，注意是黑色节点</p>
@@ -255,15 +255,15 @@
 </thead>
 <tbody>
 <tr>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215443.png" alt="image-20230312194158034"></td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215451.png" alt="image-20230312194318707"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215443.png" alt="image-20230312194158034" /></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215451.png" alt="image-20230312194318707" /></td>
 </tr>
 </tbody>
 </table>
 <p>那么插入的是黑色节点呢，那一定会破坏红黑树特性五，<mark>任一节点到根节点的路径上，其中黑色个数是一致的</mark></p>
 <p>那么如果是红色节点呢，就向上面的情况一样，说不定什么都不用处理</p>
 <p>还有种情况就是，红色节点会遇到红色节点，出现红红相连的情况，违反了红黑树的特性四。</p>
-<p><strong>所以针对上面的情况，我们就默认新插入的节点就是红色的</strong></p>
+<p><b>所以针对上面的情况，我们就默认新插入的节点就是红色的</b></p>
 </blockquote>
 <h3 id="4）当插入节点的父节点是红色节点时">4）当插入节点的父节点是红色节点时</h3>
 <p>根据特性二，根节点一定是黑色的，所以我们插入的节点一定有爷爷节点，包含祖宗三代。</p>
@@ -279,8 +279,8 @@
 </thead>
 <tbody>
 <tr>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215505.png" alt="image-20230319123834226"></td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215509.png" alt="image-20230319123900740"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215505.png" alt="image-20230319123834226" /></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215509.png" alt="image-20230319123900740" /></td>
 </tr>
 </tbody>
 </table>
@@ -307,15 +307,15 @@
 <tbody>
 <tr>
 <td>双红的情况</td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215516.png" alt="image-20230319123900740"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215516.png" alt="image-20230319123900740" /></td>
 </tr>
 <tr>
 <td>变色，<br />将父节点和叔叔节点变成黑色，<br />爷爷节点变成红色</td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215521.png" alt="image-20230319123957423"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215521.png" alt="image-20230319123957423" /></td>
 </tr>
 <tr>
 <td>由于爷爷是根节点，这里需要变回黑色</td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215528.png" alt="image-20230319124217349"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215528.png" alt="image-20230319124217349" /></td>
 </tr>
 </tbody>
 </table>
@@ -332,8 +332,8 @@
 </thead>
 <tbody>
 <tr>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215532.png" alt="image-20230319124437283"></td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215536.png" alt="image-20230319124526750"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215532.png" alt="image-20230319124437283" /></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215536.png" alt="image-20230319124526750" /></td>
 </tr>
 </tbody>
 </table>
@@ -347,7 +347,7 @@
 </ol>
 </li>
 <li class="lvl-3">
-<p>将爷爷节点进行<strong>右旋</strong></p>
+<p>将爷爷节点进行<b>右旋</b></p>
 </li>
 <li class="lvl-3">
 <p>如果爷爷节点又出现了双红的情况，那再根据情况对应再进行处理即可</p>
@@ -367,15 +367,15 @@
 <tbody>
 <tr>
 <td>左左红，且没有叔叔节点</td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215543.png" alt="image-20230319124526750"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215543.png" alt="image-20230319124526750" /></td>
 </tr>
 <tr>
 <td>先变色，<br />将父节点变成黑色，<br />将爷爷节点变成红色</td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215548.png" alt="image-20230319125635874"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215548.png" alt="image-20230319125635874" /></td>
 </tr>
 <tr>
 <td>再进行右旋</td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215553.png" alt="image-20230319125103281"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215553.png" alt="image-20230319125103281" /></td>
 </tr>
 </tbody>
 </table>
@@ -391,8 +391,8 @@
 </thead>
 <tbody>
 <tr>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215557.png" alt="image-20230319124437283"></td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215600.png" alt="image-20230319130112153"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215557.png" alt="image-20230319124437283" /></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215600.png" alt="image-20230319130112153" /></td>
 </tr>
 </tbody>
 </table>
@@ -412,7 +412,7 @@
 </ol>
 </li>
 <li class="lvl-3">
-<p>将爷爷节点进行<strong>右旋</strong></p>
+<p>将爷爷节点进行<b>右旋</b></p>
 </li>
 <li class="lvl-3">
 <p>如果爷爷节点又出现了双红的情况，那再根据情况对应再进行处理即可</p>
@@ -428,19 +428,19 @@
 <tbody>
 <tr>
 <td>左右红，且叔叔节点不存在</td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215604.png" alt="image-20230319130112153"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215604.png" alt="image-20230319130112153" /></td>
 </tr>
 <tr>
 <td>对父节点进行左旋<br />出现左左红的情况</td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215609.png" alt="image-20230319130514357"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215609.png" alt="image-20230319130514357" /></td>
 </tr>
 <tr>
 <td>变色，<br />将父节点变成黑色，<br />将爷爷节点变成红色</td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215612.png" alt="image-20230319130933187"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215612.png" alt="image-20230319130933187" /></td>
 </tr>
 <tr>
 <td>再进行右旋</td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215615.png" alt="image-20230319131128504"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215615.png" alt="image-20230319131128504" /></td>
 </tr>
 </tbody>
 </table>
@@ -456,8 +456,8 @@
 </thead>
 <tbody>
 <tr>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215618.png" alt="image-20230319131714631"></td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215621.png" alt="image-20230319131732730"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215618.png" alt="image-20230319131714631" /></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215621.png" alt="image-20230319131732730" /></td>
 </tr>
 </tbody>
 </table>
@@ -471,7 +471,7 @@
 </ol>
 </li>
 <li class="lvl-3">
-<p>将爷爷节点进行<strong>左旋</strong></p>
+<p>将爷爷节点进行<b>左旋</b></p>
 </li>
 <li class="lvl-3">
 <p>如果爷爷节点又出现了双红的情况，那再根据情况对应再进行处理即可</p>
@@ -487,15 +487,15 @@
 <tbody>
 <tr>
 <td>右右红，且叔叔节点不存在</td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215625.png" alt="image-20230319131732730"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215625.png" alt="image-20230319131732730" /></td>
 </tr>
 <tr>
 <td>变色，<br />将父节点变成黑色，<br />将爷爷节点变成红色</td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215627.png" alt="image-20230319132222817"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215627.png" alt="image-20230319132222817" /></td>
 </tr>
 <tr>
 <td>再进行右旋</td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215630.png" alt="image-20230319132234128"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215630.png" alt="image-20230319132234128" /></td>
 </tr>
 </tbody>
 </table>
@@ -511,8 +511,8 @@
 </thead>
 <tbody>
 <tr>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215634.png" alt="image-20230319131714631"></td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215636.png" alt="image-20230319132554768"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215634.png" alt="image-20230319131714631" /></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215636.png" alt="image-20230319132554768" /></td>
 </tr>
 </tbody>
 </table>
@@ -526,7 +526,7 @@
 </ol>
 </li>
 <li class="lvl-3">
-<p>将爷爷节点进行<strong>左旋</strong></p>
+<p>将爷爷节点进行<b>左旋</b></p>
 </li>
 <li class="lvl-3">
 <p>如果爷爷节点又出现了双红的情况，那再根据情况对应再进行处理即可</p>
@@ -542,19 +542,19 @@
 <tbody>
 <tr>
 <td>右左红，且叔叔节点不存在</td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215640.png" alt="image-20230319132559291"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215640.png" alt="image-20230319132559291" /></td>
 </tr>
 <tr>
 <td>先对父节点进行右旋<br />出现右右红的情况</td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215644.png" alt="image-20230319132654592"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215644.png" alt="image-20230319132654592" /></td>
 </tr>
 <tr>
 <td>变色，<br />将父节点变成黑色，<br />将爷爷节点变成红色</td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215647.png" alt="image-20230319132847377"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215647.png" alt="image-20230319132847377" /></td>
 </tr>
 <tr>
 <td>再进行左旋</td>
-<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215650.png" alt="image-20230319132917541"></td>
+<td><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230525215650.png" alt="image-20230319132917541" /></td>
 </tr>
 </tbody>
 </table>
@@ -566,7 +566,7 @@
 <h3 id="2）左旋、右旋">2）左旋、右旋</h3>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 左旋 &lt;br /&gt;</span></span><br><span class="line"><span class="comment"> * 1、将右子树的父节点 -&gt; 当前节点的父节点 &lt;br /&gt;</span></span><br><span class="line"><span class="comment"> * 2、将当前节点的父节点 -&gt; 右子树的左节点 | 右儿子变爸爸，爸爸变左儿子 &lt;br /&gt;</span></span><br><span class="line"><span class="comment"> * 3、原先右节点的左子树 -&gt; 改为当前节点的右节点 &lt;br /&gt;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">leftRotate</span><span class="params">(BRTreeNode&lt;K, V&gt; node)</span> &#123;</span><br><span class="line">    BRTreeNode&lt;K, V&gt; right = node.right;</span><br><span class="line">    BRTreeNode&lt;K, V&gt; parent = node.parent;</span><br><span class="line">    BRTreeNode&lt;K, V&gt; leftByRight = right.left;</span><br><span class="line">    <span class="comment">// 1、将右子树的父节点 -&gt; 当前节点的父节点</span></span><br><span class="line">    <span class="keyword">if</span> (nonNull(parent)) &#123;</span><br><span class="line">        right.parent = parent;</span><br><span class="line">        parent.right = right;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        right.parent = <span class="literal">null</span>;</span><br><span class="line">        <span class="built_in">this</span>.root = right;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 2、将当前节点的父节点 -&gt; 左子树的左节点 | 左儿子变爸爸，爸爸变右儿子</span></span><br><span class="line">    right.left = node;</span><br><span class="line">    node.parent = right;</span><br><span class="line">    <span class="comment">// 3、原先右节点的左子树 -&gt; 改为当前节点的右节点</span></span><br><span class="line">    node.right = leftByRight;</span><br><span class="line">    <span class="keyword">if</span> (nonNull(leftByRight)) &#123;</span><br><span class="line">        leftByRight.parent = node;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 右旋 &lt;br /&gt;</span></span><br><span class="line"><span class="comment"> * 1、将左子树的父节点 -&gt; 当前节点的父节点 &lt;br /&gt;</span></span><br><span class="line"><span class="comment"> * 2、将当前节点的父节点 -&gt; 左子树的右节点 | 左儿子变爸爸，爸爸变右儿子 &lt;br /&gt;</span></span><br><span class="line"><span class="comment"> * 3、原先左节点的右子树 -&gt; 改为当前节点的左节点 &lt;br /&gt;</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> node 当前红黑树</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">rightRotate</span><span class="params">(BRTreeNode&lt;K, V&gt; node)</span> &#123;</span><br><span class="line">    BRTreeNode&lt;K, V&gt; left = node.left;</span><br><span class="line">    BRTreeNode&lt;K, V&gt; parent = node.parent;</span><br><span class="line">    BRTreeNode&lt;K, V&gt; rightByLeft = left.right;</span><br><span class="line">    <span class="comment">// 1、将左子树的父节点 -&gt; 当前节点的父节点</span></span><br><span class="line">    <span class="keyword">if</span> (nonNull(parent)) &#123;</span><br><span class="line">        left.parent = parent;</span><br><span class="line">        parent.left = left;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        left.parent = <span class="literal">null</span>;</span><br><span class="line">        <span class="built_in">this</span>.root = left;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 2、将当前节点的父节点 -&gt; 左子树的右节点 | 左儿子变爸爸，爸爸变右儿子</span></span><br><span class="line">    left.right = node;</span><br><span class="line">    node.parent = left;</span><br><span class="line">    <span class="comment">// 3、原先左子树的右子树 -&gt; 改为当前节点的左节点</span></span><br><span class="line">    node.left = rightByLeft;</span><br><span class="line">    <span class="keyword">if</span> (nonNull(rightByLeft)) &#123;</span><br><span class="line">        rightByLeft.parent = node;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="3）插入节点">3）插入节点</h3>
-<p>这里插入节点，采用了这种模式，<strong>如果节点<code>key</code>相等，则进行节点的替换</strong></p>
+<p>这里插入节点，采用了这种模式，<b>如果节点<code>key</code>相等，则进行节点的替换</b></p>
 <p>大家可可以根据自己的策略需要来理解红黑树</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 插入</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> key 键</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> value 值</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 旧值</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> V <span class="title function_">add</span><span class="params">(K key, V value)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (Objects.isNull(<span class="built_in">this</span>.root)) &#123;</span><br><span class="line">        <span class="built_in">this</span>.root = <span class="keyword">new</span> <span class="title class_">BRTreeNode</span>&lt;&gt;(key, value);</span><br><span class="line">        <span class="built_in">this</span>.root.toggleColor();</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Optional.ofNullable(root.insert(<span class="keyword">new</span> <span class="title class_">BRTreeNode</span>&lt;&gt;(key, value), <span class="built_in">this</span>))</span><br><span class="line">                .map(BRTreeNode::getValue)</span><br><span class="line">                .orElse(<span class="literal">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">BRTreeNode</span>&lt;K <span class="keyword">extends</span> <span class="title class_">Comparable</span>&lt;K&gt;, V&gt; &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 插入</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> node 插入的节点</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 旧节点</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> BRTreeNode&lt;K, V&gt; <span class="title function_">insert</span><span class="params">(BRTreeNode&lt;K, V&gt; node, BRTree&lt;K, V&gt; tree)</span> &#123;</span><br><span class="line">        <span class="type">K</span> <span class="variable">thisKey</span> <span class="operator">=</span> <span class="built_in">this</span>.key;</span><br><span class="line">        <span class="type">K</span> <span class="variable">insertKey</span> <span class="operator">=</span> node.getKey();</span><br><span class="line">        <span class="type">int</span> <span class="variable">compare</span> <span class="operator">=</span> thisKey.compareTo(insertKey);</span><br><span class="line">        <span class="comment">// 当key值相等，则说明要进行替换</span></span><br><span class="line">        <span class="keyword">if</span> (compare == <span class="number">0</span>) &#123;</span><br><span class="line">            node.parent = <span class="built_in">this</span>.parent;</span><br><span class="line">            <span class="keyword">if</span> (Objects.isNull(<span class="built_in">this</span>.parent)) &#123;</span><br><span class="line">                tree.root = node;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (nonNull(<span class="built_in">this</span>.left)) &#123;</span><br><span class="line">                <span class="built_in">this</span>.left.parent = node;</span><br><span class="line">                node.setLeft(<span class="built_in">this</span>.left);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (nonNull(<span class="built_in">this</span>.right)) &#123;</span><br><span class="line">                <span class="built_in">this</span>.right.parent = node;</span><br><span class="line">                node.setRight(<span class="built_in">this</span>.right);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 颜色需要变得和当前节点一样</span></span><br><span class="line">            node.setColor(<span class="built_in">this</span>.color);</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 当前key比较大，需要放置左边</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (compare &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (nonNull(<span class="built_in">this</span>.left)) &#123;</span><br><span class="line">                <span class="built_in">this</span>.left.insert(node, tree);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="built_in">this</span>.left = node;</span><br><span class="line">                node.parent = <span class="built_in">this</span>;</span><br><span class="line">                node.balanceTree(<span class="literal">true</span>, tree);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 当前key比较小，需要放置右边</span></span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (nonNull(<span class="built_in">this</span>.right)) &#123;</span><br><span class="line">                <span class="built_in">this</span>.right.insert(node, tree);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="built_in">this</span>.right = node;</span><br><span class="line">                node.parent = <span class="built_in">this</span>;</span><br><span class="line">                node.balanceTree(<span class="literal">false</span>, tree);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 变色</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">toggleColor</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.color = !<span class="built_in">this</span>.color;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 平衡tree&lt;br /&gt;</span></span><br><span class="line"><span class="comment">     * 1、双红，且叔叔节点存在; 将父节点和叔叔节点变成黑色，爷爷节点变成红色; 后续处理 &lt;br /&gt;</span></span><br><span class="line"><span class="comment">     * 2、左左红，且叔叔节点不存在 &lt;br /&gt;</span></span><br><span class="line"><span class="comment">     * 3、左右红，且叔叔节点不存在 &lt;br /&gt;</span></span><br><span class="line"><span class="comment">     * 4、右右红，且叔叔节点不存在 &lt;br /&gt;</span></span><br><span class="line"><span class="comment">     * 5、右左红，且叔叔节点不存在 &lt;br /&gt;</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> left 当前节点是不是左子节点</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> tree 当前红黑树</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">balanceTree</span><span class="params">(<span class="type">boolean</span> left, BRTree&lt;K, V&gt; tree)</span> &#123;</span><br><span class="line">        <span class="comment">// 双红</span></span><br><span class="line">        <span class="type">boolean</span> <span class="variable">doubleRed</span> <span class="operator">=</span> RED.equals(<span class="built_in">this</span>.parent.getColor());</span><br><span class="line">        <span class="comment">// 叔叔节点是否存在</span></span><br><span class="line">        BRTreeNode&lt;K, V&gt; grandParentNode = <span class="built_in">this</span>.parent.parent;</span><br><span class="line">        BRTreeNode&lt;K, V&gt; uncleNode = <span class="literal">null</span>;</span><br><span class="line">        <span class="type">boolean</span> <span class="variable">existsUncle</span> <span class="operator">=</span> nonNull(grandParentNode) &amp;&amp; nonNull(uncleNode = left ? grandParentNode.getRight() : grandParentNode.getLeft());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 双红，且叔叔节点存在</span></span><br><span class="line">        <span class="keyword">if</span> (doubleRed &amp;&amp; existsUncle) &#123;</span><br><span class="line">            <span class="built_in">this</span>.toggleTreeColor(uncleNode, tree);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (doubleRed) &#123;</span><br><span class="line">            <span class="type">boolean</span> <span class="variable">parentLeft</span> <span class="operator">=</span> grandParentNode.getLeft() == <span class="built_in">this</span>.parent;</span><br><span class="line">            <span class="comment">// 左左红</span></span><br><span class="line">            <span class="keyword">if</span> (parentLeft &amp;&amp; left) &#123;</span><br><span class="line">                leftLeftRed(tree);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 左右红</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (parentLeft) &#123;</span><br><span class="line">                <span class="comment">// 先左旋，变成左左红的情况</span></span><br><span class="line">                tree.leftRotate(<span class="built_in">this</span>.parent);</span><br><span class="line">                <span class="built_in">this</span>.left.leftLeftRed(tree);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 右右红</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (!left) &#123;</span><br><span class="line">                rightRightRed(tree);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 右左红</span></span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// 先右旋，变成右右红的情况</span></span><br><span class="line">                tree.rightRotate(<span class="built_in">this</span>.parent);</span><br><span class="line">                <span class="built_in">this</span>.right.rightRightRed(tree);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 变色 &lt;br /&gt;</span></span><br><span class="line"><span class="comment">     * 1、将父节点和叔叔节点变成黑色 &lt;br /&gt;</span></span><br><span class="line"><span class="comment">     * 2、爷爷节点变成红色 &lt;br /&gt;</span></span><br><span class="line"><span class="comment">     * 3、递归后续处理 &lt;br /&gt;</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> uncleNode 叔叔节点</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> tree 当前的红黑树</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">toggleTreeColor</span><span class="params">(BRTreeNode&lt;K, V&gt; uncleNode, BRTree&lt;K, V&gt; tree)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.parent.toggleColor();</span><br><span class="line">        uncleNode.toggleColor();</span><br><span class="line">        BRTreeNode&lt;K, V&gt; grandParentNode = <span class="built_in">this</span>.parent.parent;</span><br><span class="line">        grandParentNode.toggleColor();</span><br><span class="line">        <span class="comment">// 查看爷爷节点是不是根节点</span></span><br><span class="line">        <span class="keyword">if</span> (Objects.isNull(grandParentNode.parent)) &#123;</span><br><span class="line">            <span class="comment">// 需要重新变为黑色</span></span><br><span class="line">            grandParentNode.toggleColor();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 递归处理后续</span></span><br><span class="line">            grandParentNode.balanceTree(grandParentNode.parent.getLeft() == grandParentNode, tree);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 左左红 &lt;br /&gt;</span></span><br><span class="line"><span class="comment">     * 1、将父节点变成黑色，爷爷节点变成红色 &lt;br /&gt;</span></span><br><span class="line"><span class="comment">     * 2、将爷爷节点进行右旋 &lt;br /&gt;</span></span><br><span class="line"><span class="comment">     * 3、递归后续处理 &lt;br /&gt;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">leftLeftRed</span><span class="params">(BRTree&lt;K, V&gt; tree)</span> &#123;</span><br><span class="line">        <span class="comment">// 将父节点变成黑色，爷爷节点变成红色</span></span><br><span class="line">        <span class="built_in">this</span>.parent.toggleColor();</span><br><span class="line">        BRTreeNode&lt;K, V&gt; grandParentNode = <span class="built_in">this</span>.parent.parent;</span><br><span class="line">        grandParentNode.toggleColor();</span><br><span class="line">        <span class="comment">// 将爷爷节点进行右旋</span></span><br><span class="line">        tree.rightRotate(grandParentNode);</span><br><span class="line">        <span class="comment">// 递归后续处理</span></span><br><span class="line">        <span class="keyword">if</span> (nonNull(grandParentNode.parent)) &#123;</span><br><span class="line">            grandParentNode.balanceTree(grandParentNode.parent.getLeft() == grandParentNode, tree);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 右右红 &lt;br /&gt;</span></span><br><span class="line"><span class="comment">     * 1、变色，父节点变成黑色，爷爷节点变成红色 &lt;br /&gt;</span></span><br><span class="line"><span class="comment">     * 2、将爷爷节点进行左旋 &lt;br /&gt;</span></span><br><span class="line"><span class="comment">     * 3、递归后续处理 &lt;br /&gt;</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> tree 当前红黑树</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">rightRightRed</span><span class="params">(BRTree&lt;K, V&gt; tree)</span> &#123;</span><br><span class="line">        <span class="comment">// 将父节点变成黑色，爷爷节点变成红色</span></span><br><span class="line">        <span class="built_in">this</span>.parent.toggleColor();</span><br><span class="line">        BRTreeNode&lt;K, V&gt; grandParentNode = <span class="built_in">this</span>.parent.parent;</span><br><span class="line">        grandParentNode.toggleColor();</span><br><span class="line">        <span class="comment">// 将爷爷节点进行左旋</span></span><br><span class="line">        tree.leftRotate(grandParentNode);</span><br><span class="line">        <span class="comment">// 递归后续处理</span></span><br><span class="line">        <span class="keyword">if</span> (nonNull(grandParentNode.parent)) &#123;</span><br><span class="line">            grandParentNode.balanceTree(grandParentNode.parent.getLeft() == grandParentNode, tree);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="五、完整代码">五、完整代码</h2>

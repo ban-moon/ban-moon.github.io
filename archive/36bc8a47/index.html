@@ -9,8 +9,8 @@
 <meta property="article:published_time" content="2023-08-30T09:57:11.000Z">
 <meta property="article:modified_time" content="2023-08-30T09:57:11.000Z">
 <meta property="article:author" content="半月无霜">
-<meta property="article:tag" content="jdk">
 <meta property="article:tag" content="面试">
+<meta property="article:tag" content="jdk">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230830185219.jpg"><link rel="shortcut icon" href="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/config/favicon.ico"><link rel="canonical" href="https://www.banmoon.top/archive/36bc8a47/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="../../css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
   root: '/',
@@ -175,7 +175,7 @@
 </div>
 <h2 id="二、答疑">二、答疑</h2>
 <h3 id="1）Java类的加载过程">1）Java类的加载过程</h3>
-<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230830182105.png" alt="image-20230830182103851"></p>
+<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230830182105.png" alt="image-20230830182103851" /></p>
 <p>简单来说，可以这样理解分类</p>
 <ol>
 <li class="lvl-3">
@@ -185,7 +185,7 @@
 </ol>
 </li>
 <li class="lvl-3">
-<p>类的连接，<strong>验证，准备，解析</strong>合称连接</p>
+<p>类的连接，<b>验证，准备，解析</b>合称连接</p>
 <ol>
 <li class="lvl-6">分配空间</li>
 <li class="lvl-6">静态属性赋值（赋初始值，而不是我们给予的值，如<code>int</code>是0，包装类为<code>null</code>）</li>
@@ -198,7 +198,7 @@
 </ol>
 </li>
 </ol>
-<hr>
+<hr />
 <blockquote>
 <p>什么是符号引用，什么又是直接引用</p>
 <p>可以这样进行理解，我们有一个<code>A</code>类和<code>B</code>类，<code>A</code>类中使用到了<code>B</code>类</p>
@@ -217,7 +217,7 @@
 <h3 id="2）双亲委派机制是什么">2）双亲委派机制是什么</h3>
 <p>在了解双亲委派机制之前，我们先设想一个问题，就是如果我们用户自己写一个<code>String</code>这样一个的类，会出现什么样的情况？</p>
 <p>这个问题说简单也简单，说复杂就比较复杂了，这个问题正好是由双亲委派机制来进行解决的。</p>
-<hr>
+<hr />
 <p>在了解双亲委派机制之前，我们先得了解几个<code>ClassLoader</code>类加载器</p>
 <table>
 <thead>
@@ -229,22 +229,22 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>Bootstrap ClassLoader</strong></td>
+<td><b>Bootstrap ClassLoader</b></td>
 <td>启动类加载器，最顶层的类加载器，这个加载器，<code>Java</code>中不能获取，返回的是一个<code>null</code></td>
 <td><code>&lt;JAVA HOME&gt;/lib</code></td>
 </tr>
 <tr>
-<td><strong>Extension ClassLoader</strong></td>
+<td><b>Extension ClassLoader</b></td>
 <td>扩展类加载器</td>
 <td><code>&lt;JAVA HOME&gt;/lib/ext</code></td>
 </tr>
 <tr>
-<td><strong>Application ClassLoader</strong></td>
+<td><b>Application ClassLoader</b></td>
 <td>应用程序类加载器，也是我们最常用的类加载器</td>
 <td><code>classpath/java.class.path</code></td>
 </tr>
 <tr>
-<td><strong>User ClassLoader</strong></td>
+<td><b>User ClassLoader</b></td>
 <td>用户自定义的类加载器</td>
 <td>任意来源的类</td>
 </tr>
@@ -252,52 +252,52 @@
 </table>
 <p>好的，当了解完上面的四种类加载器之后，我们将进行验证，看下面代码</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.banmoon.parentsappoint;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ParentsAppointTest</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(java.lang.String[] args)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;java.lang.String：&quot;</span> + <span class="string">&quot;abc&quot;</span>.getClass().getClassLoader());</span><br><span class="line">        System.out.println(<span class="string">&quot;com.banmoon.parentsappoint.String：&quot;</span> + String.class.getClassLoader());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230830181317.png" alt="image-20230812165237418"></p>
+<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230830181317.png" alt="image-20230812165237418" /></p>
 <p>为什么，他们的类加载器是不同的呢。有人说了，是因为类加载器本身就是有不同的加载类职责范围。</p>
 <p>那么当我们进行类加载的时候，程序怎么知道这个类要用什么类加载器。然而就是这段<mark>不同的类，确定使用不同类加载器的过程</mark>，就是我们将的双亲委派机制。</p>
 <p>我们先看这段代码，正是双亲委派机制的代码，在<code>ClassLoader.java</code>中可以找到这段代码</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> Class&lt;?&gt; loadClass(String name, <span class="type">boolean</span> resolve)</span><br><span class="line">    <span class="keyword">throws</span> ClassNotFoundException</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">synchronized</span> (getClassLoadingLock(name)) &#123;</span><br><span class="line">        <span class="comment">// 首先，先检查类是否已经被加载</span></span><br><span class="line">        Class&lt;?&gt; c = findLoadedClass(name);</span><br><span class="line">        <span class="keyword">if</span> (c == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="type">long</span> <span class="variable">t0</span> <span class="operator">=</span> System.nanoTime();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="comment">// parent是父亲加载器，这里仅仅是逻辑层面上的，并不是指继承方面的父类</span></span><br><span class="line">                <span class="keyword">if</span> (parent != <span class="literal">null</span>) &#123;</span><br><span class="line">                    <span class="comment">// 如果父亲加载器不为空，则先交给父亲加载器进行类加载</span></span><br><span class="line">                    c = parent.loadClass(name, <span class="literal">false</span>);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="comment">// 如果父亲加载器为空，那说明接下来是Bootstrap ClassLoader了，直接交给特殊的方法进行加载</span></span><br><span class="line">                    c = findBootstrapClassOrNull(name);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">                <span class="comment">// ClassNotFoundException thrown if class not found</span></span><br><span class="line">                <span class="comment">// from the non-null parent class loader</span></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (c == <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="comment">// If still not found, then invoke findClass in order</span></span><br><span class="line">                <span class="comment">// to find the class.</span></span><br><span class="line">                <span class="type">long</span> <span class="variable">t1</span> <span class="operator">=</span> System.nanoTime();</span><br><span class="line">                <span class="comment">// 如果上面的父亲类加载器没有加载成功，那就自己查找</span></span><br><span class="line">                c = findClass(name);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// this is the defining class loader; record the stats</span></span><br><span class="line">                sun.misc.PerfCounter.getParentDelegationTime().addTime(t1 - t0);</span><br><span class="line">                sun.misc.PerfCounter.getFindClassTime().addElapsedTimeFrom(t1);</span><br><span class="line">                sun.misc.PerfCounter.getFindClasses().increment();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (resolve) &#123;</span><br><span class="line">            resolveClass(c);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这就是双亲委派机制，下面可以画一个图</p>
-<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230830181311.png" alt="image-20230812182014362"></p>
+<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230830181311.png" alt="image-20230812182014362" /></p>
 <p>可以看到，类加载的时候，永远都是<code>Bootstrap ClassLoader</code>（启动类加载器）尝试去加载</p>
 <p>当然，如果类不合适，将会向下进行委派加载</p>
 <p>上面的这种行为可以这样概括，<mark>向上检查，向下委托加载</mark></p>
 <h3 id="3）JVM内存模型">3）JVM内存模型</h3>
 <p>下面这个就是JVM的内存模型，有些细节没有完全画出来，后续会补上</p>
-<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230830181306.png" alt="image-20230813094052500"></p>
+<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230830181306.png" alt="image-20230813094052500" /></p>
 <p>需要讲一下，其中的这些是什么意思</p>
 <ul class="lvl-0">
 <li class="lvl-2">
-<p>**堆内存：**这个先简单概括一下，基本对象的创建都会存储在该内存区域</p>
+<p><b>堆内存</b>：这个先简单概括一下，基本对象的创建都会存储在该内存区域</p>
 </li>
 <li class="lvl-2">
-<p>**方法区：**方法区是一个概念，然而不同的虚拟机会有不同的实现。在这里，我们只需要关注<mark>方法区究竟是干什么的即可</mark>。在方法区中，主要存储以下三个内容，</p>
+<p><b>方法区</b>：方法区是一个概念，然而不同的虚拟机会有不同的实现。在这里，我们只需要关注<mark>方法区究竟是干什么的即可</mark>。在方法区中，主要存储以下三个内容，</p>
 <ul class="lvl-2">
-<li class="lvl-4">**类签名：**记录权限名，访问权限，版本号</li>
-<li class="lvl-4">**属性：**记录类属性，访问权限</li>
-<li class="lvl-4">**方法：**方法字节码记录</li>
+<li class="lvl-4"><b>类签名</b>：记录权限名，访问权限，版本号</li>
+<li class="lvl-4"><b>属性</b>：记录类属性，访问权限</li>
+<li class="lvl-4"><b>方法</b>：方法字节码记录</li>
 </ul>
 </li>
 <li class="lvl-2">
-<p><strong>常量池：<strong>在上面讲到过</strong>符号引用改为直接引用</strong>，那些这一块常量池就是存储这一块东西的。可以理解为，他是由字节码中一个指针指向另一个字节码。比如说定义了一个<code>String</code>的属性，那么在类加载的连接阶段，常量池中会存储这么一个指针常量。</p>
+<p><b>常量池</b>：在上面讲到过<b>符号引用改为直接引用</b>，那些这一块常量池就是存储这一块东西的。可以理解为，他是由字节码中一个指针指向另一个字节码。比如说定义了一个<code>String</code>的属性，那么在类加载的连接阶段，常量池中会存储这么一个指针常量。</p>
 </li>
 <li class="lvl-2">
-<p>**运行时常量池：**这是再上面模型图中没有体现的，需要单独讲解。它里面主要存储两个内容。可以看到的是，运行时常量池是包括了常量池的。所以这一块知识点，不需要额外去记忆。</p>
+<p><b>运行时常量池</b>：这是再上面模型图中没有体现的，需要单独讲解。它里面主要存储两个内容。可以看到的是，运行时常量池是包括了常量池的。所以这一块知识点，不需要额外去记忆。</p>
 <ul class="lvl-2">
-<li class="lvl-4"><strong>运行时产生的：<strong>如字符串，如上面的</strong>符号引用改为直接引用</strong></li>
-<li class="lvl-4">**编译期间产生的：**主要是字节码中定义的静态信息，各个类的<code>Class</code>对象。还有就是开发者编写的静态变量。</li>
+<li class="lvl-4"><b>运行时产生的</b>：如字符串，如上面的<b>符号引用改为直接引用</b></li>
+<li class="lvl-4"><b>编译期间产生的</b>：主要是字节码中定义的静态信息，各个类的<code>Class</code>对象。还有就是开发者编写的静态变量。</li>
 </ul>
 </li>
 <li class="lvl-2">
-<p>**堆：**对象主要存储在堆内存中，这里也是垃圾回收<code>GC</code>的主战场。下面篇幅会提到</p>
+<p><b>堆</b>：对象主要存储在堆内存中，这里也是垃圾回收<code>GC</code>的主战场。下面篇幅会提到</p>
 </li>
 <li class="lvl-2">
-<p>**程序计数器：**用来存储字节码的指令地址，提供给执行引擎去读取执行。简单的来说就是执行到哪一步了</p>
+<p><b>程序计数器</b>：用来存储字节码的指令地址，提供给执行引擎去读取执行。简单的来说就是执行到哪一步了</p>
 </li>
 <li class="lvl-2">
-<p>**虚拟机栈：**换个名字叫<code>Java</code>方法栈，这样好理解一下。<code>Java</code>在调用方法时，会将字节码方法入栈，这个东西叫做栈帧。栈这种数据结构，就是先入后出。类似的，一个<code>A</code>方法压入栈，这个方法调用一个<code>B</code>方法，就会将<code>B</code>方法压入栈。结构展示<code>A</code>在最底下，<code>B</code>在上。在结束的时候，是<code>B</code>方法栈帧先结束，然后才是<code>A</code>方法的栈帧。符合先入后出原则。在栈帧结构内部，我们可以如下进行划分，分别是</p>
+<p><b>虚拟机栈</b>：换个名字叫<code>Java</code>方法栈，这样好理解一下。<code>Java</code>在调用方法时，会将字节码方法入栈，这个东西叫做栈帧。栈这种数据结构，就是先入后出。类似的，一个<code>A</code>方法压入栈，这个方法调用一个<code>B</code>方法，就会将<code>B</code>方法压入栈。结构展示<code>A</code>在最底下，<code>B</code>在上。在结束的时候，是<code>B</code>方法栈帧先结束，然后才是<code>A</code>方法的栈帧。符合先入后出原则。在栈帧结构内部，我们可以如下进行划分，分别是</p>
 <ul class="lvl-2">
-<li class="lvl-4"><strong>局部变量表：</strong>
+<li class="lvl-4"><b>局部变量表</b>：
 <ol>
 <li class="lvl-7">主要存储方法的参数、定义在方法内的局部变量，包括八大基本数据类型，对象的引用地址，返回值地址。</li>
 <li class="lvl-7">局部变量表中存储的基本单元为变量槽(Sot)，32位(4字节)以内的数据类型占一个slot，64位(long，double)的占两个slot。</li>
@@ -306,18 +306,18 @@
 <li class="lvl-7">局部变量表中含有直接或者间接指向的引用类型变量时，不会被垃圾回收处理。</li>
 </ol>
 </li>
-<li class="lvl-4">**操作数栈：**除了上面的局部变量表，还有一个操作数栈。这个操作数栈是在方法执行的过程中，根据字节码的指令，将上面的变量入栈，再执行指令。如执行复制、交换、求和等操作</li>
-<li class="lvl-4">**动态链接：**每个栈帧都包含一个指向运行时常量池中该栈帧所属方法的引用，持有这个引用是为了支持方法调用过程中的动态链接。</li>
-<li class="lvl-4">**方法出口：**存放调用该方法的计数器的值；有两种情况，一种是方法正常返回，另一种是方法出先异常的返回。存储在一个异常处理表，方便再发生异常的时候找到处理异常的代码。</li>
+<li class="lvl-4"><b>操作数栈</b>：除了上面的局部变量表，还有一个操作数栈。这个操作数栈是在方法执行的过程中，根据字节码的指令，将上面的变量入栈，再执行指令。如执行复制、交换、求和等操作</li>
+<li class="lvl-4"><b>动态链接</b>：每个栈帧都包含一个指向运行时常量池中该栈帧所属方法的引用，持有这个引用是为了支持方法调用过程中的动态链接。</li>
+<li class="lvl-4"><b>方法出口</b>：存放调用该方法的计数器的值；有两种情况，一种是方法正常返回，另一种是方法出先异常的返回。存储在一个异常处理表，方便再发生异常的时候找到处理异常的代码。</li>
 </ul>
 </li>
 <li class="lvl-2">
-<p>**本地方法栈：**由于<code>Java</code>是由<code>C++语言</code>编写的，里面肯定会调用到<code>C++</code>，故本地方法栈就是存储的是调用<code>C++</code>方法时的变量存储。</p>
+<p><b>本地方法栈</b>：由于<code>Java</code>是由<code>C++语言</code>编写的，里面肯定会调用到<code>C++</code>，故本地方法栈就是存储的是调用<code>C++</code>方法时的变量存储。</p>
 </li>
 </ul>
 <h2 id="三、最后">三、最后</h2>
 <p>我是半月，你我一同共勉！！！</p>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://www.banmoon.top">半月无霜</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.banmoon.top/archive/36bc8a47/">https://www.banmoon.top/archive/36bc8a47/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.banmoon.top" target="_blank">半月无霜</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="../../tags/jdk/">jdk</a><a class="post-meta__tags" href="../../tags/%E9%9D%A2%E8%AF%95/">面试</a></div><div class="post_share"><div class="social-share" data-image="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230830185219.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="../604b199/" title="自定义枚举Validated校验注解"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230830144551.jpg" onerror="onerror=null;src='../../img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">自定义枚举Validated校验注解</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="../54b2b61f/" title="Java中锁的分类"><img class="cover" src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230529161433.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-29</div><div class="title">Java中锁的分类</div></div></a></div><div><a href="../742a330a/" title="Java中关于线程池的几道面试题"><img class="cover" src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230531115249.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-31</div><div class="title">Java中关于线程池的几道面试题</div></div></a></div><div><a href="../53fb86d6/" title="关于Java中引用的面试题"><img class="cover" src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230527225134.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-27</div><div class="title">关于Java中引用的面试题</div></div></a></div><div><a href="../b668dca2/" title="关于final关键字的两个面试题"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/articles/d0431e43db3d05b52fa58ebd0a6d92c1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-05</div><div class="title">关于final关键字的两个面试题</div></div></a></div><div><a href="../f1218699/" title="Java使用NIO实现Socket通信"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/articles/c5b4cbb3ec7ca454126b4b63770c530b.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-05</div><div class="title">Java使用NIO实现Socket通信</div></div></a></div><div><a href="../a2c3ad19/" title="Java多线程"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/articles/8b791f2f81fc36f6cf57c3e00ff7dc43.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-12</div><div class="title">Java多线程</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><!-- 这是侧边栏--><div class="aside-content" id="aside-content"><script>if (document.documentElement.classList.contains('hide-aside')) {
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://www.banmoon.top">半月无霜</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.banmoon.top/archive/36bc8a47/">https://www.banmoon.top/archive/36bc8a47/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.banmoon.top" target="_blank">半月无霜</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="../../tags/%E9%9D%A2%E8%AF%95/">面试</a><a class="post-meta__tags" href="../../tags/jdk/">jdk</a></div><div class="post_share"><div class="social-share" data-image="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230830185219.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="../604b199/" title="自定义枚举Validated校验注解"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230830144551.jpg" onerror="onerror=null;src='../../img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">自定义枚举Validated校验注解</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="../742a330a/" title="Java中关于线程池的几道面试题"><img class="cover" src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230531115249.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-31</div><div class="title">Java中关于线程池的几道面试题</div></div></a></div><div><a href="../54b2b61f/" title="Java中锁的分类"><img class="cover" src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230529161433.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-29</div><div class="title">Java中锁的分类</div></div></a></div><div><a href="../53fb86d6/" title="关于Java中引用的面试题"><img class="cover" src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230527225134.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-27</div><div class="title">关于Java中引用的面试题</div></div></a></div><div><a href="../b668dca2/" title="关于final关键字的两个面试题"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/articles/d0431e43db3d05b52fa58ebd0a6d92c1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-05</div><div class="title">关于final关键字的两个面试题</div></div></a></div><div><a href="../8c746a2c/" title="Redis的持久化策略RDB和AOF"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/articles/b54a8ff58bb9d29cbb50e77472287b0e.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-11</div><div class="title">Redis的持久化策略RDB和AOF</div></div></a></div><div><a href="../546690f2/" title="kafka的架构及常见面试题"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230828102741.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-28</div><div class="title">kafka的架构及常见面试题</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><!-- 这是侧边栏--><div class="aside-content" id="aside-content"><script>if (document.documentElement.classList.contains('hide-aside')) {
     saveToLocal.set('aside-status', 'show', 2);
     document.documentElement.classList.toggle('hide-aside');
 }</script><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">关于JVM中的几大面试题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BB%8B%E7%BB%8D"><span class="toc-text">一、介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%AD%94%E7%96%91"><span class="toc-text">二、答疑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%BC%89Java%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B"><span class="toc-text">1）Java类的加载过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%BC%89%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text">2）双亲委派机制是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%EF%BC%89JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B"><span class="toc-text">3）JVM内存模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%9C%80%E5%90%8E"><span class="toc-text">三、最后</span></a></li></ol></li></ol></div></div><script>var tocItems = document.querySelectorAll('.toc-item');

@@ -435,14 +435,6 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }
 
-    // 首页按钮点击
-    const $cardBtn = document.querySelector('#card-info-btn');
-    if ($cardBtn) {
-        $cardBtn.addEventListener('click', e => {
-            btf.snackbarShow("点击 ctrl + D 加入书签");
-        })
-    }
-
     // find head position & add active class
     const list = $article.querySelectorAll('h1,h2,h3,h4,h5,h6')
     let detectItem = ''
@@ -593,6 +585,16 @@ document.addEventListener('DOMContentLoaded', function () {
         break
     }
   })
+
+  // 首页按钮点击
+  const cardBtnClick = () => {
+    const $cardBtn = document.querySelector('#card-info-btn');
+    if ($cardBtn) {
+      $cardBtn.addEventListener('click', e => {
+        btf.snackbarShow("点击 ctrl + D 加入书签");
+      })
+    }
+  }
 
   /**
    * menu
@@ -831,6 +833,8 @@ document.addEventListener('DOMContentLoaded', function () {
     tabsFn.backToTop()
     switchComments()
     document.getElementById('toggle-menu').addEventListener('click', () => { sidebarFn.open() })
+    
+    cardBtnClick()
   }
 
   refreshFn()
