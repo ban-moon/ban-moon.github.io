@@ -1,0 +1,587 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>Redis相关底层面试题 | 半月无霜</title><meta name="author" content="半月无霜"><meta name="copyright" content="半月无霜"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Redis相关底层面试题 一、介绍 Redis是一个开源的高性能键值对存储系统，具有快速、灵活和可扩展的特性。它是一个基于内存的数据结构存储系统，可以用作数据库、缓存和消息代理。Redis支持多种类型的数据结构，如字符串（strings），散列（hashes），列表（lists），集合（sets）等。 Redis支持数据的持久化，可以将内存中的数据保存在磁盘中，重启的时候可以再次加载进行使用。同时">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis相关底层面试题">
+<meta property="og:url" content="https://www.banmoon.top/archive/ea96f55a/">
+<meta property="og:site_name" content="半月无霜">
+<meta property="og:description" content="Redis相关底层面试题 一、介绍 Redis是一个开源的高性能键值对存储系统，具有快速、灵活和可扩展的特性。它是一个基于内存的数据结构存储系统，可以用作数据库、缓存和消息代理。Redis支持多种类型的数据结构，如字符串（strings），散列（hashes），列表（lists），集合（sets）等。 Redis支持数据的持久化，可以将内存中的数据保存在磁盘中，重启的时候可以再次加载进行使用。同时">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230903231220.jpg">
+<meta property="article:published_time" content="2023-09-03T15:10:56.000Z">
+<meta property="article:modified_time" content="2023-09-03T15:10:56.000Z">
+<meta property="article:author" content="半月无霜">
+<meta property="article:tag" content="面试">
+<meta property="article:tag" content="redis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230903231220.jpg"><link rel="shortcut icon" href="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/config/favicon.ico"><link rel="canonical" href="https://www.banmoon.top/archive/ea96f55a/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="../../css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: true,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Redis相关底层面试题',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: undefined,
+  isToc: true,
+  postUpdate: '2023-09-03 23:10:56'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = url => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      link.onload = () => resolve()
+      link.onerror = () => reject()
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/banmoon.css?1" defer /><meta name="generator" content="Hexo 5.4.2"></head><body><link rel="stylesheet" href="/css/flash.css"/><script src="https://cdn.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/config/a441450a27436ff61f584dc176bc6a10.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="archives/"><div class="headline">文章</div><div class="length-num">69</div></a><a href="tags/"><div class="headline">标签</div><div class="length-num">25</div></a><a href="categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/index"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fas fa-compass"></i><span> 发现</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-heartbeat"></i><span> 娱乐</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/picture/"><i class="fa-fw fa-fw fas fa-images"></i><span> 相册</span></a></li><li><a class="site-page child" href="/collection/"><i class="fa-fw fa-fw fas fa-book"></i><span> 收藏</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友联</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230903231220.jpg')"><nav id="nav"><span id="blog-info"><a href="index.html" title="半月无霜"><span class="site-name">半月无霜</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/index"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fas fa-compass"></i><span> 发现</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-heartbeat"></i><span> 娱乐</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/picture/"><i class="fa-fw fa-fw fas fa-images"></i><span> 相册</span></a></li><li><a class="site-page child" href="/collection/"><i class="fa-fw fa-fw fas fa-book"></i><span> 收藏</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友联</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Redis相关底层面试题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-09-03T15:10:56.000Z" title="发表于 2023-09-03 23:10:56">2023-09-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-09-03T15:10:56.000Z" title="更新于 2023-09-03 23:10:56">2023-09-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="../../categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>11分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Redis相关底层面试题"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1>Redis相关底层面试题</h1>
+<h2 id="一、介绍">一、介绍</h2>
+<p>Redis是一个开源的高性能键值对存储系统，具有快速、灵活和可扩展的特性。它是一个基于内存的数据结构存储系统，可以用作数据库、缓存和消息代理。Redis支持多种类型的数据结构，如字符串（strings），散列（hashes），列表（lists），集合（sets）等。</p>
+<p>Redis支持数据的持久化，可以将内存中的数据保存在磁盘中，重启的时候可以再次加载进行使用。同时，Redis还支持数据的备份，即master-slave模式的数据备份。</p>
+<p>Redis的应用场景非常广泛。虽然Redis是一个key-value的内存数据库，但在实际场景中，Redis经常被作为缓存来使用，如面对数据高并发的读写、海量数据的读写等。具体而言，分布式缓存Redis可用于以下场景：</p>
+<ol>
+<li class="lvl-3">
+<p>页面缓存：Redis可将Web页面的内容片段，包括HTML，CSS和图片等静态数据，缓存到Redis实例，提高网站的访问性能。比如在电商类应用中，热销商品展示、秒杀推荐等数据面临高并发读的压力，分布式缓存Redis的高并发及灵活扩展，可轻松支持此类应用  。</p>
+</li>
+<li class="lvl-3">
+<p>消息队列：Redis可以作为消息代理，将消息存储在Redis中，然后由消费者来消费这些消息。这种方式可以很好地解决异步处理问题。</p>
+</li>
+<li class="lvl-3">
+<p>排行榜：Redis提供的有序集合数据类构能实现各种复杂的排行榜应用。</p>
+</li>
+<li class="lvl-3">
+<p>计数器：Redis提供了INCRBY命令来实现原子性的递增，因此可以运用于高并发的秒杀活动、分布式序列号的生成等业务场景。</p>
+</li>
+</ol>
+<hr />
+<p>下面提供了<code>redis</code>的一些面试题，主要是记录，并在以后的面试中不再感到迷茫。</p>
+<div id="banmoon-toc">
+	<ul class="lvl-0">
+		<li class="lvl-2">
+			<p><a target="#1）持久化策略" data-pjax-state="anchor">持久化策略</a></p>
+		</li>
+		<li class="lvl-2">
+			<p><a target="#2）redis是单线程还是多线程的" data-pjax-state="anchor">redis是单线程还是多线程的</a></p>
+		</li>
+		<li class="lvl-2">
+			<p><a target="#3）redis的过期删除策略" data-pjax-state="anchor">redis的过期删除策略</a></p>
+		</li>
+		<li class="lvl-2">
+			<p><a target="#4）缓存淘汰算策略哪些" data-pjax-state="anchor">缓存淘汰算策略哪些</a></p>
+		</li>
+		<li class="lvl-2">
+			<p><a target="#5）主从、哨兵、集群的优缺点" data-pjax-state="anchor">主从、哨兵、集群的优缺点</a></p>
+		</li>
+		<li class="lvl-2">
+			<p><a target="#6）简述主从同步机制" data-pjax-state="anchor">简述主从同步机制</a></p>
+		</li>
+		<li class="lvl-2">
+			<p><a target="#7）缓存雪崩、缓存击穿、缓存穿透是什么，怎么避免" data-pjax-state="anchor">缓存雪崩、缓存击穿、缓存穿透是什么，怎么避免</a></p>
+		</li>
+	</ul>
+</div>
+<h2 id="二、面试题">二、面试题</h2>
+<h3 id="1）持久化策略">1）持久化策略</h3>
+<p>关于<code>redis</code>持久化的策略，分为两种一种是<code>RDB</code>、<code>AOF</code>，当然可以结合使用</p>
+<p>在以前就讲述过</p>
+<p><a href="https://www.banmoon.top/archive/8c746a2c/">Redis的持久化策略RDB和AOF | 半月无霜 (banmoon.top)</a></p>
+<h3 id="2）redis是单线程还是多线程的">2）redis是单线程还是多线程的</h3>
+<p>在<code>redis6.0</code>以前，单线程是指<code>网络IO</code>和键值对读写是由一个线程来完成。</p>
+<p>在<code>redis6.0</code>以后，引入了多线程是为了处理<code>网络IO</code>，而键值对的读写还是单线程来进行执行的。</p>
+<p>也就是说<code>redis</code>的缓存读写一定是单线程，<code>网络请求IO</code>可能是单线程的。除此以外，像其他的<b>第一节说的持久化，以及主从数据同步等</b>，是由其他额外的线程来完成的。</p>
+<h3 id="3）redis的过期删除策略">3）redis的过期删除策略</h3>
+<p>在使用中，我们可以设置<code>redis</code>缓存的过期时间。</p>
+<p>而<code>redis</code>的过期删除策略就是指，当缓存过期后，<code>redis</code>应当如何处理。</p>
+<p>一般来说，清除过期的缓存有三种</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p><b>惰性过期</b>：只有当访问一个<code>key</code>的时候，会判断这个<code>key</code>有没有过期，如果过期了，则进行清除。</p>
+<ul class="lvl-2">
+<li class="lvl-4">这种策略可以最大的节省<code>CPU</code>的资源，对内存不太友好。极端情况下可能出现一大堆过期的<code>key</code>一直存在于内存中，正是因为没有再次访问这些<code>key</code>，导致他们没有清除</li>
+</ul>
+</li>
+<li class="lvl-2">
+<p><b>定期过期</b>：每隔一段时间，<code>redis</code>会扫描数据库的<code>expires</code>字典中<b>一定数量的<code>key</code></b>，并清除其中已过期的<code>key</code>。</p>
+<ul class="lvl-2">
+<li class="lvl-4">注意是一定数量的<code>key</code>，是可以使<code>CPU</code>和<code>memory</code>达到最优平衡的效果</li>
+</ul>
+</li>
+<li class="lvl-2">
+<p><b>定时过期（redis不用）</b>：这种就是对每一个<code>key</code>来启动一个定时器，到时间了就进行清除。</p>
+<ul class="lvl-2">
+<li class="lvl-4">由于<code>redis</code>中存在大量的<code>key</code>，这种方案肯定是不能用的，随时导致<code>CPU</code>到达<code>100%</code></li>
+</ul>
+</li>
+</ul>
+<p>综上所述，<code>redis</code>的最佳使用策略有两种，就是<b>惰性过期</b>和<b>定期过期</b>。并且在<code>redis</code>中，这两种过期策略同时在使用。</p>
+<h3 id="4）缓存淘汰算策略哪些">4）缓存淘汰算策略哪些</h3>
+<p>在上面一节讲述了，<code>redis</code>的过期删除策略，那么这一节则是<code>redis</code>的淘汰策略，这两种是不一样的。</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p><b>过期删除策略</b>：指的是缓存<code>key</code>过期后，<code>redis</code>对其删除的策略。</p>
+</li>
+<li class="lvl-2">
+<p><b>缓存淘汰策略</b>：指的是<code>redis</code>缓存使用的内存超过了<code>maxmemory</code>的设置，触发的一种策略。它会清除缓存，使其使用的内存小于设定的<code>maxmemory</code>。</p>
+</li>
+</ul>
+<p>那么<b>缓存淘汰策略</b>一共有下面八种==（在<code>redis4.0</code>前一共有六种，在之后又添加了两种，现在版本一共八种）==</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>不处理：</p>
+<ol>
+<li class="lvl-5"><b>noeviction</b>：不会剔除任何数据，拒绝所有写入操作，返回<code>(error)OOM command not allowed when used memory</code>。此时<code>redis</code>只响应读操作</li>
+</ol>
+</li>
+<li class="lvl-2">
+<p>在淘汰时，仅针对设置过期时间的缓存做处理<br />
+2. <b>volatile-ttl</b>：根据过期时间的大小进行排序，越快过期的越先被删除（就算缓存还没有过期）<br />
+3. <b>volatile-random</b>：随机进行删除<br />
+4. <b>volatile-lru</b>：根据<code>LRU</code>算法进行筛选缓存进行删除<br />
+5. <b>volatile-lfu</b>：根据<code>LFU</code>算法进行筛选缓存进行删除</p>
+</li>
+<li class="lvl-2">
+<p>在淘汰时，针对所有的缓存<br />
+6. <b>allkey-random</b>：随机进行删除<br />
+7. <b>allkkey-lru</b>：根据<code>LRU</code>算法进行筛选缓存进行删除<br />
+8. <b>allkey-lfu</b>：根据<code>LFU</code>算法进行筛选缓存进行删除</p>
+</li>
+</ul>
+<blockquote>
+<p>从上面来看，有两个算法<code>LRU</code>和<code>LFU</code>，分别是什么</p>
+<ul class="lvl-1">
+<li class="lvl-2"><b>LRU（Least Recently Used，最小的最近使用）</b>：根据访问时间做排序，淘汰掉访问时间越远的缓存</li>
+<li class="lvl-2"><b>LFU（least Frequently Used，最小的频率使用）</b>：根据访问次数做排序，淘汰掉访问次数最小的缓存</li>
+</ul>
+</blockquote>
+<h3 id="5）主从、哨兵、集群的优缺点">5）主从、哨兵、集群的优缺点</h3>
+<h4 id="5-1）主从">5.1）主从</h4>
+<p>主从模式是<code>redis</code>最基本的集群模式，它实现了数据的复制和读写分离。在主从模式中，有一个主服务器<code>master</code>和多个从服务器<code>slave</code>。主服务器负责处理写操作，并将数据变化同步给从服务器。从服务器一般只负责处理读操作，并接收主服务器的数据更新。一个主服务器可以有多个从服务器，但一个从服务器只能有一个主服务器。</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>优点：</p>
+<ol>
+<li class="lvl-5">提提高了数据的可靠性，即使主服务器出现故障，也可以通过从服务器恢复数据</li>
+<li class="lvl-5">分担了主服务器的压力，提高了数据的吞吐量和响应速度</li>
+</ol>
+</li>
+<li class="lvl-2">
+<p>缺点：</p>
+<ol>
+<li class="lvl-5"><b>不具备自动容错和恢复的功能</b>，当主节点宕机，需要手动切换从节点进行顶替</li>
+<li class="lvl-5"><b>可能出现数据不一致的情况</b>，写操作都在<code>master</code>，读操作在<code>slave</code>节点。由于同步需要时间，就会造成读取数据不一致的情况。</li>
+<li class="lvl-5"><b><code>master</code>节点的压力会很大</b>，由于写操作全部在<code>master</code>，一旦写入请求过多，会导致<code>master</code>节点压力增大，从而导致宕机</li>
+<li class="lvl-5"><b>不支持在线扩容</b>，在集群容量达到上限时，需要停止服务才能增加或减少节点</li>
+</ol>
+</li>
+</ul>
+<p>如下图</p>
+<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230903230909.png" alt="image-20230826104646812" /></p>
+<h4 id="5-2）哨兵">5.2）哨兵</h4>
+<p>哨兵模式是在主从模式的基础上增加了哨兵<code>sentinel</code>进程来实现高可用性。哨兵是一个独立的进程，它可以监控多个<code>redis</code>服务器的运行状态，包括主服务器和从服务器。哨兵模式的作用有</p>
+<ol>
+<li class="lvl-3">
+<p>通过发送命令，让<code>redis</code>服务器返回监控其运行状态，包括主服务器和从服务器</p>
+</li>
+<li class="lvl-3">
+<p>当哨兵监测到主服务器宕机，会自动将从服务器切换为主服务器，并通过发布订阅模式通知其他从服务器和客户端，完成故障转移</p>
+</li>
+<li class="lvl-3">
+<p>为了避免单点故障，可以使用多个哨兵进行监控。各个哨兵之间也会相互监控，形成一个哨兵集群</p>
+</li>
+</ol>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>优点</p>
+<ol>
+<li class="lvl-5">实现了高可用，当主节点出现宕机的情况，可以通知进行主从切换，无需人工干预</li>
+<li class="lvl-5">支持了动态配置，当主从变化，哨兵会实现自动更新配置信息，并通知其他节点</li>
+<li class="lvl-5">提供了事件通知机制，当监控的<code>redis</code>实例发生故障或恢复时，哨兵会执行指定的脚本或发送邮件等方式通知相关人员</li>
+</ol>
+</li>
+<li class="lvl-2">
+<p>缺点</p>
+<ol>
+<li class="lvl-5"><b>缓存丢失</b>，同步需要时间，<code>slave</code>节点还没来得及同步缓存数据，<code>master</code>就宕机了。此时<code>sentinel</code>选举一个<code>slave</code>节点变成<code>master</code>，原先的<code>master</code>恢复后变成<code>slave</code>，会去新<code>master</code>同步数据，导致最近的一批缓存数据丢失</li>
+<li class="lvl-5"><b>缓存不一致</b>，和主从结构一样，同步需要时间，可能会出现缓存不一致的情况</li>
+<li class="lvl-5"><b><code>master</code>节点的压力会很大</b>，和主从结构一样，哨兵并没有解决<code>master</code>节点请求集中的问题，还是可能会造成<code>master</code>节点压力过大，导致宕机的问题</li>
+</ol>
+</li>
+</ul>
+<p>如下图</p>
+<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230903230917.png" alt="image-20230826111352361" /></p>
+<h4 id="5-3）集群">5.3）集群</h4>
+<p>集群模式是Redis最高级的集群模式，它实现了数据的分片和负载均衡。在集群模式中，没有明确的主从关系，而是由多个相互协作的节点组成一个集群。每个节点都负责一部分数据，并且可以处理读写操作。当某个节点出现故障时，集群会自动进行数据迁移和故障转移。</p>
+<p>引入和<code>hash slot</code>哈希槽，一共<code>16384</code>个，每一个写入的缓存<code>key</code>都会计算其<code>hash</code>值，从而决定写入到哪个集群节点</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>优点</p>
+<ol>
+<li class="lvl-5">实现了分片存储，突破了<code>redis</code>单节点的限制，提高了系统扩展性</li>
+<li class="lvl-5">实现了负载均衡，写请求压力不再是单节点，提高了系统的性能和吞吐量</li>
+<li class="lvl-5">实现了高可用，当某个节点出现故障时，集群会自动进行数据迁移和故障转移，无需人工干预</li>
+</ol>
+</li>
+<li class="lvl-2">
+<p>缺点</p>
+<ol>
+<li class="lvl-5">不支持多键操作，多键可能落在不同的集群节点上，故不支持操作</li>
+<li class="lvl-5">不支持事务操作，因为要保证连接要在同一个节点上，而集群会导致连接到不同的节点，从而导致事务失效</li>
+<li class="lvl-5">不支持数据库的切换操作，集群模式只能使用数据库<code>0</code></li>
+</ol>
+</li>
+</ul>
+<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230903230923.png" alt="image-20230826114519095" /></p>
+<h3 id="6）简述主从同步机制">6）简述主从同步机制</h3>
+<p>在<code>redis</code>中，主从同步主要经过了以下几个流程</p>
+<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230823204705.png" alt="123" /></p>
+<p>上面提到增量复制和全量复制，大家应该都知道是什么意思</p>
+<ol>
+<li class="lvl-3">
+<p><b>全量复制</b>：</p>
+<ol>
+<li class="lvl-6"><code>master</code>节点会通过<code> bgsave</code>命令启动子线程进行<code>RDB</code>的持久化</li>
+<li class="lvl-6"><code>master</code>节点通过<code>网络IO</code>将文件发送给<code>slave</code>节点，这会对消耗网络带宽</li>
+<li class="lvl-6"><code>slave</code>节点会清空原本的旧数据，将<code>RDB</code>快照文件进行载入。<b>注意了，在载入的过程中，整个<code>slave</code>节点是阻塞的，无法响应客户端的命令</b></li>
+</ol>
+</li>
+<li class="lvl-3">
+<p><b>增量复制</b>：</p>
+<ol>
+<li class="lvl-6"><code>offset</code>：执行同步的两方节点，分别会维护一个复制偏移量<code>offset</code></li>
+<li class="lvl-6"><code>runid</code>：每个<code>redis</code>实例节点，都有其运行<code>ID</code>。这个<code>ID</code>由节点在启动运行时自动生成。<code>master</code>节点会将自己的<code>runid</code>发送给<code>salve</code>节点，<code>salve</code>节点会将<code>master</code>节点的<code>runid</code>保存起来。当<code>master</code>节点发生变更后，<code>salve</code>节点请求复制时，会携带这个<code>runid</code>，新的<code>master</code>节点会进行判断。
+<ol>
+<li class="lvl-9">如果<code>salve</code>发送过来的<code>runid</code>与自己的不同，那么只能进行全量复制</li>
+<li class="lvl-9">如果<code>salve</code>发送过来的<code>runid</code>与自己的相同，那么就尝试进行增量复制**（进入第三点再进行判断，最终决定是否增量复制）**</li>
+</ol>
+</li>
+<li class="lvl-6">复制积压缓冲区：在<code>master</code>节点中，维护了一个长度固定、先进先出的队列，作为复制积压缓冲区。<b>当主从节点<code>offset</code>的差距过大，超出了缓冲区大小时，那么<code>slave</code>节点将无法进行增量复制，只能进行全量复制</b></li>
+</ol>
+</li>
+</ol>
+<h3 id="7）缓存雪崩、缓存击穿、缓存穿透是什么，怎么避免">7）缓存雪崩、缓存击穿、缓存穿透是什么，怎么避免</h3>
+<h4 id="7-1）缓存雪崩">7.1）缓存雪崩</h4>
+<p>当雪崩来临，没有一片雪花是无辜的。当然缓存雪崩也一样，没有一个缓存<code>key</code>是无辜的。</p>
+<p>它指的是，<b>大面积的缓存<code>key</code>同时过期，导致请求直接略过的缓存，打击到数据库上</b>。故此称为缓存雪崩。</p>
+<p>针对上面的现象，我们可以这样进行解决</p>
+<p><b>对于缓存<code>key</code>的过期时间，我们不要设置成固定统一的，而是在其基础上添加一定的随机值，从而避免大面积过期。</b></p>
+<h4 id="7-2）缓存击穿">7.2）缓存击穿</h4>
+<p><b>缓存击穿，指的是当一个缓存<code>key</code>存在时，它能抗住大量的请求。一旦缓存<code>key</code>过期，大量的请求直接击穿到数据库，导致数据库压力瞬间增加。</b></p>
+<p>从上面来看，缓存<code>key</code>过期才会导致，大量的请求击穿到数据库。一般业务上来讲，这些数据都是高热点的数据，因为业务正常，且请求非常高。</p>
+<p>针对上面的现象，我们可以这样进行解决</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>热点缓存永不过期，后台一个线程自动更新缓存</p>
+</li>
+<li class="lvl-2">
+<p>添加互斥锁，对读写缓存的代码进行加锁，那么最多也只有一个请求能到数据库</p>
+</li>
+</ul>
+<h4 id="7-3）缓存穿透">7.3）缓存穿透</h4>
+<p><b>当访问一个不存在的缓存<code>key</code>时，<code>redis</code>根本拦不住，缓存都没有，所以这些请求都会到数据库。一旦这些请求是恶意大量的，就会使得数据库的压力增加。</b></p>
+<p>比如说我想获取<code>ID=-1000</code>的用户信息，<code>1s</code>中请求了<code>3k</code>次，由于缓存没有拦下请求，就相当于进行了<code>3k</code>次的数据库查询。</p>
+<p>针对上面的现象，我们可以这样进行解决</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>对入参进行校验，对于不合理的入参直接进行过滤</p>
+</li>
+<li class="lvl-2">
+<p>如果数据库中查询出不存在的值，我们可以再缓存中设置为<code>null</code>，当然过期时间可以给短一下，避免恶意请求</p>
+</li>
+<li class="lvl-2">
+<p>采用布隆过滤器</p>
+<ul class="lvl-2">
+<li class="lvl-4">当一个<code>ID</code>在过滤器中不存在，那么它一定不存在。直接过滤掉即可</li>
+<li class="lvl-4">当一个<code>ID</code>在过滤器中存在，那么它可能存在，可能不存在。那么再去读取缓存，读取数据库即可。</li>
+</ul>
+</li>
+<li class="lvl-2">
+<p>添加互斥锁，对读写缓存的代码进行加锁，那么最多也只有一个请求能到数据库</p>
+</li>
+</ul>
+<h2 id="三、最后">三、最后</h2>
+<p>如果有什么<code>redis</code>相关的面试题，我都会在此文章中更新。</p>
+<p>我是半月，你我一同共勉！！！</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://www.banmoon.top">半月无霜</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.banmoon.top/archive/ea96f55a/">https://www.banmoon.top/archive/ea96f55a/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.banmoon.top" target="_blank">半月无霜</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="../../tags/%E9%9D%A2%E8%AF%95/">面试</a><a class="post-meta__tags" href="../../tags/redis/">redis</a></div><div class="post_share"><div class="social-share" data-image="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230903231220.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="../36bc8a47/" title="关于JVM中的几大面试题"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230830185219.jpg" onerror="onerror=null;src='../../img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">关于JVM中的几大面试题</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="../8c746a2c/" title="Redis的持久化策略RDB和AOF"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/articles/b54a8ff58bb9d29cbb50e77472287b0e.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-11</div><div class="title">Redis的持久化策略RDB和AOF</div></div></a></div><div><a href="../54b2b61f/" title="Java中锁的分类"><img class="cover" src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230529161433.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-29</div><div class="title">Java中锁的分类</div></div></a></div><div><a href="../742a330a/" title="Java中关于线程池的几道面试题"><img class="cover" src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230531115249.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-31</div><div class="title">Java中关于线程池的几道面试题</div></div></a></div><div><a href="../546690f2/" title="kafka的架构及常见面试题"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230828102741.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-28</div><div class="title">kafka的架构及常见面试题</div></div></a></div><div><a href="../36bc8a47/" title="关于JVM中的几大面试题"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230830185219.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-30</div><div class="title">关于JVM中的几大面试题</div></div></a></div><div><a href="../53fb86d6/" title="关于Java中引用的面试题"><img class="cover" src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230527225134.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-27</div><div class="title">关于Java中引用的面试题</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><!-- 这是侧边栏--><div class="aside-content" id="aside-content"><script>if (document.documentElement.classList.contains('hide-aside')) {
+    saveToLocal.set('aside-status', 'show', 2);
+    document.documentElement.classList.toggle('hide-aside');
+}</script><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">Redis相关底层面试题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BB%8B%E7%BB%8D"><span class="toc-text">一、介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="toc-text">二、面试题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%BC%89%E6%8C%81%E4%B9%85%E5%8C%96%E7%AD%96%E7%95%A5"><span class="toc-text">1）持久化策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%BC%89redis%E6%98%AF%E5%8D%95%E7%BA%BF%E7%A8%8B%E8%BF%98%E6%98%AF%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84"><span class="toc-text">2）redis是单线程还是多线程的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%EF%BC%89redis%E7%9A%84%E8%BF%87%E6%9C%9F%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5"><span class="toc-text">3）redis的过期删除策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%EF%BC%89%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AE%97%E7%AD%96%E7%95%A5%E5%93%AA%E4%BA%9B"><span class="toc-text">4）缓存淘汰算策略哪些</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%EF%BC%89%E4%B8%BB%E4%BB%8E%E3%80%81%E5%93%A8%E5%85%B5%E3%80%81%E9%9B%86%E7%BE%A4%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-text">5）主从、哨兵、集群的优缺点</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1%EF%BC%89%E4%B8%BB%E4%BB%8E"><span class="toc-text">5.1）主从</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2%EF%BC%89%E5%93%A8%E5%85%B5"><span class="toc-text">5.2）哨兵</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-3%EF%BC%89%E9%9B%86%E7%BE%A4"><span class="toc-text">5.3）集群</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%EF%BC%89%E7%AE%80%E8%BF%B0%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6"><span class="toc-text">6）简述主从同步机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%EF%BC%89%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9%E3%80%81%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E3%80%81%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%8C%E6%80%8E%E4%B9%88%E9%81%BF%E5%85%8D"><span class="toc-text">7）缓存雪崩、缓存击穿、缓存穿透是什么，怎么避免</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#7-1%EF%BC%89%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9"><span class="toc-text">7.1）缓存雪崩</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-2%EF%BC%89%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="toc-text">7.2）缓存击穿</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-3%EF%BC%89%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F"><span class="toc-text">7.3）缓存穿透</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%9C%80%E5%90%8E"><span class="toc-text">三、最后</span></a></li></ol></li></ol></div></div><script>var tocItems = document.querySelectorAll('.toc-item');
+tocItems.forEach(item => {
+  var span = item.querySelector('a > span');
+  var content = span.textContent;
+  item.setAttribute('title', content);
+});</script><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="" title="Redis相关底层面试题"><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230903231220.jpg" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="Redis相关底层面试题"/></a><div class="content"><a class="title" href="" title="Redis相关底层面试题">Redis相关底层面试题</a><time datetime="2023-09-03T15:10:56.000Z" title="发表于 2023-09-03 23:10:56">2023-09-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../36bc8a47/" title="关于JVM中的几大面试题"><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230830185219.jpg" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="关于JVM中的几大面试题"/></a><div class="content"><a class="title" href="../36bc8a47/" title="关于JVM中的几大面试题">关于JVM中的几大面试题</a><time datetime="2023-08-30T09:57:11.000Z" title="发表于 2023-08-30 17:57:11">2023-08-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../604b199/" title="自定义枚举Validated校验注解"><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230830144551.jpg" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="自定义枚举Validated校验注解"/></a><div class="content"><a class="title" href="../604b199/" title="自定义枚举Validated校验注解">自定义枚举Validated校验注解</a><time datetime="2023-08-30T06:24:51.000Z" title="发表于 2023-08-30 14:24:51">2023-08-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../546690f2/" title="kafka的架构及常见面试题"><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230828102741.jpg" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="kafka的架构及常见面试题"/></a><div class="content"><a class="title" href="../546690f2/" title="kafka的架构及常见面试题">kafka的架构及常见面试题</a><time datetime="2023-08-28T02:25:07.000Z" title="发表于 2023-08-28 10:25:07">2023-08-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../742a330a/" title="Java中关于线程池的几道面试题"><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230531115249.jpg" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="Java中关于线程池的几道面试题"/></a><div class="content"><a class="title" href="../742a330a/" title="Java中关于线程池的几道面试题">Java中关于线程池的几道面试题</a><time datetime="2023-05-31T03:51:04.000Z" title="发表于 2023-05-31 11:51:04">2023-05-31</time></div></div></div></div></div></div></main><footer id="footer" style="background: linear-gradient(-45deg,#ee7752,#ce3e75,#23a6d5,#23d5ab)"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2023 By 半月无霜</div><div class="footer_custom_text"><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/"><span>粤ICP备2021146613号</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="../../js/utils.js"></script><script src="../../js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="../../js/search/local-search.js"></script><div class="js-pjax"><script>(() => {
+  const $mermaidWrap = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaidWrap.length) {
+    window.runMermaid = () => {
+      window.loadMermaid = true
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+      Array.from($mermaidWrap).forEach((item, index) => {
+        const mermaidSrc = item.firstElementChild
+        const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+        const mermaidID = 'mermaid-' + index
+        const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+        mermaid.mermaidAPI.render(mermaidID, mermaidDefinition, (svgCode) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svgCode)
+        })
+      })
+    }
+
+    const loadMermaid = () => {
+      window.loadMermaid ? runMermaid() : getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaid)
+    }
+
+    window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+  }
+})()</script><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://www.banmoon.top/archive/ea96f55a/'
+    this.page.identifier = ''
+    this.page.title = 'Redis相关底层面试题'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+
+  document.getElementById('darkmode').addEventListener('click', () => {
+    setTimeout(() => window.disqusReset(), 200)
+  })
+}
+
+if ('Valine' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script></div><script src="/js/banmoon.js" defer></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
