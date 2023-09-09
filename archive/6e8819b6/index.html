@@ -1,0 +1,525 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>MySQL的MVCC是什么，有什么用？ | 半月无霜</title><meta name="author" content="半月无霜"><meta name="copyright" content="半月无霜"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="MySQL的MVCC是什么，有什么用？ 一、介绍 面试被问到了MVCC，我不知道啊，一脸懵逼！ 于是回家查询了资料，记录一下 实际上，MVCC的全称是Multi Version ConCurrency Control，翻译过来就是多版本并发控制。 二、概念 1）隔离级别 指的是一种提高并发的技术。最早的数据库系统，只有读读之间可以并发，读写，写读，写写都要阻塞。引入多版本之后，只有写写之间相互阻塞">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL的MVCC是什么，有什么用？">
+<meta property="og:url" content="https://www.banmoon.top/archive/6e8819b6/">
+<meta property="og:site_name" content="半月无霜">
+<meta property="og:description" content="MySQL的MVCC是什么，有什么用？ 一、介绍 面试被问到了MVCC，我不知道啊，一脸懵逼！ 于是回家查询了资料，记录一下 实际上，MVCC的全称是Multi Version ConCurrency Control，翻译过来就是多版本并发控制。 二、概念 1）隔离级别 指的是一种提高并发的技术。最早的数据库系统，只有读读之间可以并发，读写，写读，写写都要阻塞。引入多版本之后，只有写写之间相互阻塞">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230909142753.jpg">
+<meta property="article:published_time" content="2023-09-09T06:27:23.000Z">
+<meta property="article:modified_time" content="2023-09-09T06:27:23.000Z">
+<meta property="article:author" content="半月无霜">
+<meta property="article:tag" content="MySQL">
+<meta property="article:tag" content="面试">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230909142753.jpg"><link rel="shortcut icon" href="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/config/favicon.ico"><link rel="canonical" href="https://www.banmoon.top/archive/6e8819b6/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="../../css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: true,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'MySQL的MVCC是什么，有什么用？',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: undefined,
+  isToc: true,
+  postUpdate: '2023-09-09 14:27:23'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = url => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      link.onload = () => resolve()
+      link.onerror = () => reject()
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/banmoon.css?1" defer /><meta name="generator" content="Hexo 5.4.2"></head><body><link rel="stylesheet" href="/css/flash.css"/><script src="https://cdn.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/config/a441450a27436ff61f584dc176bc6a10.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="archives/"><div class="headline">文章</div><div class="length-num">70</div></a><a href="tags/"><div class="headline">标签</div><div class="length-num">25</div></a><a href="categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/index"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fas fa-compass"></i><span> 发现</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-heartbeat"></i><span> 娱乐</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/picture/"><i class="fa-fw fa-fw fas fa-images"></i><span> 相册</span></a></li><li><a class="site-page child" href="/collection/"><i class="fa-fw fa-fw fas fa-book"></i><span> 收藏</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友联</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230909142753.jpg')"><nav id="nav"><span id="blog-info"><a href="index.html" title="半月无霜"><span class="site-name">半月无霜</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/index"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fas fa-compass"></i><span> 发现</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-heartbeat"></i><span> 娱乐</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/picture/"><i class="fa-fw fa-fw fas fa-images"></i><span> 相册</span></a></li><li><a class="site-page child" href="/collection/"><i class="fa-fw fa-fw fas fa-book"></i><span> 收藏</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友联</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">MySQL的MVCC是什么，有什么用？</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-09-09T06:27:23.000Z" title="发表于 2023-09-09 14:27:23">2023-09-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-09-09T06:27:23.000Z" title="更新于 2023-09-09 14:27:23">2023-09-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="../../categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="MySQL的MVCC是什么，有什么用？"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1>MySQL的MVCC是什么，有什么用？</h1>
+<h2 id="一、介绍">一、介绍</h2>
+<p>面试被问到了<code>MVCC</code>，我不知道啊，一脸懵逼！</p>
+<p>于是回家查询了资料，记录一下</p>
+<p>实际上，<code>MVCC</code>的全称是<code>Multi Version ConCurrency Control</code>，翻译过来就是多版本并发控制。</p>
+<h2 id="二、概念">二、概念</h2>
+<h3 id="1）隔离级别">1）隔离级别</h3>
+<p>指的是一种提高并发的技术。最早的数据库系统，只有读读之间可以并发，读写，写读，写写都要阻塞。引入多版本之后，只有写写之间相互阻塞，其他三种操作都可以并行。在<code>MySQL</code>中，这样大幅度提高了<code>InnoDB</code>的并发度。在内部实现中，<code>InnoDB</code>通过<code>undo log</code>保存每条数据的多个版本，并且能够找回数据历史版本提供给用户读，每个事务读到的数据版本可能是不一样的。在同一个事务中，用户只能看到该事务创建快照之前已经提交的修改和该事务本身做的修改。</p>
+<p>首先我们先了解一下数据库事务的隔离级别</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p><b>未提交读（READ UNCOMMITED）</b>：也就是脏读，当一个事务读取到另外一个事务修改但未提交的数据时</p>
+</li>
+<li class="lvl-2">
+<p><b>已提交读 （READ COMMITED）</b>：简称<code>RC</code></p>
+</li>
+<li class="lvl-2">
+<p><b>可重复读（REPEATABLE READ）</b>：简称<code>RR</code></p>
+</li>
+<li class="lvl-2">
+<p><b>可串行化（SERIALIZABLE）</b></p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>隔离级别</th>
+<th>脏读</th>
+<th>不可重复读</th>
+<th>幻读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>未提交读</td>
+<td>可能</td>
+<td>可能</td>
+<td>可能</td>
+</tr>
+<tr>
+<td>已提交读</td>
+<td>不可能</td>
+<td>可能</td>
+<td>可能</td>
+</tr>
+<tr>
+<td>可重复读</td>
+<td>不可能</td>
+<td>不可能</td>
+<td>可能</td>
+</tr>
+<tr>
+<td>可串行化</td>
+<td>不可能</td>
+<td>不可能</td>
+<td>不可能</td>
+</tr>
+</tbody>
+</table>
+<p>那么先介绍下面的现象</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p><b>脏读</b>：当一个事务读取到另外一个事务修改但未提交的数据时</p>
+</li>
+<li class="lvl-2">
+<p><b>不可重复读</b>：在同一个事务中，同样的条件<code>SQL</code>查询出的结果不一致</p>
+</li>
+<li class="lvl-2">
+<p><b>幻读</b>：在同一个事务中，同样的条件<code>SQL</code>查询出的结果不一致==（重点在于，数据有新增或者删除，导致的结果不一致）==</p>
+</li>
+</ul>
+<h3 id="2）undo-log">2）undo log</h3>
+<p>在上面有提到<code>undo log</code>，那么这个<code>undo log</code>是什么呢？</p>
+<p>实际上是当多个事务操作一条数据时，每个事务中的每个操作都会产生一条记录，比如说下面这样</p>
+<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230909141722.png" alt="image-20230909130137655" /></p>
+<p>可以看到，当一个事务<code>TX111</code>修改了数据值，就会产生一条<code>undo log</code>，并记录指向上一条最原始的这条<code>undo log</code>。</p>
+<hr />
+<p>如果有多条事务，修改同一条数据，那么就会产生链表一样的结构，我们称为<code>undo log</code>版本链表，如下</p>
+<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230909141729.png" alt="image-20230909130109990" /></p>
+<blockquote>
+<p><code>undo log</code>，会进行删除，但不是立即删除。</p>
+<p>它会在确保，当前<code>undo log</code>不被引用后，再进行删除。也就是当事务所有完成后，也就是<code>commit</code>、<code>rollback</code>，保留最终确认下的<code>undo log</code>，并删除之前所有的版本链。</p>
+</blockquote>
+<h3 id="3）快照读、当前读">3）快照读、当前读</h3>
+<p>好的，现在要介绍一下<mark>快照读</mark>和<mark>当前读</mark>，只要介绍了这个，我们就能了解<code>MVCC</code>到底是什么了</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p><b>快照读</b>（<code>readView</code>）：当执行查询<code>select</code>语句时，提取数据的一个记录</p>
+</li>
+<li class="lvl-2">
+<p><b>当前读</b>：当执行下面的语句时，提取数据的一个记录</p>
+<ul class="lvl-2">
+<li class="lvl-4"><code>insert</code>、<code>update</code>、<code>delete</code>、<code>select...for update</code>、<code>select...lock in share mode</code></li>
+</ul>
+</li>
+</ul>
+<p>上面了解到他们是一个数据记录，那么其中他们有什么数据呢</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>m_ids</td>
+<td>当前活跃的事务编号集合，也就是还没有被提交回滚的事务集合</td>
+</tr>
+<tr>
+<td>min_trx_id</td>
+<td>最小的活跃事务编号</td>
+</tr>
+<tr>
+<td>max_trx_id</td>
+<td>预分配事务编号，当前最大事务编号+1</td>
+</tr>
+<tr>
+<td>creator_trx_id</td>
+<td>快照读创建者的事务编号</td>
+</tr>
+</tbody>
+</table>
+<p>好的，我们来进行理解一下这个快照读</p>
+<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230909141738.png" alt="image-20230909125747658" /></p>
+<h3 id="4）多版本并发控制流程">4）多版本并发控制流程</h3>
+<p>上面的概念都看完了，接下来可以讲讲<code>MVCC</code>了，他是怎么使用<code>RR</code>、<code>RC</code>来影响事务读取的数据的呢？</p>
+<p>快照读配合当前读会影响，读取的结果，我们看下面的<code>undo log</code>和<code>readView</code></p>
+<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230909141743.png" alt="image-20230909130447845" /></p>
+<p>我们要确定版本时，就是拿着快照读去匹配版本链上的每一个<code>undo log</code>，从最后往前进行判断</p>
+<p>使用这些判断条件，<code>MySQL</code>就能确定要读取的版本了</p>
+<ol>
+<li class="lvl-3">
+<p>判断<code>undo log</code>的<code>trx_id == creator_trx_id</code></p>
+<ol>
+<li class="lvl-6">相等，则说明这条<code>undo log</code>修改，就是本事务自己更新修改的。可以访问</li>
+</ol>
+</li>
+<li class="lvl-3">
+<p>判断<code>undo log</code>的<code>trx_id &lt; min_trx_id</code></p>
+<ol>
+<li class="lvl-6">成立，则说明当前判断的这个<code>undo log</code>已经提交。可以访问</li>
+</ol>
+</li>
+<li class="lvl-3">
+<p>判断<code>undo log</code>的<code>trx_id &gt;= max_trx_id</code></p>
+<ol>
+<li class="lvl-6">成立，则说明当前判断的这个<code>undo log</code>，是在产生快照读之后创建的事务。所以不允许访问</li>
+</ol>
+</li>
+<li class="lvl-3">
+<p>判断<code>min_trx_id &lt;= trx_id &lt; max_trx_id</code>，成立则继续判断，<code>trx_id</code>是否存在于<code>m_ids</code>里面</p>
+<ol>
+<li class="lvl-6">成立，则说明<code>undo log</code>的事务还没有提交。不允许访问</li>
+<li class="lvl-6">不成立，则说明<code>undo log</code>的事务已经提交。允许访问</li>
+</ol>
+</li>
+</ol>
+<p><b>根据上面的判断条件，我们来进行判断</b></p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>首先是第一个<code>undo log</code></p>
+<ol>
+<li class="lvl-5"><code>trx_id == creator_trx_id</code>，即<code>TX222 == TX333</code>。不成立，继续下一个判断条件</li>
+<li class="lvl-5"><code>trx_id &lt; min_trx_id</code>，即<code>TX222 &lt; TX222</code>。不成立，则继续下一个判断条件</li>
+<li class="lvl-5"><code>trx_id &gt;= max_trx_id</code>，即<code>TX222 &gt;= TX334</code>。不成立，则继续向下判断</li>
+<li class="lvl-5"><code>min_trx_id &lt;= trx_id &lt; max_trx_id</code>，即<code>TX222 &lt;= TX222 &lt;= TX334</code>。成立，则还要判断是否处于活跃事务集合中
+<ol>
+<li class="lvl-8"><code>TX222</code>处于集合<code>[TX222, TX333]</code>之中，不允许访问</li>
+</ol>
+</li>
+</ol>
+</li>
+<li class="lvl-2">
+<p><b>上面的条件都不满足后，我们将要继续下一个<code>undolog</code></b></p>
+<ol>
+<li class="lvl-5"><code>trx_id == creator_trx_id</code>，即<code>TX111 == TX333</code>。不成立，继续下一个判断条件</li>
+<li class="lvl-5"><code>trx_id &lt; min_trx_id</code>，即<code>TX111 &lt; TX222</code>。
+<ol>
+<li class="lvl-8">成立，则说明<code>TX111</code>的事务已经提交，允许访问，确定下来一个数据的访问</li>
+</ol>
+</li>
+</ol>
+</li>
+</ul>
+<hr />
+<p>按照上面的方法，进行判断</p>
+<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230909141751.png" alt="image-20230909134721632" /></p>
+<p>会读取到这样的一个结果，<mark>注意看，在<code>TX333</code>的事务下，三次读取出现了三次不同的结果</mark>，这便是<b>不可重复读</b>。</p>
+<p>那么<code>MVCC</code>该如何控制呢，其实问题主要的发生原因，是每次的<code>readView</code>不一致导致的，既然快照读不一致，所查询的结果肯定也不一致。</p>
+<p>那么只需要，将同一个事务中快照读，变成同一份，不就是<mark>可重复读</mark>的隔离级别了嘛。</p>
+<p>故事务中，将第一次快照读进行保存，后面的读取都按照这份快照读进行复用。</p>
+<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230909141901.png" alt="image-20230909135858466" /></p>
+<hr />
+<p>那么为什么说可重复读<code>RR</code>，并不能完全解决幻读的问题呢？</p>
+<p>因为，在同一个事务中，快照读是复用的，一旦事务中出现了一次当前读，也就是执行了<code>update</code>等语句，那么就会重新刷新快照读。一旦快照读发生了改变，幻读就有可能出现了。</p>
+<p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230909141906.png" alt="image-20230909141251609" /></p>
+<blockquote>
+<p>不可重复读，是指一个事务中，两次读取的结果不一致的现象。</p>
+<p>但<b>同一个事务中，如果是因为自己修改了数据，从而导致两次查询结果不一致的情况，这是正常现象，不叫不可重复读</b></p>
+<p>这也正是，为什么发生当前读后，快照读要重新进行生成的原因。因为要读取到自己事务上一刻修改的数据。</p>
+</blockquote>
+<h2 id="三、最后">三、最后</h2>
+<p>好了，我是被面试问到的，真的是一脸懵逼，服了</p>
+<p>我是半月，你我一同共勉！！！</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://www.banmoon.top">半月无霜</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.banmoon.top/archive/6e8819b6/">https://www.banmoon.top/archive/6e8819b6/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.banmoon.top" target="_blank">半月无霜</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="../../tags/MySQL/">MySQL</a><a class="post-meta__tags" href="../../tags/%E9%9D%A2%E8%AF%95/">面试</a></div><div class="post_share"><div class="social-share" data-image="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230909142753.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="../ea96f55a/" title="Redis相关底层面试题"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230903231220.jpg" onerror="onerror=null;src='../../img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Redis相关底层面试题</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="../f725265/" title="关于MySQL的几道面试题"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/articles/e4e8dc45b6c63e99023848eb8f302c7b.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-22</div><div class="title">关于MySQL的几道面试题</div></div></a></div><div><a href="../e7b99fed/" title="数据库的三大范式"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/articles/af5fc17b891c578ae291342e996576bc.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-19</div><div class="title">数据库的三大范式</div></div></a></div><div><a href="../ccb3931/" title="MySQL触发器详解"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/articles/44d36f6eca703dee3a7dbe2932778d3a.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-02</div><div class="title">MySQL触发器详解</div></div></a></div><div><a href="../c1ab110c/" title="MySQL自定义函数和存储过程"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/articles/f43f1755fc567a6619e9570e418f81d5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-05-12</div><div class="title">MySQL自定义函数和存储过程</div></div></a></div><div><a href="../c7a20c63/" title="MySQL连表update操作"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/articles/889e4a2e7af4463c5caa75530f6fff5c.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-01-11</div><div class="title">MySQL连表update操作</div></div></a></div><div><a href="../16bbf730/" title="盘点MySQL中常用的函数"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/articles/4481ef11c0834cc0031daa1e5c1de09a.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-05-02</div><div class="title">盘点MySQL中常用的函数</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><!-- 这是侧边栏--><div class="aside-content" id="aside-content"><script>if (document.documentElement.classList.contains('hide-aside')) {
+    saveToLocal.set('aside-status', 'show', 2);
+    document.documentElement.classList.toggle('hide-aside');
+}</script><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">MySQL的MVCC是什么，有什么用？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BB%8B%E7%BB%8D"><span class="toc-text">一、介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%A6%82%E5%BF%B5"><span class="toc-text">二、概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%BC%89%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="toc-text">1）隔离级别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%BC%89undo-log"><span class="toc-text">2）undo log</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%EF%BC%89%E5%BF%AB%E7%85%A7%E8%AF%BB%E3%80%81%E5%BD%93%E5%89%8D%E8%AF%BB"><span class="toc-text">3）快照读、当前读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%EF%BC%89%E5%A4%9A%E7%89%88%E6%9C%AC%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6%E6%B5%81%E7%A8%8B"><span class="toc-text">4）多版本并发控制流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%9C%80%E5%90%8E"><span class="toc-text">三、最后</span></a></li></ol></li></ol></div></div><script>var tocItems = document.querySelectorAll('.toc-item');
+tocItems.forEach(item => {
+  var span = item.querySelector('a > span');
+  var content = span.textContent;
+  item.setAttribute('title', content);
+});</script><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="" title="MySQL的MVCC是什么，有什么用？"><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230909142753.jpg" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="MySQL的MVCC是什么，有什么用？"/></a><div class="content"><a class="title" href="" title="MySQL的MVCC是什么，有什么用？">MySQL的MVCC是什么，有什么用？</a><time datetime="2023-09-09T06:27:23.000Z" title="发表于 2023-09-09 14:27:23">2023-09-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../ea96f55a/" title="Redis相关底层面试题"><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230903231220.jpg" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="Redis相关底层面试题"/></a><div class="content"><a class="title" href="../ea96f55a/" title="Redis相关底层面试题">Redis相关底层面试题</a><time datetime="2023-09-03T15:10:56.000Z" title="发表于 2023-09-03 23:10:56">2023-09-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../36bc8a47/" title="关于JVM中的几大面试题"><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230830185219.jpg" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="关于JVM中的几大面试题"/></a><div class="content"><a class="title" href="../36bc8a47/" title="关于JVM中的几大面试题">关于JVM中的几大面试题</a><time datetime="2023-08-30T09:57:11.000Z" title="发表于 2023-08-30 17:57:11">2023-08-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../604b199/" title="自定义枚举Validated校验注解"><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230830144551.jpg" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="自定义枚举Validated校验注解"/></a><div class="content"><a class="title" href="../604b199/" title="自定义枚举Validated校验注解">自定义枚举Validated校验注解</a><time datetime="2023-08-30T06:24:51.000Z" title="发表于 2023-08-30 14:24:51">2023-08-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../546690f2/" title="kafka的架构及常见面试题"><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230828102741.jpg" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="kafka的架构及常见面试题"/></a><div class="content"><a class="title" href="../546690f2/" title="kafka的架构及常见面试题">kafka的架构及常见面试题</a><time datetime="2023-08-28T02:25:07.000Z" title="发表于 2023-08-28 10:25:07">2023-08-28</time></div></div></div></div></div></div></main><footer id="footer" style="background: linear-gradient(-45deg,#ee7752,#ce3e75,#23a6d5,#23d5ab)"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2023 By 半月无霜</div><div class="footer_custom_text"><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/"><span>粤ICP备2021146613号</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="../../js/utils.js"></script><script src="../../js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="../../js/search/local-search.js"></script><div class="js-pjax"><script>(() => {
+  const $mermaidWrap = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaidWrap.length) {
+    window.runMermaid = () => {
+      window.loadMermaid = true
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+      Array.from($mermaidWrap).forEach((item, index) => {
+        const mermaidSrc = item.firstElementChild
+        const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+        const mermaidID = 'mermaid-' + index
+        const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+        mermaid.mermaidAPI.render(mermaidID, mermaidDefinition, (svgCode) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svgCode)
+        })
+      })
+    }
+
+    const loadMermaid = () => {
+      window.loadMermaid ? runMermaid() : getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaid)
+    }
+
+    window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+  }
+})()</script><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://www.banmoon.top/archive/6e8819b6/'
+    this.page.identifier = ''
+    this.page.title = 'MySQL的MVCC是什么，有什么用？'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+
+  document.getElementById('darkmode').addEventListener('click', () => {
+    setTimeout(() => window.disqusReset(), 200)
+  })
+}
+
+if ('Valine' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script></div><script src="/js/banmoon.js" defer></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
