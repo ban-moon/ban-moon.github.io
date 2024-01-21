@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>如何读取到maven中profile设置的参数</title>
+      <link href="/archive/cc32bfd4/"/>
+      <url>/archive/cc32bfd4/</url>
+      
+        <content type="html"><![CDATA[<h1>如何读取到maven中profile设置的参数</h1><h2 id="一、介绍">一、介绍</h2><p>在<code>maven</code>工程中，我们会用到<code>profiles</code>来配置不同环境的不同的参数。</p><p>我们下面介绍如何读取到在这里面设置的值</p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">profiles</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">profile</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">id</span>&gt;</span>local<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">host</span>&gt;</span>localhost:2333<span class="tag">&lt;/<span class="name">host</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">activation</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">activeByDefault</span>&gt;</span>true<span class="tag">&lt;/<span class="name">activeByDefault</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">activation</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">profile</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">profile</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">id</span>&gt;</span>dev<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">host</span>&gt;</span>192.168.10.111:2333<span class="tag">&lt;/<span class="name">host</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">profile</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">profiles</span>&gt;</span></span><br></pre></td></tr></table></figure><h2 id="二、使用">二、使用</h2><p>比如说，我们有下面两个文件，<code>example.yml</code>，<code>example.txt</code></p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">example:</span></span><br><span class="line">  <span class="attr">host:</span> <span class="string">$&#123;host&#125;</span></span><br></pre></td></tr></table></figure><figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">请注意，当前host是<span class="built_in">$</span>&#123;host&#125;</span><br></pre></td></tr></table></figure><p>在我们使用<code>maven</code>当做我们的包管理构建工具的时候，就可以用到里面的<code>resources</code>标签，来修改我们的文件</p><p>只要正确的配置，在构建工程的时候就会修改<code>$&#123;&#125;</code>的值，如下进行配置</p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">resources</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">resource</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">directory</span>&gt;</span>src/main/resources<span class="tag">&lt;/<span class="name">directory</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">includes</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">include</span>&gt;</span>**/example.yml<span class="tag">&lt;/<span class="name">include</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">include</span>&gt;</span>**/example.txt<span class="tag">&lt;/<span class="name">include</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">includes</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">filtering</span>&gt;</span>true<span class="tag">&lt;/<span class="name">filtering</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">resource</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">resources</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure><p>接下来就可以进行构建了，如果是在<code>IDEA</code>中的话，可以在此选择对应的<code>profile</code></p><p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20240121130853.png" alt="image-20240121125232348" /></p><p>自己命令手动构建的话，请加上<code>-PfrofileId</code>，例如<code>mvn clean package -Pdev</code></p><p>构建完成，我们去<code>target</code>目录中看看，发现在编译完成后，相对应的占位位置的值已经发生了变化</p><p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20240121130858.png" alt="image-20240121125841104" /></p><h2 id="三、最后">三、最后</h2><p><b>如何在<code>Java</code>代码中读取？</b></p><p>其实在编译完成后，就可以用<code>@Value</code>读取到值了。具体可以看看我的这篇文章</p><p><a href="https://www.banmoon.top/archive/3ef4f50/">SpringBoot中读取配置的几种方式 | 半月无霜 (banmoon.top)</a></p><hr /><blockquote><p>如果<code>$&#123;&#125;</code>失效的话，请试试<code>@@</code></p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">example:</span></span><br><span class="line">  <span class="attr">host:</span> <span class="string">@host@</span></span><br></pre></td></tr></table></figure><p>这是因为使用了<code>spring-boot-starter-parent</code>作为父项目，里面有个属性改变了这个占位符</p><p><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20240121130904.png" alt="image-20240121130712170" /></p></blockquote><p>我是半月，你我一同共勉！！！</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Java </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 构建工具 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>JDK17的新特性写法</title>
       <link href="/archive/ed3e62df/"/>
       <url>/archive/ed3e62df/</url>
@@ -207,9 +232,9 @@
       
         <tags>
             
-            <tag> jdk </tag>
-            
             <tag> 面试 </tag>
+            
+            <tag> jdk </tag>
             
         </tags>
       
@@ -286,9 +311,9 @@
       
         <tags>
             
-            <tag> jdk </tag>
-            
             <tag> 面试 </tag>
+            
+            <tag> jdk </tag>
             
         </tags>
       
@@ -313,9 +338,9 @@
       
         <tags>
             
-            <tag> jdk </tag>
-            
             <tag> 面试 </tag>
+            
+            <tag> jdk </tag>
             
         </tags>
       
@@ -340,9 +365,9 @@
       
         <tags>
             
-            <tag> jdk </tag>
-            
             <tag> 面试 </tag>
+            
+            <tag> jdk </tag>
             
         </tags>
       
@@ -1582,9 +1607,9 @@
       
         <tags>
             
-            <tag> jdk </tag>
-            
             <tag> 面试 </tag>
+            
+            <tag> jdk </tag>
             
         </tags>
       
