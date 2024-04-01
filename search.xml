@@ -20,9 +20,9 @@
       
         <tags>
             
-            <tag> demo </tag>
-            
             <tag> MySQL </tag>
+            
+            <tag> demo </tag>
             
             <tag> Mybatis </tag>
             
@@ -76,9 +76,9 @@
       
         <tags>
             
-            <tag> demo </tag>
-            
             <tag> MySQL </tag>
+            
+            <tag> demo </tag>
             
             <tag> Mybatis </tag>
             
@@ -1592,9 +1592,9 @@
       
         <tags>
             
-            <tag> 消息队列 </tag>
-            
             <tag> redis </tag>
+            
+            <tag> 消息队列 </tag>
             
         </tags>
       

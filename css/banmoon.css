@@ -41,6 +41,9 @@ hr {
     position: unset !important;
     margin: 20px auto !important;
 }
+hr:before {
+    display: none;
+}
 
 /* mark标记 */
 mark {
