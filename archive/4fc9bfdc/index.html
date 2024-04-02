@@ -1,0 +1,364 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>SpringBoot整合MongoDB | 半月无霜</title><meta name="author" content="半月无霜"><meta name="copyright" content="半月无霜"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="SpringBoot整合MongoDB 一、介绍 MongoDB是一个开源的文档数据库，采用分布式文件存储的方法，是NoSQL数据库中的一种。它的设计目标是为了在现代应用开发中解决传统关系型数据库所遇到的一些挑战，比如灵活性、可扩展性和性能等方面的问题。 以下是MongoDB的一些主要特点：   文档导向存储：MongoDB采用文档导向的存储模式，数据以JSON格式存储，这种模式很适合应用程序的数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot整合MongoDB">
+<meta property="og:url" content="https://www.banmoon.top/archive/4fc9bfdc/">
+<meta property="og:site_name" content="半月无霜">
+<meta property="og:description" content="SpringBoot整合MongoDB 一、介绍 MongoDB是一个开源的文档数据库，采用分布式文件存储的方法，是NoSQL数据库中的一种。它的设计目标是为了在现代应用开发中解决传统关系型数据库所遇到的一些挑战，比如灵活性、可扩展性和性能等方面的问题。 以下是MongoDB的一些主要特点：   文档导向存储：MongoDB采用文档导向的存储模式，数据以JSON格式存储，这种模式很适合应用程序的数">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images20240402214817.jpg">
+<meta property="article:published_time" content="2024-04-02T13:47:08.000Z">
+<meta property="article:modified_time" content="2024-04-02T13:47:08.000Z">
+<meta property="article:author" content="半月无霜">
+<meta property="article:tag" content="demo">
+<meta property="article:tag" content="SpringBoot">
+<meta property="article:tag" content="MongoDB">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images20240402214817.jpg"><link rel="shortcut icon" href="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/config/favicon.ico"><link rel="canonical" href="https://www.banmoon.top/archive/4fc9bfdc/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="../../css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: true,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'SpringBoot整合MongoDB',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: undefined,
+  isToc: true,
+  postUpdate: '2024-04-02 21:47:08'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = url => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      link.onload = () => resolve()
+      link.onerror = () => reject()
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/banmoon.css?1" defer /><meta name="generator" content="Hexo 5.4.2"></head><body><link rel="stylesheet" href="/css/flash.css"/><script src="https://cdn.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/config/a441450a27436ff61f584dc176bc6a10.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="archives/"><div class="headline">文章</div><div class="length-num">86</div></a><a href="tags/"><div class="headline">标签</div><div class="length-num">28</div></a><a href="categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/index"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fas fa-compass"></i><span> 发现</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-heartbeat"></i><span> 娱乐</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/picture/"><i class="fa-fw fa-fw fas fa-images"></i><span> 相册</span></a></li><li><a class="site-page child" href="/collection/"><i class="fa-fw fa-fw fas fa-book"></i><span> 收藏</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images20240402214817.jpg')"><nav id="nav"><span id="blog-info"><a href="index.html" title="半月无霜"><span class="site-name">半月无霜</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/index"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fas fa-compass"></i><span> 发现</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-heartbeat"></i><span> 娱乐</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/picture/"><i class="fa-fw fa-fw fas fa-images"></i><span> 相册</span></a></li><li><a class="site-page child" href="/collection/"><i class="fa-fw fa-fw fas fa-book"></i><span> 收藏</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">SpringBoot整合MongoDB</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-04-02T13:47:08.000Z" title="发表于 2024-04-02 21:47:08">2024-04-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-04-02T13:47:08.000Z" title="更新于 2024-04-02 21:47:08">2024-04-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="../../categories/Java/">Java</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="SpringBoot整合MongoDB"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1>SpringBoot整合MongoDB</h1>
+<h2 id="一、介绍">一、介绍</h2>
+<p><code>MongoDB</code>是一个开源的文档数据库，采用分布式文件存储的方法，是<code>NoSQL</code>数据库中的一种。它的设计目标是为了在现代应用开发中解决传统关系型数据库所遇到的一些挑战，比如灵活性、可扩展性和性能等方面的问题。</p>
+<p>以下是<code>MongoDB</code>的一些主要特点：</p>
+<ol>
+<li class="lvl-3">
+<p><b>文档导向存储</b>：<code>MongoDB</code>采用文档导向的存储模式，数据以<code>JSON</code>格式存储，这种模式很适合应用程序的数据结构，可以更自然地映射到代码结构。</p>
+</li>
+<li class="lvl-3">
+<p><b>灵活的模式设计</b>：<code>MongoDB</code>不需要事先定义表结构，文档可以包含不同的字段，可以根据需要动态地添加或删除字段，因此更适合快速迭代和灵活的数据模型设计。</p>
+</li>
+<li class="lvl-3">
+<p><b>高性能</b>：<code>MongoDB</code>具有高性能的读写操作，支持在数据量较大的情况下进行高效的查询和写入操作，同时也支持基于索引的查询优化。</p>
+</li>
+<li class="lvl-3">
+<p><b>可扩展性</b>：<code>MongoDB</code>具有良好的横向扩展能力，可以通过添加更多的节点来扩展数据存储和处理能力，从而应对不断增长的数据量和访问压力。</p>
+</li>
+<li class="lvl-3">
+<p><b>复制和容错</b>：<code>MongoDB</code>支持数据的复制和容错机制，可以配置主从复制和分片集群，确保数据的可用性和可靠性。</p>
+</li>
+<li class="lvl-3">
+<p><b>丰富的功能和工具</b>：<code>MongoDB</code>提供了丰富的功能和工具，包括数据备份和恢复、数据加密、数据验证、文本搜索等功能，以及各种客户端驱动和管理工具。</p>
+</li>
+</ol>
+<p>总的来说，<code>MongoDB</code>是一个功能强大、灵活性高、性能优越的NoSQL数据库，适用于各种类型的应用程序，特别是那些需要处理大量数据和具有复杂数据结构的应用。</p>
+<p>本文将介绍<code>SpringBoot</code>整合使用<code>MongoDB</code>，其服务的安装就不说了</p>
+<h2 id="二、代码">二、代码</h2>
+<h3 id="1）配置">1）配置</h3>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">data:</span></span><br><span class="line">    <span class="attr">mongodb:</span></span><br><span class="line">      <span class="attr">host:</span> <span class="string">主机地址</span></span><br><span class="line">      <span class="attr">port:</span> <span class="string">端口</span></span><br><span class="line">      <span class="attr">database:</span> <span class="string">数据库</span></span><br><span class="line">      <span class="attr">authentication-database:</span> <span class="string">admin</span></span><br><span class="line">      <span class="attr">auto-index-creation:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<h3 id="2）MongoRepository">2）MongoRepository</h3>
+<p>可以使用<code>MongoRepository</code>来进行编码，这一点和<code>MybatisPlus</code>实体那块很像</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.banmoon.repository;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.banmoon.entity.MemberAccountLogEntity;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.mongodb.repository.MongoRepository;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Repository;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">MemberAccountLogRepository</span> <span class="keyword">extends</span> <span class="title class_">MongoRepository</span>&lt;MemberAccountLogEntity, Long&gt; &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>具体的实体<code>MemberAccountLogEntity.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.banmoon.entity;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> lombok.experimental.FieldNameConstants;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.annotation.Id;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.mongodb.core.mapping.Document;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.math.BigDecimal;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@FieldNameConstants</span></span><br><span class="line"><span class="meta">@Document(collection = &quot;member_account_log&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MemberAccountLogEntity</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String memberId;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String memberName;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> BigDecimal totalConsumption;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> BigDecimal depositMoney;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用<code>MemberAccountLogRepository.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.banmoon.execute;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cn.hutool.core.collection.CollUtil;</span><br><span class="line"><span class="keyword">import</span> cn.hutool.core.util.IdUtil;</span><br><span class="line"><span class="keyword">import</span> cn.hutool.core.util.RandomUtil;</span><br><span class="line"><span class="keyword">import</span> com.banmoon.entity.MemberAccountLogEntity;</span><br><span class="line"><span class="keyword">import</span> com.banmoon.repository.MemberAccountLogRepository;</span><br><span class="line"><span class="keyword">import</span> lombok.extern.slf4j.Slf4j;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.domain.*;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.annotation.Resource;</span><br><span class="line"><span class="keyword">import</span> java.math.BigDecimal;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 测试mongo的使用，使用MongoRepository</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MongoExecute</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> MemberAccountLogRepository memberAccountLogRepository;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        insertOne();</span><br><span class="line">        insertBatch(<span class="number">50</span>);</span><br><span class="line">        findAll();</span><br><span class="line">        update();</span><br><span class="line">        delete();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 删除</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">delete</span><span class="params">()</span> &#123;</span><br><span class="line">        List&lt;MemberAccountLogEntity&gt; list = memberAccountLogRepository.findAll();</span><br><span class="line">        <span class="keyword">if</span> (CollUtil.isNotEmpty(list)) &#123;</span><br><span class="line">            memberAccountLogRepository.deleteById(list.get(<span class="number">0</span>).getId());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 更新</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">update</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">long</span> <span class="variable">id</span> <span class="operator">=</span> <span class="number">1729792683813355522L</span>;</span><br><span class="line">        <span class="type">MemberAccountLogEntity</span> <span class="variable">entity</span> <span class="operator">=</span> memberAccountLogRepository.findById(id)</span><br><span class="line">                .map(memberAccountLogEntity -&gt; &#123;</span><br><span class="line">                    memberAccountLogEntity.setMemberName(<span class="string">&quot;半月无霜&quot;</span>);</span><br><span class="line">                    memberAccountLogEntity.setDepositMoney(<span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;1000&quot;</span>));</span><br><span class="line">                    <span class="keyword">return</span> memberAccountLogRepository.save(memberAccountLogEntity);</span><br><span class="line">                &#125;).orElse(<span class="literal">null</span>);</span><br><span class="line">        log.info(<span class="string">&quot;修改后的信息，&#123;&#125;&quot;</span>, memberAccountLogRepository.findById(id).get());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询所有</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">findAll</span><span class="params">()</span> &#123;</span><br><span class="line">        List&lt;MemberAccountLogEntity&gt; list = memberAccountLogRepository.findAll();</span><br><span class="line">        log.info(<span class="string">&quot;mongoDB全部用户数量：&#123;&#125;，详情：&#123;&#125;&quot;</span>, list.size(), list);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 添加条件，名字匹配</span></span><br><span class="line">        <span class="type">MemberAccountLogEntity</span> <span class="variable">entity</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MemberAccountLogEntity</span>();</span><br><span class="line">        entity.setMemberName(<span class="string">&quot;35ns98w1&quot;</span>);</span><br><span class="line">        List&lt;MemberAccountLogEntity&gt; list1 = memberAccountLogRepository.findAll(Example.of(entity));</span><br><span class="line">        log.info(<span class="string">&quot;mongoDB全部用户数量：&#123;&#125;，详情：&#123;&#125;&quot;</span>, list1.size(), list1);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 添加条件，名字模糊匹配，添加排序</span></span><br><span class="line">        <span class="type">MemberAccountLogEntity</span> <span class="variable">entity1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MemberAccountLogEntity</span>();</span><br><span class="line">        entity1.setMemberName(<span class="string">&quot;35&quot;</span>);</span><br><span class="line">        <span class="type">ExampleMatcher</span> <span class="variable">matcher</span> <span class="operator">=</span> ExampleMatcher.matching()</span><br><span class="line">                .withMatcher(MemberAccountLogEntity.Fields.memberName, ExampleMatcher.GenericPropertyMatchers.contains());</span><br><span class="line">        Example&lt;MemberAccountLogEntity&gt; example = Example.of(entity1, matcher);</span><br><span class="line">        <span class="type">Sort</span> <span class="variable">sort</span> <span class="operator">=</span> Sort.by(MemberAccountLogEntity.Fields.depositMoney).descending();</span><br><span class="line">        List&lt;MemberAccountLogEntity&gt; list2 = memberAccountLogRepository.findAll(example, sort);</span><br><span class="line">        log.info(<span class="string">&quot;mongoDB全部用户数量：&#123;&#125;，详情：&#123;&#125;&quot;</span>, list2.size(), list2);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 分页</span></span><br><span class="line">        <span class="type">Sort</span> <span class="variable">sort1</span> <span class="operator">=</span> Sort.by(MemberAccountLogEntity.Fields.totalConsumption).descending();</span><br><span class="line">        <span class="type">PageRequest</span> <span class="variable">page</span> <span class="operator">=</span> PageRequest.of(<span class="number">0</span>, <span class="number">10</span>, sort1);</span><br><span class="line">        Page&lt;MemberAccountLogEntity&gt; list3 = memberAccountLogRepository.findAll(page);</span><br><span class="line">        log.info(<span class="string">&quot;mongoDB全部用户数量：&#123;&#125;，当前分页详情：&#123;&#125;&quot;</span>, list3.getTotalElements(), list3.getContent());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 总数</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">count</span> <span class="operator">=</span> memberAccountLogRepository.count(example);</span><br><span class="line">        log.info(<span class="string">&quot;查询用户数量：&#123;&#125;&quot;</span>, count);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 批量插入</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">insertBatch</span><span class="params">(<span class="type">int</span> count)</span> &#123;</span><br><span class="line">        List&lt;MemberAccountLogEntity&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">            <span class="type">MemberAccountLogEntity</span> <span class="variable">entity</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MemberAccountLogEntity</span>();</span><br><span class="line">            entity.setId(IdUtil.getSnowflakeNextId());</span><br><span class="line">            entity.setMemberId(i + RandomUtil.randomString(<span class="number">6</span>));</span><br><span class="line">            entity.setMemberName(i + RandomUtil.randomString(<span class="number">6</span>));</span><br><span class="line">            entity.setTotalConsumption(RandomUtil.randomBigDecimal(BigDecimal.ZERO, BigDecimal.TEN));</span><br><span class="line">            entity.setDepositMoney(RandomUtil.randomBigDecimal(BigDecimal.ZERO, BigDecimal.TEN));</span><br><span class="line">            list.add(entity);</span><br><span class="line">        &#125;</span><br><span class="line">        memberAccountLogRepository.insert(list);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 插入单挑</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">insertOne</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">MemberAccountLogEntity</span> <span class="variable">entity</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MemberAccountLogEntity</span>();</span><br><span class="line">        entity.setId(IdUtil.getSnowflakeNextId());</span><br><span class="line">        entity.setMemberId(RandomUtil.randomString(<span class="number">6</span>));</span><br><span class="line">        entity.setMemberName(RandomUtil.randomString(<span class="number">6</span>));</span><br><span class="line">        entity.setTotalConsumption(RandomUtil.randomBigDecimal(BigDecimal.ZERO, BigDecimal.TEN));</span><br><span class="line">        entity.setDepositMoney(RandomUtil.randomBigDecimal(BigDecimal.ZERO, BigDecimal.TEN));</span><br><span class="line">        memberAccountLogRepository.insert(entity);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3）MongoTemplate">3）MongoTemplate</h3>
+<p>对于某些复杂的查询，那么我们将会用到<code>MongoTemplate.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.banmoon.execute;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cn.hutool.core.util.IdUtil;</span><br><span class="line"><span class="keyword">import</span> cn.hutool.core.util.RandomUtil;</span><br><span class="line"><span class="keyword">import</span> cn.hutool.json.JSONUtil;</span><br><span class="line"><span class="keyword">import</span> com.banmoon.dto.MangoAggregationDTO;</span><br><span class="line"><span class="keyword">import</span> com.banmoon.dto.MangoAggregationGroupByDTO;</span><br><span class="line"><span class="keyword">import</span> com.banmoon.entity.MemberAccountLogEntity;</span><br><span class="line"><span class="keyword">import</span> lombok.extern.slf4j.Slf4j;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.mongodb.core.MongoTemplate;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.mongodb.core.aggregation.*;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.mongodb.core.query.Criteria;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.mongodb.core.query.Query;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.mongodb.core.query.Update;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.annotation.Resource;</span><br><span class="line"><span class="keyword">import</span> java.math.BigDecimal;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MongoTemplateExecute</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> MongoTemplate mongoTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">COLLECTION_NAME</span> <span class="operator">=</span> <span class="string">&quot;member_account_log&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        simpleCurd();</span><br><span class="line">        aggregation();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 聚合操作</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">aggregation</span><span class="params">()</span> &#123;</span><br><span class="line"><span class="comment">//        count();</span></span><br><span class="line">        groupBy();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">groupBy</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 构建查询match条件：</span></span><br><span class="line">        <span class="type">MatchOperation</span> <span class="variable">matchOperation</span> <span class="operator">=</span> Aggregation.match(Criteria.where(MemberAccountLogEntity.Fields.memberName).ne(<span class="literal">null</span>));</span><br><span class="line">        <span class="comment">// 构建分组聚合分析</span></span><br><span class="line">        <span class="type">GroupOperation</span> <span class="variable">groupOperation</span> <span class="operator">=</span> Aggregation.group(MemberAccountLogEntity.Fields.memberId)</span><br><span class="line">                                                .first(MemberAccountLogEntity.Fields.memberName).as(MangoAggregationGroupByDTO.Fields.memberName)</span><br><span class="line">                                                .count().as(MangoAggregationGroupByDTO.Fields.count)</span><br><span class="line">                                                .max(MemberAccountLogEntity.Fields.depositMoney).as(MangoAggregationGroupByDTO.Fields.max)</span><br><span class="line">                                                .min(MemberAccountLogEntity.Fields.depositMoney).as(MangoAggregationGroupByDTO.Fields.min)</span><br><span class="line">                                                .avg(MemberAccountLogEntity.Fields.depositMoney).as(MangoAggregationGroupByDTO.Fields.avg)</span><br><span class="line">                                                .sum(MemberAccountLogEntity.Fields.totalConsumption).as(MangoAggregationGroupByDTO.Fields.sum);</span><br><span class="line">        <span class="comment">// 整合生成聚合对象</span></span><br><span class="line">        TypedAggregation&lt;MangoAggregationGroupByDTO&gt; aggregation = Aggregation.newAggregation(MangoAggregationGroupByDTO.class, matchOperation, groupOperation);</span><br><span class="line">        <span class="comment">// 查询</span></span><br><span class="line">        AggregationResults&lt;MangoAggregationGroupByDTO&gt; resultList = mongoTemplate.aggregate(aggregation, MangoAggregationGroupByDTO.class);</span><br><span class="line">        <span class="comment">// 获取结果</span></span><br><span class="line">        List&lt;MangoAggregationGroupByDTO&gt; list = resultList.getMappedResults();</span><br><span class="line">        list.forEach(dto -&gt; log.info(<span class="string">&quot;&#123;&#125;&quot;</span>, JSONUtil.toJsonStr(dto)));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">count</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 构建查询match条件：</span></span><br><span class="line">        <span class="type">MatchOperation</span> <span class="variable">matchOperation</span> <span class="operator">=</span> Aggregation.match(Criteria.where(MemberAccountLogEntity.Fields.totalConsumption).gt(<span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;1&quot;</span>)));</span><br><span class="line">        <span class="comment">// 构建count操作，用“count”名称接收</span></span><br><span class="line">        <span class="type">CountOperation</span> <span class="variable">countOperation</span> <span class="operator">=</span> Aggregation.count().as(MangoAggregationDTO.Fields.count);</span><br><span class="line">        <span class="comment">// 整合生成聚合对象</span></span><br><span class="line">        <span class="type">Aggregation</span> <span class="variable">aggregation</span> <span class="operator">=</span> Aggregation.newAggregation(matchOperation, countOperation);</span><br><span class="line">        <span class="comment">// 查询你</span></span><br><span class="line">        AggregationResults&lt;MangoAggregationDTO&gt; resultList = mongoTemplate.aggregate(aggregation, COLLECTION_NAME, MangoAggregationDTO.class);</span><br><span class="line">        <span class="comment">// 获取结果</span></span><br><span class="line">        List&lt;MangoAggregationDTO&gt; aggregationList = resultList.getMappedResults();</span><br><span class="line">        log.info(<span class="string">&quot;count结果数量：&#123;&#125;&quot;</span>, aggregationList.get(<span class="number">0</span>).getCount());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">simpleCurd</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 查询所有</span></span><br><span class="line">        List&lt;MemberAccountLogEntity&gt; allList = mongoTemplate.findAll(MemberAccountLogEntity.class);</span><br><span class="line">        log.info(<span class="string">&quot;所有会员数量：&#123;&#125;&quot;</span>, allList.size());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 新增</span></span><br><span class="line">        <span class="type">MemberAccountLogEntity</span> <span class="variable">entity</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MemberAccountLogEntity</span>();</span><br><span class="line">        entity.setId(IdUtil.getSnowflakeNextId());</span><br><span class="line">        entity.setMemberName(RandomUtil.randomString(<span class="number">6</span>));</span><br><span class="line">        entity.setMemberId(RandomUtil.randomString(<span class="number">6</span>));</span><br><span class="line">        entity.setTotalConsumption(<span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;100&quot;</span>));</span><br><span class="line">        entity.setDepositMoney(RandomUtil.randomBigDecimal(BigDecimal.ZERO, BigDecimal.TEN));</span><br><span class="line">        mongoTemplate.save(entity, COLLECTION_NAME);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 修改</span></span><br><span class="line">        <span class="type">Query</span> <span class="variable">query</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Query</span>(Criteria.where(MemberAccountLogEntity.Fields.totalConsumption).gte(<span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;100&quot;</span>)));</span><br><span class="line">        <span class="type">Update</span> <span class="variable">update</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Update</span>();</span><br><span class="line">        update.set(MemberAccountLogEntity.Fields.depositMoney, <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;99&quot;</span>));</span><br><span class="line">        mongoTemplate.updateFirst(query, update, MemberAccountLogEntity.class);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 查询</span></span><br><span class="line">        <span class="type">Query</span> <span class="variable">query1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Query</span>(Criteria.where(MemberAccountLogEntity.Fields.totalConsumption).gte(<span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;100&quot;</span>)));</span><br><span class="line">        List&lt;MemberAccountLogEntity&gt; list = mongoTemplate.find(query1, MemberAccountLogEntity.class);</span><br><span class="line">        log.info(<span class="string">&quot;余额大于100的人：&#123;&#125;&quot;</span>, list);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 分页查询</span></span><br><span class="line">        <span class="type">Query</span> <span class="variable">query2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Query</span>(Criteria.where(MemberAccountLogEntity.Fields.totalConsumption).gte(<span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;100&quot;</span>)));</span><br><span class="line">        <span class="type">long</span> <span class="variable">count</span> <span class="operator">=</span> mongoTemplate.count(query2, COLLECTION_NAME);</span><br><span class="line">        <span class="type">int</span> <span class="variable">pageSize</span> <span class="operator">=</span> <span class="number">10</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">pageIndex</span> <span class="operator">=</span> <span class="number">3</span>;</span><br><span class="line">        query2.skip((pageIndex - <span class="number">1</span>) * pageSize).limit(pageSize);</span><br><span class="line">        List&lt;MemberAccountLogEntity&gt; list1 = mongoTemplate.find(query2, MemberAccountLogEntity.class, COLLECTION_NAME);</span><br><span class="line">        log.info(<span class="string">&quot;分页查询总数：&#123;&#125;，当前页：&#123;&#125;&quot;</span>, count, list1);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 删除</span></span><br><span class="line">        <span class="type">Query</span> <span class="variable">query3</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Query</span>();</span><br><span class="line">        mongoTemplate.remove(query3, MemberAccountLogEntity.class);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="三、最后">三、最后</h2>
+<p>介绍了<code>MongoRepository.java</code>、<code>MongoTemplate.java</code>两种写法。</p>
+<p>具体使用可能不是很全面，如果后面有新的，后续再进行补充。</p>
+<p>我是半月，你我一同共勉！！！</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://www.banmoon.top">半月无霜</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.banmoon.top/archive/4fc9bfdc/">https://www.banmoon.top/archive/4fc9bfdc/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.banmoon.top" target="_blank">半月无霜</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="../../tags/demo/">demo</a><a class="post-meta__tags" href="../../tags/SpringBoot/">SpringBoot</a><a class="post-meta__tags" href="../../tags/MongoDB/">MongoDB</a></div><div class="post_share"><div class="social-share" data-image="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images20240402214817.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="../842d7987/" title="MyBatisPlus的SQL注入器批量插入更新方法"><img class="cover" src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images20240328223617.jpg" onerror="onerror=null;src='../../img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">MyBatisPlus的SQL注入器批量插入更新方法</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="../1fba55af/" title="SpringBootAdmin监控程序"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/images/20230925120045.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-25</div><div class="title">SpringBootAdmin监控程序</div></div></a></div><div><a href="../aeff03cf/" title="SpringBoot动态修改日志等级"><img class="cover" src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images/20230304221526.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-04</div><div class="title">SpringBoot动态修改日志等级</div></div></a></div><div><a href="../fd0ecbaf/" title="SpringBoot动态创建绑定rabbitMq队列"><img class="cover" src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images20240306224116.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-06</div><div class="title">SpringBoot动态创建绑定rabbitMq队列</div></div></a></div><div><a href="../a4ead5b7/" title="Validated分组校验及扩展"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/articles/b0efea5382ca20c31e4eb89502018d67.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-01-31</div><div class="title">Validated分组校验及扩展</div></div></a></div><div><a href="../2b62f472/" title="Valid注解使用及扩展"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/articles/6bf9e068b8dc3d11a2a7f07c50305abd.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-23</div><div class="title">Valid注解使用及扩展</div></div></a></div><div><a href="../88f528d7/" title="使用axios下载文件"><img class="cover" src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/articles/2bde62836cdf5d93808a8fe5acf42047.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-03</div><div class="title">使用axios下载文件</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><!-- 这是侧边栏--><div class="aside-content" id="aside-content"><script>if (document.documentElement.classList.contains('hide-aside')) {
+    saveToLocal.set('aside-status', 'show', 2);
+    document.documentElement.classList.toggle('hide-aside');
+}</script><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">SpringBoot整合MongoDB</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BB%8B%E7%BB%8D"><span class="toc-text">一、介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BB%A3%E7%A0%81"><span class="toc-text">二、代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%BC%89%E9%85%8D%E7%BD%AE"><span class="toc-text">1）配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%BC%89MongoRepository"><span class="toc-text">2）MongoRepository</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%EF%BC%89MongoTemplate"><span class="toc-text">3）MongoTemplate</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%9C%80%E5%90%8E"><span class="toc-text">三、最后</span></a></li></ol></li></ol></div></div><script>var tocItems = document.querySelectorAll('.toc-item');
+tocItems.forEach(item => {
+  var span = item.querySelector('a > span');
+  var content = span.textContent;
+  item.setAttribute('title', content);
+});</script><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="" title="SpringBoot整合MongoDB"><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images20240402214817.jpg" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="SpringBoot整合MongoDB"/></a><div class="content"><a class="title" href="" title="SpringBoot整合MongoDB">SpringBoot整合MongoDB</a><time datetime="2024-04-02T13:47:08.000Z" title="发表于 2024-04-02 21:47:08">2024-04-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../842d7987/" title="MyBatisPlus的SQL注入器批量插入更新方法"><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images20240328223617.jpg" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="MyBatisPlus的SQL注入器批量插入更新方法"/></a><div class="content"><a class="title" href="../842d7987/" title="MyBatisPlus的SQL注入器批量插入更新方法">MyBatisPlus的SQL注入器批量插入更新方法</a><time datetime="2024-03-28T14:30:16.000Z" title="发表于 2024-03-28 22:30:16">2024-03-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../ff3e9c8b/" title="IDEA如何在DEBUG中输出耗时"><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images20240328221143.png" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="IDEA如何在DEBUG中输出耗时"/></a><div class="content"><a class="title" href="../ff3e9c8b/" title="IDEA如何在DEBUG中输出耗时">IDEA如何在DEBUG中输出耗时</a><time datetime="2024-03-28T14:07:21.000Z" title="发表于 2024-03-28 22:07:21">2024-03-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../c6da5220/" title="MyBatisPlus的SQL注入器"><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images20240317153120.jpg" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="MyBatisPlus的SQL注入器"/></a><div class="content"><a class="title" href="../c6da5220/" title="MyBatisPlus的SQL注入器">MyBatisPlus的SQL注入器</a><time datetime="2024-03-17T07:30:54.000Z" title="发表于 2024-03-17 15:30:54">2024-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../75abe9f4/" title="关于Java中try...catch...finally的面试题"><img src="https://banmoon-pic.oss-cn-guangzhou.aliyuncs.com/images20240317143434.jpg" onerror="this.onerror=null;this.src='../../img/404.jpg'" alt="关于Java中try...catch...finally的面试题"/></a><div class="content"><a class="title" href="../75abe9f4/" title="关于Java中try...catch...finally的面试题">关于Java中try...catch...finally的面试题</a><time datetime="2024-03-17T06:25:15.000Z" title="发表于 2024-03-17 14:25:15">2024-03-17</time></div></div></div></div></div></div></main><footer id="footer" style="background: linear-gradient(-45deg,#ee7752,#ce3e75,#23a6d5,#23d5ab)"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2024 By 半月无霜</div><div class="footer_custom_text"><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/"><span>粤ICP备2021146613号</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="../../js/utils.js"></script><script src="../../js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="../../js/search/local-search.js"></script><div class="js-pjax"><script>(() => {
+  const $mermaidWrap = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaidWrap.length) {
+    window.runMermaid = () => {
+      window.loadMermaid = true
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+      Array.from($mermaidWrap).forEach((item, index) => {
+        const mermaidSrc = item.firstElementChild
+        const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+        const mermaidID = 'mermaid-' + index
+        const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+        mermaid.mermaidAPI.render(mermaidID, mermaidDefinition, (svgCode) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svgCode)
+        })
+      })
+    }
+
+    const loadMermaid = () => {
+      window.loadMermaid ? runMermaid() : getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaid)
+    }
+
+    window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+  }
+})()</script><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://www.banmoon.top/archive/4fc9bfdc/'
+    this.page.identifier = ''
+    this.page.title = 'SpringBoot整合MongoDB'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+
+  document.getElementById('darkmode').addEventListener('click', () => {
+    setTimeout(() => window.disqusReset(), 200)
+  })
+}
+
+if ('Valine' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script></div><script src="/js/banmoon.js" defer></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
